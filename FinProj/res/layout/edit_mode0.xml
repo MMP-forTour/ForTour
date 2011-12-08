@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@drawable/background">
+    <TextView android:text="Album Title" 
+    		  android:textSize="30dp"
+    		  android:textColor="#FFFFFF"
+    		  android:id="@+id/titre" 
+    		  android:layout_width="wrap_content" 
+    		  android:layout_height="wrap_content" 
+    		  android:layout_gravity="center"
+    		 />
+    <FrameLayout android:layout_height="fill_parent" android:layout_weight="3" android:id="@+id/frameLayout1" android:layout_width="match_parent">
+         <ImageView android:scaleType="matrix" android:id="@+id/img" android:src="@drawable/cover" android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_gravity="center"/>
+         <!--<ImageView android:src="@drawable/photo_frame" android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_gravity="center"/>-->
+         <!--<ImageView class="com.finproj.TouchImageView" android:id="@+id/img" android:layout_width="match_parent" android:layout_height="wrap_content"/>-->
+    </FrameLayout>
+    <FrameLayout android:layout_height="fill_parent" android:layout_weight="7" android:id="@+id/frameLayout2" android:layout_width="match_parent">       
+        <LinearLayout android:id="@+id/linearLayout1" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="horizontal">
+            <ImageButton  android:onClick="onClick" android:id="@+id/counterClockwise" android:layout_height="wrap_content" android:src="@android:drawable/ic_menu_rotate" android:layout_width="wrap_content" android:layout_gravity="bottom"></ImageButton>
+        	<ImageButton  android:onClick="onClick" android:id="@+id/clockwise" android:layout_height="wrap_content" android:src="@android:drawable/ic_menu_rotate" android:layout_width="wrap_content" android:layout_gravity="bottom"></ImageButton>	
+        </LinearLayout>
+    </FrameLayout> 
+</LinearLayout>
