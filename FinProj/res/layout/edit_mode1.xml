@@ -22,8 +22,8 @@
     </FrameLayout>
     <FrameLayout android:layout_height="fill_parent" android:layout_weight="7" android:id="@+id/frameLayout2" android:layout_width="match_parent">       
         <LinearLayout android:id="@+id/linearLayout1" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
-        	<EditText android:layout_marginTop="10dp" android:hint="What do you want to say..." android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/editText1" android:gravity="center"/>
-        	<EditText android:hint="where are you..." android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/editText2"/>
+        	<EditText android:layout_marginTop="10dp" android:hint="About this Story..." android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/editTextEMStory" android:gravity="center"/>
+        	<EditText android:hint="Location of Story..." android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/editTextEMLocation"/>
         </LinearLayout>
     </FrameLayout> 
 </LinearLayout>

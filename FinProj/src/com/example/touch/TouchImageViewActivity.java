@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Window;
-import android.widget.ImageView;
 
 public class TouchImageViewActivity extends Activity {
     /** Called when the activity is first created. */

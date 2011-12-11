@@ -1,12 +1,8 @@
 package com.finproj;
 
-
-
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -29,13 +25,18 @@ import android.widget.Toast;
 public class FinProj extends Activity {
     Button add, view, set;
     
-    private File thisFile;
-    private Uri mImageCaptureUri;
+    protected static DbAdapter mDbHelper;
+    
+    private Uri mImageCaptureUri, mImageDirayUri;
+    private String mFilename;
 	
 	private static final int PICK_FROM_CAMERA = 1;
 	private static final int CROP_FROM_CAMERA = 2;
 	private static final int PICK_FROM_FILE = 3;
-	/** Called when the activity is first created. */
+	
+	private static final String WORK_DIR = "ForTour";
+	private static final String TEMP_DIR = ".tmp";
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,10 +46,24 @@ public class FinProj extends Activity {
         //this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         
         setContentView(R.layout.main);
+        
+        mDbHelper = new DbAdapter( this );
+        mDbHelper.open();
+        
+        checkWorkDirs();
         findviews();
         setCamera();
         setButtonListener();
-    }     
+    }
+    
+    private void checkWorkDirs() {
+    	File workDir = new File( Environment.getExternalStorageDirectory(), WORK_DIR + "/" + TEMP_DIR + "/" );
+    	if( !workDir.exists() ) {
+    		if( !workDir.mkdirs() ) {
+    			Toast.makeText( this, "Working Directories Creation Fail.", Toast.LENGTH_LONG ).show();
+    		}
+    	}
+    }
     
     private void findviews(){
     	add = (Button) findViewById(R.id.button1);
@@ -61,6 +76,8 @@ public class FinProj extends Activity {
 		ArrayAdapter<String> adapter	= new ArrayAdapter<String> (this, android.R.layout.select_dialog_item,items);
 		AlertDialog.Builder builder		= new AlertDialog.Builder(this);
 		
+		mFilename = String.valueOf(System.currentTimeMillis()) + ".png";
+		
 		builder.setTitle("Select Image");
 		builder.setAdapter( adapter, new DialogInterface.OnClickListener() {
 			public void onClick( DialogInterface dialog, int item ) { 
@@ -68,8 +85,9 @@ public class FinProj extends Activity {
 					//pick from camera
 					Intent intent 	 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);					
 					mImageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
-									   "tmp_avatar_" + String.valueOf(System.currentTimeMillis()) + ".png"));
+									   WORK_DIR + "/" + TEMP_DIR + "/" + mFilename ));
 					intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
+					
 					try {
 						intent.putExtra("return-data", true);					
 						startActivityForResult(intent, PICK_FROM_CAMERA);
@@ -81,7 +99,7 @@ public class FinProj extends Activity {
 					Intent intent = new Intent();					
 	                intent.setType("image/*");
 	                intent.setAction(Intent.ACTION_GET_CONTENT);	                
-	                startActivityForResult(Intent.createChooser(intent, "Complete action using"), PICK_FROM_FILE);
+	                startActivityForResult(Intent.createChooser(intent, "Complete Action With"), PICK_FROM_FILE);
 				}
 			}
 		} );
@@ -117,29 +135,23 @@ public class FinProj extends Activity {
 		    	break;
 		    	
 		    case PICK_FROM_FILE: 
-		    	mImageCaptureUri = data.getData();		    	
-		    	doCrop();	    
-		    	break;	    	
+		    	mImageCaptureUri = data.getData();
+		    	doCrop();
+		    	break;
 	    
-		    case CROP_FROM_CAMERA:	    	
+		    case CROP_FROM_CAMERA:
 		        Bundle extras = data.getExtras();
-		        if (extras != null) {	 
-		         // File tempFile = getTempFile();
-		         // new logic to get the photo from a URI
-		            if (data.getAction() != null) {
-		            	//processPhotoUpdate(thisFile);
-		           }
-
-		            //open the editPage
-		            Intent intent1 = new Intent();
+		        if (extras != null) {	 					
+					//open the editPage
+					Intent intent1 = new Intent();
 					intent1.setClass(FinProj.this, EditPage.class);
 					Bundle bundle = new Bundle();
-					bundle.putString("FILE", thisFile.toString());
+					bundle.putString( "FILE", mImageDirayUri.toString() );
 					intent1.putExtras(bundle);
 					startActivity(intent1);	            
 		        }
 
-		        // Delete the temp photo. ("tmp_avatar_" ... + ".png"))
+		        // Delete the temp photo
 		        File f = new File(mImageCaptureUri.getPath());		        
 		        if (f.exists()) f.delete();
 		        break;
@@ -148,23 +160,28 @@ public class FinProj extends Activity {
     
     private void doCrop() {
 		final ArrayList<CropOption> cropOptions = new ArrayList<CropOption>();   	
-    	Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setType("image/*");       
+    	
+		Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setType("image/*");
+        
         List<ResolveInfo> list = getPackageManager().queryIntentActivities( intent, 0 );        
         int size = list.size();        
+        
         if (size == 0) {	        
         	Toast.makeText(this, "Can not find image crop app", Toast.LENGTH_SHORT).show();       	
             return;
         } else {
+        	mImageDirayUri = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
+        											  WORK_DIR + "/" + mFilename ) );
+        	
         	intent.setData(mImageCaptureUri);        
-            intent.putExtra("outputX", 540);
-            intent.putExtra("outputY", 540);
+            intent.putExtra("outputX", 360);
+            intent.putExtra("outputY", 360);
             intent.putExtra("aspectX", 1);
             intent.putExtra("aspectY", 1);
             intent.putExtra("scale", true);
-            //intent.putExtra("noFaceDetection", true);            
-            intent.putExtra("return-data", false);           
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, getTempUri());
+            intent.putExtra("return-data", false);
+            intent.putExtra( MediaStore.EXTRA_OUTPUT, mImageDirayUri );
             intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
       
         	if (size == 1) {
@@ -207,52 +224,10 @@ public class FinProj extends Activity {
         	}
         }
 	}
-    private Uri getTempUri() {
-    	return Uri.fromFile(getTempFile());
+    
+    @Override
+    protected void onDestroy() {
+    	super.onDestroy();
+    	if( mDbHelper != null ) mDbHelper.close();
     }
-
-    private File getTempFile() {
-    	if (isSDCARDMounted()) {
-    		String TEMP_PHOTO_FILE="/bluetooth/myFile.PNG";
-    		File f = new File(Environment.getExternalStorageDirectory(),TEMP_PHOTO_FILE);
-    		try {
-    			f.createNewFile();
-    		} catch (IOException e) {
-    			// TODO Auto-generated catch block
-    			Toast.makeText(this, "fileIOIssue", Toast.LENGTH_LONG).show();
-    		}
-    		thisFile = f;  		    		
-    		return f;
-    	}
-    	else {
-    		return null;
-    	}
-    }
-
-    private boolean isSDCARDMounted(){
-    	String status = Environment.getExternalStorageState();
-    	if (status.equals(Environment.MEDIA_MOUNTED))
-    		return true;
-    	return false;
-    	
-	}
-    /*
-	 *  processes a temp photo file from 
-	 */
-	/*private void processPhotoUpdate(File tempFile) {
-		ProcessProfilePhotoTask task = new ProcessProfilePhotoTask(){
-
-			protected void onPostExecute(Bitmap result) {
-				//android.widget.LinearLayout.LayoutParams params = new android.widget.LinearLayout.LayoutParams(result.getWidth(),result.getHeight());
-				//params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
-				//photo.setLayoutParams(params);
-				//photo.setImageBitmap(result);
-				//imageView1.setImageBitmap(result);
-			}
-			
-		};
-		task.execute(tempFile);
-		
-	}*/
-   
-}//end class FinProj
+}
