@@ -90,4 +90,12 @@ public class DbAdapter {
 							new String[] { KEY_ROWID, KEY_TITLE, KEY_IMAGE, KEY_STORY, KEY_LOCATION, KEY_TIME },
 							null, null, null, null, null );
 	}
+	
+	public Cursor ftStoryFetchByID( final String ftID ) {
+		return mDb.query(	DATABASE_TABLE , 
+							new String[] { KEY_ROWID, KEY_TITLE, KEY_IMAGE, KEY_STORY, KEY_LOCATION, KEY_TIME },
+							"_id=?",
+							new String[] { ftID },
+							null, null, null );
+	}
 }

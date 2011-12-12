@@ -6,12 +6,12 @@ import java.util.Date;
 
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -21,8 +21,8 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 public class ListPage extends ListActivity {
-	private static final int LENGTH_STORY    = 15;
-	private static final int LENGTH_LOCATION = 20;
+	private static final int LENGTH_STORY    = 10;
+	private static final int LENGTH_LOCATION = 12;
 
 	/** Called when the activity is first created. */
     @Override
@@ -38,10 +38,16 @@ public class ListPage extends ListActivity {
     }
     
     private OnItemClickListener ftStoryClick = new OnItemClickListener() {
-
 		@Override
 		public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-			Log.i("info",String.valueOf(id));
+			Cursor selectedItem = (Cursor) parent.getItemAtPosition( position );
+			
+			Intent intent = new Intent();
+			Bundle bundle = new Bundle();
+			intent.setClass( ListPage.this, OnePhoto.class );
+			bundle.putString( "_ID", selectedItem.getString( 0 ) );
+			intent.putExtras( bundle );
+			startActivity( intent );
 		}
 	};
 	

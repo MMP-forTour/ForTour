@@ -21,6 +21,7 @@
         <activity android:name="RotatePhoto"></activity>
         <activity android:name="ImageRotate"></activity>
         <activity android:name="ListPage"></activity>
+        <activity android:name="OnePhoto"></activity>
 
     </application>
 </manifest>

@@ -7,23 +7,24 @@
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
+        android:minHeight="70dp"
         android:padding="4dp" >
 
         <ImageView
             android:id="@+id/imageViewLMRImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_marginRight="4dp"
+            android:layout_marginRight="8dp"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/icon" />
 
         <LinearLayout
             android:id="@+id/linearLayout2"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:gravity="center_vertical"
+            android:layout_weight="1"
             android:orientation="vertical" >
 
             <TextView
@@ -33,33 +34,30 @@
                 android:text="Story"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                <TextView
-                    android:id="@+id/textViewLMRLocation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Location"
-                    android:layout_weight="1"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
+            <TextView
+                android:id="@+id/textViewLMRLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Location"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
 
-                <TextView
-                    android:id="@+id/textViewLMRTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:text="Timestamp"
-                    android:layout_weight="1"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
-
-
+            <TextView
+                android:id="@+id/textViewLMRTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="Timestamp"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
         </LinearLayout>
 
         <CheckBox
             android:id="@+id/checkBoxLMRCheckbox"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
             android:layout_marginLeft="8dp"
-            android:text="" />
+            android:gravity="center_vertical"
+            android:text=""
+            android:visibility="gone" />
 
     </LinearLayout>
 
