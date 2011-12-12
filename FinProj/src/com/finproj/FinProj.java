@@ -34,9 +34,11 @@ public class FinProj extends Activity {
 	private static final int CROP_FROM_CAMERA = 2;
 	private static final int PICK_FROM_FILE = 3;
 	
-	private static final String WORK_DIR = "ForTour";
-	private static final String TEMP_DIR = ".tmp";
+	private static final String WORK_DIR  = "ForTour";
+	private static final String TEMP_DIR  = ".tmp";
+	private static final String THUMB_DIR = ".thumbs";
 	
+	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,13 +58,23 @@ public class FinProj extends Activity {
         setButtonListener();
     }
     
-    private void checkWorkDirs() {
-    	File workDir = new File( Environment.getExternalStorageDirectory(), WORK_DIR + "/" + TEMP_DIR + "/" );
-    	if( !workDir.exists() ) {
-    		if( !workDir.mkdirs() ) {
+    private void checkDir( boolean isExternal, final String dirPath ) {
+    	File dir;
+    	
+    	if( isExternal ) dir = new File( Environment.getExternalStorageDirectory(), dirPath );
+    	else dir = new File( dirPath );
+    	
+    	if( !dir.exists() ) {
+    		if( !dir.mkdir() ) {
     			Toast.makeText( this, "Working Directories Creation Fail.", Toast.LENGTH_LONG ).show();
     		}
     	}
+    }
+    
+    private void checkWorkDirs() {
+    	checkDir( true, WORK_DIR + "/" );
+    	checkDir( true, WORK_DIR + "/" + TEMP_DIR + "/" );
+    	checkDir( true, WORK_DIR + "/" + THUMB_DIR + "/" );
     }
     
     private void findviews(){
@@ -115,7 +127,10 @@ public class FinProj extends Activity {
     private void setButtonListener(){
         view.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View arg0){
+        		Intent intent = new Intent();
+        		intent.setClass( FinProj.this, ListPage.class );
         		
+        		startActivity( intent );
         	}
         });
         set.setOnClickListener(new Button.OnClickListener(){
@@ -148,7 +163,7 @@ public class FinProj extends Activity {
 					Bundle bundle = new Bundle();
 					bundle.putString( "FILE", mImageDirayUri.toString() );
 					intent1.putExtras(bundle);
-					startActivity(intent1);	            
+					startActivity(intent1);  
 		        }
 
 		        // Delete the temp photo
