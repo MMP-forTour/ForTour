@@ -21,8 +21,8 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 public class ListPage extends ListActivity {
-	private static final int LENGTH_STORY    = 10;
-	private static final int LENGTH_LOCATION = 12;
+	private static final int LENGTH_TITLE = 10;
+	private static final int LENGTH_STORY = 12;
 
 	/** Called when the activity is first created. */
     @Override
@@ -56,13 +56,13 @@ public class ListPage extends ListActivity {
         startManagingCursor( c );
         
         String[] from = new String[] {
+        		DbAdapter.KEY_TITLE,
         		DbAdapter.KEY_STORY,
-        		DbAdapter.KEY_LOCATION,
         		DbAdapter.KEY_TIME
         };
 		int[] to = new int[] {
+				R.id.textViewLMRTitle,
 				R.id.textViewLMRStory,
-				R.id.textViewLMRLocation,
 				R.id.textViewLMRTime
 		};
 		
@@ -81,8 +81,8 @@ public class ListPage extends ListActivity {
 			super.bindView(view, context, cursor);
 			
 			ImageView ftImage   = (ImageView) view.findViewById( R.id.imageViewLMRImage );
+			TextView ftTitle    = (TextView) view.findViewById( R.id.textViewLMRTitle );
 			TextView ftStroy    = (TextView) view.findViewById( R.id.textViewLMRStory );
-			TextView ftLocation = (TextView) view.findViewById( R.id.textViewLMRLocation );
 			TextView ftTime     = (TextView) view.findViewById( R.id.textViewLMRTime );
 			
 			try {
@@ -93,11 +93,11 @@ public class ListPage extends ListActivity {
 			catch (FileNotFoundException e) { }
 			catch (IOException e) { }
 			
+			if( cursor.getString( 1 ).length() > LENGTH_TITLE ) ftTitle.setText( cursor.getString( 1 ).substring( 0, LENGTH_TITLE ) + "..." );
+			else ftTitle.setText( cursor.getString( 1 ) );
+			
 			if( cursor.getString( 3 ).length() > LENGTH_STORY ) ftStroy.setText( cursor.getString( 3 ).substring( 0, LENGTH_STORY ) + "..." );
 			else ftStroy.setText( cursor.getString( 3 ) );
-			
-			if( cursor.getString( 4 ).length() > LENGTH_LOCATION ) ftLocation.setText( cursor.getString( 4 ).substring( 0, LENGTH_LOCATION ) + "..." );
-			else ftLocation.setText( cursor.getString( 4 ) );
 			
 			ftTime.setText( new Date(Long.parseLong(cursor.getString( 5 ))).toLocaleString() );
 		}
