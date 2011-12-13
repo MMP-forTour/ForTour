@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ListPage extends ListActivity {
 	private static final int LENGTH_TITLE = 10;
@@ -53,21 +54,26 @@ public class ListPage extends ListActivity {
 	
 	private void updateListView() {
 		Cursor c = FinProj.mDbHelper.ftStoryFetchAll();
-        startManagingCursor( c );
-        
-        String[] from = new String[] {
-        		DbAdapter.KEY_TITLE,
-        		DbAdapter.KEY_STORY,
-        		DbAdapter.KEY_TIME
-        };
-		int[] to = new int[] {
-				R.id.textViewLMRTitle,
-				R.id.textViewLMRStory,
-				R.id.textViewLMRTime
-		};
-		
-		SimpleCursorAdapter contacts = new mySimpleCursorAdaptor( this, R.layout.list_mode_row, c, from, to );
-		setListAdapter( contacts );	
+		if( c.getCount() != 0 ) { 
+	        startManagingCursor( c );
+	        
+	        String[] from = new String[] {
+	        		DbAdapter.KEY_TITLE,
+	        		DbAdapter.KEY_STORY,
+	        		DbAdapter.KEY_TIME
+	        };
+			int[] to = new int[] {
+					R.id.textViewLMRTitle,
+					R.id.textViewLMRStory,
+					R.id.textViewLMRTime
+			};
+			
+			SimpleCursorAdapter contacts = new mySimpleCursorAdaptor( this, R.layout.list_mode_row, c, from, to );
+			setListAdapter( contacts );
+		}
+		else {
+			Toast.makeText( ListPage.this, "There is no data now.", Toast.LENGTH_LONG ).show();
+		}
 	}
 	
 	public class mySimpleCursorAdaptor extends SimpleCursorAdapter {
