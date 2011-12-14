@@ -96,7 +96,7 @@ public class DBRoulette extends Activity {
 
     private ImageView mImage;
 
-    private final String PHOTO_DIR = "/ForTour/";
+    private final String PHOTO_DIR = "/Photos/";
 
     final static private int NEW_PICTURE = 1;
     private String mCameraFileName;

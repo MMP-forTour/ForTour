@@ -4,39 +4,37 @@
   android:orientation="vertical"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@drawable/background"
-  >
+  android:background="@drawable/book_bg2">
 
     <FrameLayout
         android:id="@+id/frameLayout1"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="48dp"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="8.3" >
+        android:layout_marginTop="15dp" android:layout_weight="0.01">
 
         <EditText
             android:id="@+id/editTextOPTitle"
             android:layout_width="220dp"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
+            android:layout_gravity="center_vertical|center"
             android:hint="Title of Story"
-            android:singleLine="true" />
+            android:singleLine="true" android:layout_marginTop="10dp"/>
 
         <TextView
             android:id="@+id/textViewOPTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="left"
             android:visibility="gone"
             android:ellipsize="marquee"
             android:singleLine="true"
-            android:textSize="35dp"
             android:marqueeRepeatLimit="marquee_forever"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Title of Story" />
+            android:text="Title of Story" android:layout_marginTop="10dp" android:textSize="40dp"/>
 
     </FrameLayout>
 
@@ -45,19 +43,26 @@
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="3" >
+        android:layout_weight="2.5" android:layout_marginRight="25dp" android:layout_marginLeft="20dp">
 
+           <ImageView
+              android:id="@+id/note"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:layout_gravity="center_horizontal"
+              android:src="@drawable/photo_frame" />
+        
           <ImageView
              android:id="@+id/imageViewOPImage"
              android:layout_width="fill_parent"
              android:layout_height="fill_parent"
-             android:layout_gravity="center" />
+             android:layout_gravity="center_horizontal" />
 
           <ImageView
               android:id="@+id/pframe"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-              android:layout_gravity="center"
+              android:layout_gravity="center_horizontal"
               android:src="@drawable/photo_frame" />
 
           <EditText
@@ -73,14 +78,13 @@
               android:id="@+id/textViewOPStory"
               android:layout_width="220dp"
               android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              android:layout_marginTop="125dp"
+              android:layout_gravity="bottom|center"
               android:maxLines="2"
               android:textAppearance="?android:attr/textAppearanceMedium"
               android:textColor="@android:color/black"
               android:textStyle="bold"
               android:visibility="gone"
-              android:text="About this Story..." />
+              android:text="About this Story..." android:layout_marginBottom="20dp"/>
 
     </FrameLayout>
 
@@ -89,29 +93,30 @@
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="7" >
+        android:layout_weight="6" >
 
         <LinearLayout
             android:id="@+id/linearLayout1"
             android:layout_width="220dp"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_gravity="center_horizontal"
-            android:orientation="vertical" >
+            android:layout_gravity="right"
+            android:orientation="vertical" android:layout_marginRight="25dp">
 
             <TextView
                 android:id="@+id/textViewOPTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Time of Story..."
+                android:textColor="@android:color/black"
                 android:visibility="gone"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium" android:layout_gravity="top"/>
 
             <TextView
                 android:id="@+id/textViewOPLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Location of Story..."
+                android:textColor="@android:color/black"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:visibility="gone"

@@ -2,15 +2,58 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/cover" android:orientation="vertical">
-    <LinearLayout android:id="@+id/linearLayout1" android:layout_height="wrap_content" android:layout_width="match_parent" android:orientation="vertical" android:layout_weight="1">
+    android:background="@drawable/cover2" android:orientation="vertical">
+    <LinearLayout android:id="@+id/linearLayout1" android:layout_height="wrap_content" android:layout_width="match_parent" android:orientation="vertical" android:layout_weight="0.8">
     </LinearLayout>
-    <LinearLayout android:id="@+id/linearLayout2" android:layout_height="wrap_content" android:layout_width="match_parent" android:layout_weight="0.5" android:weightSum="1">
-        <LinearLayout android:id="@+id/linearLayout3" android:layout_height="match_parent" android:layout_width="wrap_content" android:orientation="vertical" android:layout_weight="0.50">
-            <Button android:text="Add" android:layout_height="wrap_content" android:id="@+id/button1" android:layout_width="140dp"></Button>
-            <Button android:text="Diary" android:layout_height="wrap_content" android:id="@+id/button2" android:layout_width="140dp"></Button>
-            <Button android:text="Settings" android:layout_height="wrap_content" android:id="@+id/button3" android:layout_width="140dp"></Button>
+    <LinearLayout android:id="@+id/linearLayout2" android:layout_height="wrap_content" android:layout_width="match_parent" android:layout_weight="0.4" android:weightSum="1">
+
+        <LinearLayout
+            android:id="@+id/linearLayout4"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.50" >
+
+            <LinearLayout
+                android:id="@+id/linearLayout5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" android:layout_weight="1">
+
+                <ImageButton
+                    android:id="@+id/button1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00000000"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/btn_browse" android:layout_marginLeft="10dp"/>
+
+                <ImageButton
+                    android:id="@+id/button2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00000000"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/btn_record" android:layout_marginLeft="10dp"/>
+
+                <ImageButton
+                    android:src="@drawable/btn_setting"
+                    android:background="#00000000"
+                    android:scaleType="centerInside"
+                    android:id="@+id/button3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout6"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" android:layout_weight="0.8">
+            </LinearLayout>
+
         </LinearLayout>
+
     </LinearLayout>
     
 </LinearLayout>

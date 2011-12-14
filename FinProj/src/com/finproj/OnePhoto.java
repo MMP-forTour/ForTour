@@ -27,7 +27,7 @@ public class OnePhoto extends Activity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.one_photo);
+        setContentView(R.layout.one_photo_view);
         
         ftID = this.getIntent().getExtras().getString( "_ID" );
         
