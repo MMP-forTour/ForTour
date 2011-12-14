@@ -64,7 +64,7 @@ public class ListPage extends ListActivity {
 	        };
 			int[] to = new int[] {
 					R.id.textViewLMRTitle,
-					R.id.textViewLMRStory,
+					//R.id.textViewLMRStory,
 					R.id.textViewLMRTime
 			};
 			
@@ -88,7 +88,7 @@ public class ListPage extends ListActivity {
 			
 			ImageView ftImage   = (ImageView) view.findViewById( R.id.imageViewLMRImage );
 			TextView ftTitle    = (TextView) view.findViewById( R.id.textViewLMRTitle );
-			TextView ftStroy    = (TextView) view.findViewById( R.id.textViewLMRStory );
+			//TextView ftStroy    = (TextView) view.findViewById( R.id.textViewLMRStory );
 			TextView ftTime     = (TextView) view.findViewById( R.id.textViewLMRTime );
 			
 			try {
@@ -102,8 +102,8 @@ public class ListPage extends ListActivity {
 			if( cursor.getString( 1 ).length() > LENGTH_TITLE ) ftTitle.setText( cursor.getString( 1 ).substring( 0, LENGTH_TITLE ) + "..." );
 			else ftTitle.setText( cursor.getString( 1 ) );
 			
-			if( cursor.getString( 3 ).length() > LENGTH_STORY ) ftStroy.setText( cursor.getString( 3 ).substring( 0, LENGTH_STORY ) + "..." );
-			else ftStroy.setText( cursor.getString( 3 ) );
+			//if( cursor.getString( 3 ).length() > LENGTH_STORY ) ftStroy.setText( cursor.getString( 3 ).substring( 0, LENGTH_STORY ) + "..." );
+			//else ftStroy.setText( cursor.getString( 3 ) );
 			
 			ftTime.setText( new Date(Long.parseLong(cursor.getString( 5 ))).toLocaleString() );
 		}

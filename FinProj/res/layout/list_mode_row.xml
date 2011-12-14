@@ -6,8 +6,9 @@
 
     <LinearLayout
         android:id="@+id/linearLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="108dp"
+        android:background="@drawable/list2"
         android:minHeight="70dp"
         android:padding="4dp" >
 
@@ -15,16 +16,18 @@
             android:id="@+id/imageViewLMRImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/icon" />
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginRight="8dp"
+            android:src="@drawable/icon" android:layout_weight="1"/>
 
         <LinearLayout
             android:id="@+id/linearLayout2"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_weight="3"
             android:gravity="center_vertical"
-            android:layout_weight="1"
             android:orientation="vertical" >
 
             <TextView
@@ -32,21 +35,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Title"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/textViewLMRStory"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Story"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceMedium" android:layout_marginTop="10dp"/>
 
             <TextView
                 android:id="@+id/textViewLMRTime"
-                android:layout_width="match_parent"
+                android:layout_width="111dp"
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:text="Timestamp"
+                android:textColor="#FFFFEB"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </LinearLayout>
 
@@ -58,7 +55,6 @@
             android:gravity="center_vertical"
             android:text=""
             android:visibility="gone" />
-
     </LinearLayout>
 
 </LinearLayout>
