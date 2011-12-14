@@ -21,7 +21,7 @@ public class ImageUtil {
     public Bitmap mergeBitmap( final Bitmap currentBitmap ) {   	
         Bitmap mBmOverlay = Bitmap.createBitmap( frameBitmap.getWidth(), frameBitmap.getHeight(), frameBitmap.getConfig() );
         Canvas canvas = new Canvas( mBmOverlay );
-        canvas.drawBitmap( currentBitmap, 15, 15, null );
+        canvas.drawBitmap( currentBitmap, 25, 20, null );
         canvas.drawBitmap( frameBitmap, new Matrix(), null );
         return mBmOverlay;
     }
