@@ -1,8 +1,11 @@
-package com.finproj;
+package tw.edu.ntu.fortour;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import com.finproj.R;
 
 import android.app.ListActivity;
 import android.content.Context;
@@ -22,8 +25,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ListPage extends ListActivity {
-	private static final int LENGTH_TITLE = 10;
-	private static final int LENGTH_STORY = 12;
+	private static final int LENGTH_TITLE = 5;
+	
+	private SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd" );
 
 	/** Called when the activity is first created. */
     @Override
@@ -53,18 +57,18 @@ public class ListPage extends ListActivity {
 	};
 	
 	private void updateListView() {
-		Cursor c = FinProj.mDbHelper.ftStoryFetchAll();
+		Cursor c = ForTour.mDbHelper.ftStoryFetchAll();
 		if( c.getCount() != 0 ) { 
 	        startManagingCursor( c );
 	        
 	        String[] from = new String[] {
+	        		DbAdapter.KEY_IMAGE,
 	        		DbAdapter.KEY_TITLE,
-	        		DbAdapter.KEY_STORY,
 	        		DbAdapter.KEY_TIME
 	        };
 			int[] to = new int[] {
+					R.id.imageViewLMRImage,
 					R.id.textViewLMRTitle,
-					//R.id.textViewLMRStory,
 					R.id.textViewLMRTime
 			};
 			
@@ -88,13 +92,12 @@ public class ListPage extends ListActivity {
 			
 			ImageView ftImage   = (ImageView) view.findViewById( R.id.imageViewLMRImage );
 			TextView ftTitle    = (TextView) view.findViewById( R.id.textViewLMRTitle );
-			//TextView ftStroy    = (TextView) view.findViewById( R.id.textViewLMRStory );
 			TextView ftTime     = (TextView) view.findViewById( R.id.textViewLMRTime );
 			
 			try {
 				// TODO: A better way to generate thumbnails
 				Bitmap bm = MediaStore.Images.Media.getBitmap( ListPage.this.getContentResolver(), Uri.parse( cursor.getString( 2 ) ) );
-				ftImage.setImageBitmap( Bitmap.createScaledBitmap( bm, 50, 50, true ) );
+				ftImage.setImageBitmap( Bitmap.createScaledBitmap( bm, 40, 40, true ) );
 			}
 			catch (FileNotFoundException e) { }
 			catch (IOException e) { }
@@ -102,10 +105,7 @@ public class ListPage extends ListActivity {
 			if( cursor.getString( 1 ).length() > LENGTH_TITLE ) ftTitle.setText( cursor.getString( 1 ).substring( 0, LENGTH_TITLE ) + "..." );
 			else ftTitle.setText( cursor.getString( 1 ) );
 			
-			//if( cursor.getString( 3 ).length() > LENGTH_STORY ) ftStroy.setText( cursor.getString( 3 ).substring( 0, LENGTH_STORY ) + "..." );
-			//else ftStroy.setText( cursor.getString( 3 ) );
-			
-			ftTime.setText( new Date(Long.parseLong(cursor.getString( 5 ))).toLocaleString() );
+			ftTime.setText( sdf.format( new Date(Long.parseLong(cursor.getString( 5 ))) ) );
 		}
 	}
 }

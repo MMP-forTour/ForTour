@@ -18,7 +18,7 @@
             android:layout_width="220dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:hint="Title of Story"
+            android:hint="Title of Story..."
             android:singleLine="true" />
 
         <TextView

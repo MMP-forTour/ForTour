@@ -1,7 +1,9 @@
-package com.finproj;
+package tw.edu.ntu.fortour;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import com.finproj.R;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -57,7 +59,7 @@ public class EditPage extends Activity {
 		buttonOPOK.setOnClickListener( new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				long rst = FinProj.mDbHelper.ftStoryAdd(	( (EditText) findViewById( R.id.editTextOPTitle ) ).getText().toString(),
+				long rst = ForTour.mDbHelper.ftStoryAdd(	( (EditText) findViewById( R.id.editTextOPTitle ) ).getText().toString(),
 															bmUriPath,
 															( (EditText) findViewById( R.id.editTextOPStory ) ).getText().toString(),
 															( (EditText) findViewById( R.id.editTextOPLocation ) ).getText().toString()

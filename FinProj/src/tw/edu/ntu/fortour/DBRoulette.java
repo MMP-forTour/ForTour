@@ -23,7 +23,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.finproj;
+package tw.edu.ntu.fortour;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -54,6 +54,7 @@ import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.AppKeyPair;
 import com.dropbox.client2.session.Session.AccessType;
 import com.dropbox.client2.session.TokenPair;
+import com.finproj.R;
 
 
 public class DBRoulette extends Activity {
@@ -92,7 +93,7 @@ public class DBRoulette extends Activity {
     private Button mSubmit;
     private LinearLayout mDisplay;
     private Button mPhoto;
-    private Button mRoulette;
+    //private Button mRoulette;
 
     private ImageView mImage;
 

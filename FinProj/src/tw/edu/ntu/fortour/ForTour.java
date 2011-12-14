@@ -1,8 +1,10 @@
-package com.finproj;
+package tw.edu.ntu.fortour;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.finproj.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,7 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class FinProj extends Activity {
+public class ForTour extends Activity {
     Button add, view, set;
     
     protected static DbAdapter mDbHelper;
@@ -128,14 +130,14 @@ public class FinProj extends Activity {
         view.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View arg0){
         		Intent intent = new Intent();
-        		intent.setClass( FinProj.this, ListPage.class );        		
+        		intent.setClass( ForTour.this, ListPage.class );        		
         		startActivity( intent );
         	}
         });
         set.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View arg0){
         		Intent intent = new Intent();
-        		intent.setClass( FinProj.this, DBRoulette.class );
+        		intent.setClass( ForTour.this, DBRoulette.class );
         		startActivity( intent );
         	}
         });
@@ -160,7 +162,7 @@ public class FinProj extends Activity {
 		        if (extras != null) {	 					
 					//open the editPage
 					Intent intent1 = new Intent();
-					intent1.setClass(FinProj.this, EditPage.class);
+					intent1.setClass(ForTour.this, EditPage.class);
 					Bundle bundle = new Bundle();
 					bundle.putString( "FILE", mImageDirayUri.toString() );
 					intent1.putExtras(bundle);

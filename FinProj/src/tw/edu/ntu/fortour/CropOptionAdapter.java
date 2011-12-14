@@ -1,4 +1,4 @@
-package com.finproj;
+package tw.edu.ntu.fortour;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +11,8 @@ import android.widget.TextView;
 import android.content.Context;
 
 import java.util.ArrayList;
+
+import com.finproj.R;
 
 /**
  * Adapter for crop option list.
