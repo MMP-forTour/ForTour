@@ -128,14 +128,15 @@ public class FinProj extends Activity {
         view.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View arg0){
         		Intent intent = new Intent();
-        		intent.setClass( FinProj.this, ListPage.class );
-        		
+        		intent.setClass( FinProj.this, ListPage.class );        		
         		startActivity( intent );
         	}
         });
         set.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View arg0){
-        		
+        		Intent intent = new Intent();
+        		intent.setClass( FinProj.this, DBRoulette.class );
+        		startActivity( intent );
         	}
         });
     }
