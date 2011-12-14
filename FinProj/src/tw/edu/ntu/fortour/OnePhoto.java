@@ -81,9 +81,9 @@ public class OnePhoto extends Activity{
 		} catch (IOException e) {
 			Toast.makeText( OnePhoto.this, "IO Exception: " + e.toString(), Toast.LENGTH_LONG ).show();
 		}
-
-        imageViewOPImage.setImageBitmap( imgUtil.mergeBitmap( bm ) );
         
+		imageViewOPImage.setImageBitmap( imgUtil.mergeBitmap( bm ) );
+		
         c.close();
     }
 }

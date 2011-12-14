@@ -21,20 +21,21 @@ public final class R {
         public static final int list2=0x7f020007;
         public static final int list_bg=0x7f020008;
         public static final int photo_frame=0x7f020009;
-        public static final int setting_btn=0x7f02000a;
+        public static final int photo_frame3=0x7f02000a;
+        public static final int setting_btn=0x7f02000b;
     }
     public static final class id {
         public static final int auth_button=0x7f050002;
         public static final int button1=0x7f05000e;
         public static final int button2=0x7f05000f;
         public static final int button3=0x7f050010;
-        public static final int buttonOPOK=0x7f05001c;
+        public static final int buttonOPOK=0x7f05001b;
         public static final int checkBoxLMRCheckbox=0x7f05000c;
-        public static final int editTextOPLocation=0x7f05001b;
-        public static final int editTextOPStory=0x7f050016;
+        public static final int editTextOPLocation=0x7f05001a;
+        public static final int editTextOPStory=0x7f050015;
         public static final int editTextOPTitle=0x7f050012;
         public static final int frameLayout1=0x7f050011;
-        public static final int frameLayout2=0x7f050018;
+        public static final int frameLayout2=0x7f050017;
         public static final int imageViewLMRImage=0x7f050008;
         public static final int imageViewOPImage=0x7f050014;
         public static final int image_view=0x7f050004;
@@ -43,14 +44,13 @@ public final class R {
         public static final int linearLayout2=0x7f050009;
         public static final int linearLayout3=0x7f05000d;
         public static final int logged_in_display=0x7f050003;
-        public static final int pframe=0x7f050015;
         public static final int photo_button=0x7f050006;
         public static final int roulette_button=0x7f050005;
         public static final int textViewLMRTime=0x7f05000b;
         public static final int textViewLMRTitle=0x7f05000a;
-        public static final int textViewOPLocation=0x7f05001a;
-        public static final int textViewOPStory=0x7f050017;
-        public static final int textViewOPTime=0x7f050019;
+        public static final int textViewOPLocation=0x7f050019;
+        public static final int textViewOPStory=0x7f050016;
+        public static final int textViewOPTime=0x7f050018;
         public static final int textViewOPTitle=0x7f050013;
         public static final int tv_name=0x7f050001;
     }
