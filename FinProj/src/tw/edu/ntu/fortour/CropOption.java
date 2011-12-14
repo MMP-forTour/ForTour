@@ -1,4 +1,4 @@
-package com.finproj;
+package tw.edu.ntu.fortour;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;

@@ -1,4 +1,4 @@
-package com.finproj;
+package tw.edu.ntu.fortour;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -20,10 +20,13 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
-public class FinProj extends Activity {
-    Button add, view, set;
+import com.finproj.R;
+
+public class ForTour extends Activity {
+    ImageButton add, view, set;
     
     protected static DbAdapter mDbHelper;
     
@@ -78,9 +81,9 @@ public class FinProj extends Activity {
     }
     
     private void findviews(){
-    	add = (Button) findViewById(R.id.button1);
-    	view = (Button) findViewById(R.id.button2);
-    	set = (Button) findViewById(R.id.button3);
+    	add = (ImageButton) findViewById(R.id.button1);
+    	view = (ImageButton) findViewById(R.id.button2);
+    	set = (ImageButton) findViewById(R.id.button3);
     }
     
     private void setCamera(){
@@ -128,14 +131,14 @@ public class FinProj extends Activity {
         view.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View arg0){
         		Intent intent = new Intent();
-        		intent.setClass( FinProj.this, ListPage.class );        		
+        		intent.setClass( ForTour.this, ListPage.class );        		
         		startActivity( intent );
         	}
         });
         set.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View arg0){
         		Intent intent = new Intent();
-        		intent.setClass( FinProj.this, DBRoulette.class );
+        		intent.setClass( ForTour.this, DBRoulette.class );
         		startActivity( intent );
         	}
         });
@@ -160,7 +163,7 @@ public class FinProj extends Activity {
 		        if (extras != null) {	 					
 					//open the editPage
 					Intent intent1 = new Intent();
-					intent1.setClass(FinProj.this, EditPage.class);
+					intent1.setClass(ForTour.this, EditPage.class);
 					Bundle bundle = new Bundle();
 					bundle.putString( "FILE", mImageDirayUri.toString() );
 					intent1.putExtras(bundle);

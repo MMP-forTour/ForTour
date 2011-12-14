@@ -1,8 +1,10 @@
-package com.finproj;
+package tw.edu.ntu.fortour;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
+
+import com.finproj.R;
 
 import android.app.Activity;
 import android.database.Cursor;
@@ -34,7 +36,7 @@ public class OnePhoto extends Activity{
         imgUtil = new ImageUtil();
         imgUtil.frameBitmap = imgUtil.drawableToBitmap( getResources().getDrawable( R.drawable.photo_frame ) );
         
-        Cursor c = FinProj.mDbHelper.ftStoryFetchByID( ftID );
+        Cursor c = ForTour.mDbHelper.ftStoryFetchByID( ftID );
         c.moveToFirst();
         
         TextView textViewOPTitle	= (TextView) findViewById( R.id.textViewOPTitle );

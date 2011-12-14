@@ -2,14 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.finproj"
       android:versionCode="1"
-      android:versionName="0.3">
+      android:versionName="0.4">
     <uses-sdk android:minSdkVersion="8" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
     <uses-permission android:name="android.permission.CAMERA"></uses-permission>
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar" >
-        <activity android:name=".FinProj"
+        <activity android:name="tw.edu.ntu.fortour.ForTour"
                   android:label="@string/app_name"
                   android:screenOrientation="portrait">
             <intent-filter>
@@ -29,13 +29,10 @@
             <category android:name="android.intent.category.DEFAULT" /> 
           </intent-filter>
         </activity>
-        <activity android:name="EditPage" android:screenOrientation="portrait"></activity>
-        <activity android:name="EditPhoto"></activity>
-        <activity android:name="RotatePhoto"></activity>
-        <activity android:name="ImageRotate"></activity>
-        <activity android:name="ListPage"></activity>
-        <activity android:name="OnePhoto"></activity>
-        <activity android:name="DBRoulette"></activity>
+        <activity android:name="tw.edu.ntu.fortour.EditPage" android:screenOrientation="portrait"></activity>
+        <activity android:name="tw.edu.ntu.fortour.ListPage"></activity>
+        <activity android:name="tw.edu.ntu.fortour.OnePhoto"></activity>
+        <activity android:name="tw.edu.ntu.fortour.DBRoulette"></activity>
         
 
     </application>

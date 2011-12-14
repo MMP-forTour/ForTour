@@ -24,7 +24,7 @@
  */
 
 
-package com.finproj;
+package tw.edu.ntu.fortour;
 
 import java.io.File;
 import java.io.FileInputStream;
