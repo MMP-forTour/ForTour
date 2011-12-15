@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.finproj.R;
-
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -15,9 +13,12 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -26,6 +27,8 @@ import android.widget.Toast;
 
 public class ListPage extends ListActivity {
 	private static final int LENGTH_TITLE = 5;
+	
+	protected static final int MENU_EXPORT = Menu.FIRST;
 	
 	private SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd" );
 
@@ -55,6 +58,35 @@ public class ListPage extends ListActivity {
 			startActivity( intent );
 		}
 	};
+	
+	public boolean onCreateOptionsMenu( Menu menu ) {
+		super.onCreateOptionsMenu(menu);
+		
+		menu.add( 0, MENU_EXPORT, 0, "Export Mode" );
+		
+		return true;
+	};
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
+		
+		switch( item.getItemId() ) {
+			case MENU_EXPORT:
+				CheckBox checkBoxLMRCheckbox = (CheckBox) findViewById( R.id.checkBoxLMRCheckbox );
+				if( checkBoxLMRCheckbox.getVisibility() == View.VISIBLE ) {
+					checkBoxLMRCheckbox.setVisibility( View.INVISIBLE );
+					item.setTitle( "Export Mode" );
+				}
+				else {
+					checkBoxLMRCheckbox.setVisibility( View.VISIBLE );
+					item.setTitle( "List Mode" );
+				}
+				break;
+		}
+		
+		return true;
+	}
 	
 	private void updateListView() {
 		Cursor c = ForTour.mDbHelper.ftStoryFetchAll();

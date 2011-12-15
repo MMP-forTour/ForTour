@@ -3,8 +3,6 @@ package tw.edu.ntu.fortour;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import com.finproj.R;
-
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.net.Uri;
