@@ -9,19 +9,29 @@ import android.graphics.drawable.Drawable;
 public class ImageUtil {
 	protected Bitmap frameBitmap;
 	
+	/* TODO: A better way to merge border images. */
+	private final int frameWidth      = 427;
+	private final int frameHeight     = 500;
+	private final int frameInsideLeft = 25;
+	private final int frameInsideTop  = 20;
+	
 	public Bitmap drawableToBitmap( final Drawable drawable ) {
 		Bitmap.Config c = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
-		Bitmap bitmap = Bitmap.createBitmap( drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(),  c);
+		//Bitmap bitmap = Bitmap.createBitmap( drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(),  c);
+		Bitmap bitmap = Bitmap.createBitmap( frameWidth, frameHeight,  c);
 		Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        //drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+		drawable.setBounds( 0, 0, frameWidth, frameHeight );
         drawable.draw(canvas);
         return bitmap;
     }
-	
-    public Bitmap mergeBitmap( final Bitmap currentBitmap ) {   	
+    
+    public Bitmap mergeBitmap( Drawable drawable, final Bitmap currentBitmap ) {
+    	frameBitmap = drawableToBitmap( drawable );
+    	
         Bitmap mBmOverlay = Bitmap.createBitmap( frameBitmap.getWidth(), frameBitmap.getHeight(), frameBitmap.getConfig() );
         Canvas canvas = new Canvas( mBmOverlay );
-        canvas.drawBitmap( currentBitmap, 15, 15, null );
+        canvas.drawBitmap( currentBitmap, frameInsideLeft, frameInsideTop, null );
         canvas.drawBitmap( frameBitmap, new Matrix(), null );
         return mBmOverlay;
     }

@@ -97,7 +97,7 @@ public class ListPage extends ListActivity {
 			try {
 				// TODO: A better way to generate thumbnails
 				Bitmap bm = MediaStore.Images.Media.getBitmap( ListPage.this.getContentResolver(), Uri.parse( cursor.getString( 2 ) ) );
-				ftImage.setImageBitmap( Bitmap.createScaledBitmap( bm, 40, 40, true ) );
+				ftImage.setImageBitmap( bm );
 			}
 			catch (FileNotFoundException e) { }
 			catch (IOException e) { }
