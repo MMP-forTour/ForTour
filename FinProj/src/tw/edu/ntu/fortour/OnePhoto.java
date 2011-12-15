@@ -34,7 +34,6 @@ public class OnePhoto extends Activity{
         ftID = this.getIntent().getExtras().getString( "_ID" );
         
         imgUtil = new ImageUtil();
-        imgUtil.frameBitmap = imgUtil.drawableToBitmap( getResources().getDrawable( R.drawable.photo_frame ) );
         
         Cursor c = ForTour.mDbHelper.ftStoryFetchByID( ftID );
         c.moveToFirst();
@@ -82,7 +81,7 @@ public class OnePhoto extends Activity{
 			Toast.makeText( OnePhoto.this, "IO Exception: " + e.toString(), Toast.LENGTH_LONG ).show();
 		}
         
-		imageViewOPImage.setImageBitmap( imgUtil.mergeBitmap( bm ) );
+		imageViewOPImage.setImageBitmap( imgUtil.mergeBitmap( getResources().getDrawable( R.drawable.photo_frame ), bm ) );
 		
         c.close();
     }

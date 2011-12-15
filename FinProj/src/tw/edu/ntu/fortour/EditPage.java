@@ -46,13 +46,12 @@ public class EditPage extends Activity {
 			Toast.makeText( EditPage.this, "IO Exception: " + e.toString(), Toast.LENGTH_LONG ).show();
 		}
 
-        imageViewOPImage.setImageBitmap( imgUtil.mergeBitmap( bm ) );
+        imageViewOPImage.setImageBitmap( imgUtil.mergeBitmap( getResources().getDrawable( R.drawable.photo_frame ), bm ) );
     }
 	
 	private void findviews(){        
 		imageViewOPImage  	= (ImageView) findViewById( R.id.imageViewOPImage );
         buttonOPOK    		= (Button) findViewById( R.id.buttonOPOK );
-        imgUtil.frameBitmap = imgUtil.drawableToBitmap( getResources().getDrawable( R.drawable.photo_frame ) );
 	}
 	
 	private void setButtonListener(){

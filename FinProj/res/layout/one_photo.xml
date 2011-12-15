@@ -15,7 +15,7 @@
 
         <EditText
             android:id="@+id/editTextOPTitle"
-            android:layout_width="240dp"
+            android:layout_width="225dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:hint="Title of Story..."
@@ -49,12 +49,13 @@
              android:id="@+id/imageViewOPImage"
              android:layout_width="fill_parent"
              android:layout_height="fill_parent"
+             android:paddingLeft="5dp"
              android:layout_gravity="center_horizontal"
              android:src="@drawable/photo_frame" />
 
           <EditText
               android:id="@+id/editTextOPStory"
-              android:layout_width="240dp"
+              android:layout_width="225dp"
               android:layout_height="wrap_content"
               android:layout_gravity="center"
               android:layout_marginTop="115dp"
@@ -64,7 +65,7 @@
 
           <TextView
               android:id="@+id/textViewOPStory"
-              android:layout_width="240dp"
+              android:layout_width="225dp"
               android:layout_height="wrap_content"
               android:layout_gravity="center"
               android:gravity="center_vertical"
@@ -87,7 +88,7 @@
 
         <LinearLayout
             android:id="@+id/linearLayout1"
-            android:layout_width="240dp"
+            android:layout_width="225dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:layout_gravity="center_horizontal"
