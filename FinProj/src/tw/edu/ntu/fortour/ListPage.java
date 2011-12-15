@@ -1,17 +1,18 @@
 package tw.edu.ntu.fortour;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.SimpleCursorAdapter.ViewBinder;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +33,10 @@ public class ListPage extends ListActivity {
 	protected static final int MENU_EXPORT = Menu.FIRST;
 	
 	private SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd" );
+	
+	private Bitmap bm;
+	
+	private Uri bmUriPath;
 
 	/** Called when the activity is first created. */
     @Override
@@ -90,9 +96,8 @@ public class ListPage extends ListActivity {
 	
 	private void updateListView() {
 		Cursor c = ForTour.mDbHelper.ftStoryFetchAll();
-		if( c.getCount() != 0 ) { 
-	        startManagingCursor( c );
-	        
+		startManagingCursor( c );
+		if( c.getCount() != 0 ) { 	        
 	        String[] from = new String[] {
 	        		DbAdapter.KEY_IMAGE,
 	        		DbAdapter.KEY_TITLE,
@@ -104,7 +109,50 @@ public class ListPage extends ListActivity {
 					R.id.textViewLMRTime
 			};
 			
-			SimpleCursorAdapter contacts = new mySimpleCursorAdaptor( this, R.layout.list_mode_row, c, from, to );
+			SimpleCursorAdapter contacts = new SimpleCursorAdapter( this, R.layout.list_mode_row, c, from, to );
+			contacts.setViewBinder( new ViewBinder() {
+				
+				@Override
+				public boolean setViewValue(View view, Cursor cursor, int index) {
+					ImageView ftImage   = (ImageView) view.findViewById( R.id.imageViewLMRImage );
+					TextView ftTitle    = (TextView) view.findViewById( R.id.textViewLMRTitle );
+					TextView ftTime     = (TextView) view.findViewById( R.id.textViewLMRTime );
+					
+					switch( view.getId() ) {
+						case R.id.imageViewLMRImage:
+							try {
+								// First Try Thumb
+								bmUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
+																	ForTour.WORK_DIR + "/" + ForTour.THUMB_DIR + "/" + cursor.getString( 2 ) ) );
+								bm = MediaStore.Images.Media.getBitmap( ListPage.this.getContentResolver(), bmUriPath );
+								ftImage.setImageBitmap( bm );
+							}
+							catch (FileNotFoundException e) {
+								// Second Try original image
+								try {
+									bmUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
+																		ForTour.WORK_DIR + "/" + cursor.getString( 2 ) ) );
+									bm = MediaStore.Images.Media.getBitmap( ListPage.this.getContentResolver(), bmUriPath );
+									ftImage.setImageBitmap( bm );
+								}
+								catch (FileNotFoundException e1) { }
+								catch (IOException e1) { }
+							}
+							catch (IOException e) { }
+							break;
+						case R.id.textViewLMRTitle:
+							if( cursor.getString( 1 ).length() > LENGTH_TITLE ) ftTitle.setText( cursor.getString( 1 ).substring( 0, LENGTH_TITLE ) + "..." );
+							else ftTitle.setText( cursor.getString( 1 ) );
+							break;
+						case R.id.textViewLMRTime:
+							ftTime.setText( sdf.format( new Date( Long.parseLong( cursor.getString( 5 ) ) ) ) );
+							break;
+						default:
+							break;
+					}
+					return true;
+				}
+			});
 			setListAdapter( contacts );
 		}
 		else {
@@ -112,32 +160,10 @@ public class ListPage extends ListActivity {
 		}
 	}
 	
-	public class mySimpleCursorAdaptor extends SimpleCursorAdapter {
-		public mySimpleCursorAdaptor(Context context, int layout, Cursor c,
-									  String[] from, int[] to) {
-			super(context, layout, c, from, to);
-		}
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
 		
-		@Override
-		public void bindView(View view, Context context, Cursor cursor) {
-			super.bindView(view, context, cursor);
-			
-			ImageView ftImage   = (ImageView) view.findViewById( R.id.imageViewLMRImage );
-			TextView ftTitle    = (TextView) view.findViewById( R.id.textViewLMRTitle );
-			TextView ftTime     = (TextView) view.findViewById( R.id.textViewLMRTime );
-			
-			try {
-				// TODO: A better way to generate thumbnails
-				Bitmap bm = MediaStore.Images.Media.getBitmap( ListPage.this.getContentResolver(), Uri.parse( cursor.getString( 2 ) ) );
-				ftImage.setImageBitmap( bm );
-			}
-			catch (FileNotFoundException e) { }
-			catch (IOException e) { }
-			
-			if( cursor.getString( 1 ).length() > LENGTH_TITLE ) ftTitle.setText( cursor.getString( 1 ).substring( 0, LENGTH_TITLE ) + "..." );
-			else ftTitle.setText( cursor.getString( 1 ) );
-			
-			ftTime.setText( sdf.format( new Date(Long.parseLong(cursor.getString( 5 ))) ) );
-		}
+		if( bm != null && bm.isRecycled() ) bm.recycle();
 	}
 }

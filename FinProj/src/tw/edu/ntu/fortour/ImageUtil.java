@@ -9,11 +9,20 @@ import android.graphics.drawable.Drawable;
 public class ImageUtil {
 	protected Bitmap frameBitmap;
 	
-	/* TODO: A better way to merge border images. */
-	private final int frameWidth      = 427;
-	private final int frameHeight     = 500;
-	private final int frameInsideLeft = 25;
-	private final int frameInsideTop  = 20;
+	private final int frameWidth;
+	private final int frameHeight;
+	private final int frameInsideLeft;
+	private final int frameInsideTop;
+	
+	protected int THUMB_SIZE = 72;
+	
+	public ImageUtil() {
+		/* TODO: A better way to merge border images. */
+		frameWidth      = 427;
+		frameHeight     = 500;
+		frameInsideLeft = 25;
+		frameInsideTop  = 20;
+	}
 	
 	public Bitmap drawableToBitmap( final Drawable drawable ) {
 		Bitmap.Config c = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
@@ -34,5 +43,12 @@ public class ImageUtil {
         canvas.drawBitmap( currentBitmap, frameInsideLeft, frameInsideTop, null );
         canvas.drawBitmap( frameBitmap, new Matrix(), null );
         return mBmOverlay;
+    }
+    
+    @Override
+    protected void finalize() throws Throwable {
+    	super.finalize();
+    	
+    	if( frameBitmap != null && frameBitmap.isRecycled() ) frameBitmap.recycle();
     }
 }

@@ -1,5 +1,6 @@
 package tw.edu.ntu.fortour;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
@@ -10,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +24,7 @@ public class OnePhoto extends Activity{
 	private String ftID;
 	private Bitmap bm; 
 	private ImageUtil imgUtil;
+	private Uri bmUriPath;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -72,7 +75,9 @@ public class OnePhoto extends Activity{
         buttonOPOK.setVisibility( View.GONE );
         
         try {
-			bm = MediaStore.Images.Media.getBitmap( this.getContentResolver(), Uri.parse( c.getString( 2 ) ) );
+        	bmUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
+			   									ForTour.WORK_DIR + "/" + c.getString( 2 ) ) );
+			bm = MediaStore.Images.Media.getBitmap( this.getContentResolver(), bmUriPath );
 		} catch (FileNotFoundException e) {
 			Toast.makeText( OnePhoto.this, "File Not Found: " + e.toString(), Toast.LENGTH_LONG ).show();
 		} catch (IOException e) {
@@ -82,5 +87,17 @@ public class OnePhoto extends Activity{
 		imageViewOPImage.setImageBitmap( imgUtil.mergeBitmap( getResources().getDrawable( R.drawable.photo_frame ), bm ) );
 		
         c.close();
+    }
+    
+    @Override
+    protected void onDestroy() {
+    	super.onDestroy();
+    	
+    	if( bm != null && bm.isRecycled() ) bm.recycle();
+    	
+    	try {
+			imgUtil.finalize();
+		}
+    	catch( Throwable e ) { }
     }
 }

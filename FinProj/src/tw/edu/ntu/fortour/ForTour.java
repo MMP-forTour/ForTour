@@ -36,9 +36,9 @@ public class ForTour extends Activity {
 	private static final int CROP_FROM_CAMERA = 2;
 	private static final int PICK_FROM_FILE = 3;
 	
-	private static final String WORK_DIR  = "ForTour";
-	private static final String TEMP_DIR  = ".tmp";
-	private static final String THUMB_DIR = ".thumbs";
+	protected static final String WORK_DIR  = "ForTour";
+	protected static final String TEMP_DIR  = ".tmp";
+	protected static final String THUMB_DIR = ".thumbs";
 	
 	/** Called when the activity is first created. */
     @Override
@@ -90,11 +90,11 @@ public class ForTour extends Activity {
 		ArrayAdapter<String> adapter	= new ArrayAdapter<String> (this, android.R.layout.select_dialog_item,items);
 		AlertDialog.Builder builder		= new AlertDialog.Builder(this);
 		
-		mFilename = String.valueOf(System.currentTimeMillis()) + ".png";
-		
 		builder.setTitle("Select Image");
 		builder.setAdapter( adapter, new DialogInterface.OnClickListener() {
-			public void onClick( DialogInterface dialog, int item ) { 
+			public void onClick( DialogInterface dialog, int item ) {
+				mFilename = String.valueOf(System.currentTimeMillis()) + ".png";
+				
 				if (item == 0) {
 					//pick from camera
 					Intent intent 	 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);					
@@ -164,14 +164,15 @@ public class ForTour extends Activity {
 					Intent intent1 = new Intent();
 					intent1.setClass(ForTour.this, EditPage.class);
 					Bundle bundle = new Bundle();
-					bundle.putString( "FILE", mImageDirayUri.toString() );
+					//bundle.putString( "FILE", mImageDirayUri.toString() );
+					bundle.putString( "FILE", mFilename );
 					intent1.putExtras(bundle);
 					startActivity(intent1);  
 		        }
 
 		        // Delete the temp photo
-		        File f = new File(mImageCaptureUri.getPath());		        
-		        if (f.exists()) f.delete();
+		        File f = new File( mImageCaptureUri.getPath() );		        
+		        if( f.exists() ) f.delete();
 		        break;
 	    }
 	}

@@ -4,9 +4,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Thirdparty"/>
-	<classpathentry kind="lib" path="/Users/mac/android/jars/dropbox-android-sdk.jar"/>
-	<classpathentry kind="lib" path="/Users/mac/android/jars/httpmime-4.0.3.jar"/>
-	<classpathentry kind="lib" path="/Users/mac/android/jars/json_simple-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/dropbox-android-sdk.jar"/>
+	<classpathentry kind="lib" path="lib/httpmime-4.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/json_simple-1.1.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
