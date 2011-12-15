@@ -1,5 +1,7 @@
 package tw.edu.ntu.fortour;
 
+import java.io.File;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -22,6 +24,10 @@ public class ImageUtil {
 		frameHeight     = 500;
 		frameInsideLeft = 25;
 		frameInsideTop  = 20;
+	}
+	
+	public static void deleteImage( File file ) {
+		if( file.exists() ) file.delete(); 
 	}
 	
 	public Bitmap drawableToBitmap( final Drawable drawable ) {

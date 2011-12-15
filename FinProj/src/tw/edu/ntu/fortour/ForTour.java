@@ -171,8 +171,7 @@ public class ForTour extends Activity {
 		        }
 
 		        // Delete the temp photo
-		        File f = new File( mImageCaptureUri.getPath() );		        
-		        if( f.exists() ) f.delete();
+		        ImageUtil.deleteImage( new File( mImageCaptureUri.getPath() ) );
 		        break;
 	    }
 	}

@@ -90,7 +90,10 @@ public class EditPage extends Activity {
 	}
 	
 	private void discardStoryImages() {
-		
+		ImageUtil.deleteImage( new File( Environment.getExternalStorageDirectory(),
+				   			    ForTour.WORK_DIR + "/" + ForTour.THUMB_DIR + "/" + mFileName ) );
+		ImageUtil.deleteImage( new File( Environment.getExternalStorageDirectory(),
+   			    ForTour.WORK_DIR + "/" + mFileName ) );
 	}
 	
 	@Override
