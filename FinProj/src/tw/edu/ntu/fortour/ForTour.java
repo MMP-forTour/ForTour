@@ -23,7 +23,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.finproj.R;
 
 public class ForTour extends Activity {
     ImageButton add, view, set;

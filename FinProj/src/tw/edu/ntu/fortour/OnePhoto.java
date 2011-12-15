@@ -4,8 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 
-import com.finproj.R;
-
 import android.app.Activity;
 import android.database.Cursor;
 import android.graphics.Bitmap;
