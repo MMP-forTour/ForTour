@@ -13,6 +13,7 @@
         android:padding="4dp" >
 
         <ImageView
+            android:scaleType="centerInside"
             android:id="@+id/imageViewLMRImage"
             android:layout_width="50dp"
             android:layout_height="50dp"
