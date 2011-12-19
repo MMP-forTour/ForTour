@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PreferenceScreen 
+	xmlns:android="http://schemas.android.com/apk/res/android" >
+	<PreferenceCategory
+                android:title="Dropbox Setting">
+	<CheckBoxPreference
+	    android:key="sync_db"
+		android:title="Sync to Dropbox" 
+		android:summaryOn="Linked"
+		android:summaryOff="Unlinked"
+		android:defaultValue="false">
+	</CheckBoxPreference>
+	</PreferenceCategory>
+</PreferenceScreen>

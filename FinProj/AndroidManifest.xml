@@ -32,7 +32,7 @@
         <activity android:name="tw.edu.ntu.fortour.EditPage" android:screenOrientation="portrait"></activity>
         <activity android:name="tw.edu.ntu.fortour.ListPage"></activity>
         <activity android:name="tw.edu.ntu.fortour.OnePhoto"></activity>
-        <activity android:name="tw.edu.ntu.fortour.DBRoulette"></activity>
+        <activity android:name="tw.edu.ntu.fortour.Settings"></activity>
         
 
     </application>

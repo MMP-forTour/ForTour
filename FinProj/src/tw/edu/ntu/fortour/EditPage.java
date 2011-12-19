@@ -15,14 +15,14 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 public class EditPage extends Activity {
 	private ImageView imageViewOPImage;
-	private Button buttonOPOK;
+	private ImageButton buttonOPOK;
 	private Bitmap bm;
 	private Uri bmUriPath;
 	private ImageUtil imgUtil;
@@ -57,7 +57,7 @@ public class EditPage extends Activity {
 	
 	private void findviews(){        
 		imageViewOPImage  	= (ImageView) findViewById( R.id.imageViewOPImage );
-        buttonOPOK    		= (Button) findViewById( R.id.buttonOPOK );
+        buttonOPOK    		= (ImageButton) findViewById( R.id.buttonOPOK );
 	}
 	
 	private void setButtonListener(){

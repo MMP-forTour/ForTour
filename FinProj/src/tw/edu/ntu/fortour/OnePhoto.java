@@ -14,8 +14,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,7 +50,7 @@ public class OnePhoto extends Activity{
         
         ImageView imageViewOPImage	= (ImageView) findViewById( R.id.imageViewOPImage );
         
-        Button buttonOPOK			= (Button) findViewById( R.id.buttonOPOK );
+        ImageButton buttonOPOK			= (ImageButton) findViewById( R.id.buttonOPOK );
         
         Typeface font = Typeface.createFromAsset( getAssets(), "PEIXE.ttf" );
         textViewOPTitle.setTypeface( font );

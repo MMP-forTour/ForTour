@@ -129,11 +129,13 @@
                 android:hint="Location of Story..."
                 android:singleLine="true" />
             
-            <Button
-                android:id="@+id/buttonOPOK"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Save" />
+            <ImageButton
+                    android:id="@+id/buttonOPOK"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00000000"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/btn_save"/>
 
         </LinearLayout>
 
