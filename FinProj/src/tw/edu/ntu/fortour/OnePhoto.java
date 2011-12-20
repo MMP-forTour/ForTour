@@ -84,7 +84,7 @@ public class OnePhoto extends Activity{
 			Toast.makeText( OnePhoto.this, "IO Exception: " + e.toString(), Toast.LENGTH_LONG ).show();
 		}
         
-		imageViewOPImage.setImageBitmap( imgUtil.mergeBitmap( getResources().getDrawable( R.drawable.photo_frame ), bm ) );
+		imageViewOPImage.setImageBitmap( imgUtil.imageBorderMerge( getResources().getDrawable( R.drawable.photo_frame ), bm ) );
 		
         c.close();
     }
@@ -93,7 +93,7 @@ public class OnePhoto extends Activity{
     protected void onDestroy() {
     	super.onDestroy();
     	
-    	if( bm != null && bm.isRecycled() ) bm.recycle();
+    	ImageUtil.freeBitmap( bm );
     	
     	try {
 			imgUtil.finalize();

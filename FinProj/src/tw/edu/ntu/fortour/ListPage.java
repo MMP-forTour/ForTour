@@ -164,6 +164,6 @@ public class ListPage extends ListActivity {
 	protected void onDestroy() {
 		super.onDestroy();
 		
-		if( bm != null && bm.isRecycled() ) bm.recycle();
+		ImageUtil.freeBitmap( bm );
 	}
 }

@@ -1,7 +1,5 @@
 package tw.edu.ntu.fortour;
 
-import java.io.File;
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -9,52 +7,61 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 
 public class ImageUtil {
-	protected Bitmap frameBitmap;
+	protected Bitmap imageBorderBitmap, imageBorderDrawable, imageBorderOverlay;
 	
-	private final int frameWidth;
-	private final int frameHeight;
-	private final int frameInsideLeft;
-	private final int frameInsideTop;
+	private final int imageBorderWidth;
+	private final int imageBorderHeight;
+	private final int imageBorderAnchorLeft;
+	private final int imageBorderAnchorTop;
 	
 	protected int THUMB_SIZE = 72;
 	
 	public ImageUtil() {
 		/* TODO: A better way to merge border images. */
-		frameWidth      = 427;
-		frameHeight     = 500;
-		frameInsideLeft = 25;
-		frameInsideTop  = 20;
+		imageBorderWidth      = 427;
+		imageBorderHeight     = 500;
+		imageBorderAnchorLeft = 25;
+		imageBorderAnchorTop  = 20;
 	}
 	
-	public static void deleteImage( File file ) {
-		if( file.exists() ) file.delete(); 
-	}
-	
-	public Bitmap drawableToBitmap( final Drawable drawable ) {
-		Bitmap.Config c = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
-		//Bitmap bitmap = Bitmap.createBitmap( drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(),  c);
-		Bitmap bitmap = Bitmap.createBitmap( frameWidth, frameHeight,  c);
-		Canvas canvas = new Canvas(bitmap);
-        //drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-		drawable.setBounds( 0, 0, frameWidth, frameHeight );
-        drawable.draw(canvas);
-        return bitmap;
+	private Bitmap imageBorderToDrawable( final Drawable drawable ) {
+		Bitmap.Config c = ( drawable.getOpacity() != PixelFormat.OPAQUE ) ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
+		
+		try {
+			imageBorderDrawable = Bitmap.createBitmap( imageBorderWidth, imageBorderHeight,  c);
+			Canvas canvas = new Canvas( imageBorderDrawable );
+			drawable.setBounds( 0, 0, imageBorderWidth, imageBorderHeight );
+	        drawable.draw( canvas );
+		}
+		catch( IllegalArgumentException iae ) { }
+		
+        return imageBorderDrawable;
     }
     
-    public Bitmap mergeBitmap( Drawable drawable, final Bitmap currentBitmap ) {
-    	frameBitmap = drawableToBitmap( drawable );
+    public Bitmap imageBorderMerge( Drawable drawable, final Bitmap currentBitmap ) {
+    	imageBorderBitmap = imageBorderToDrawable( drawable );
     	
-        Bitmap mBmOverlay = Bitmap.createBitmap( frameBitmap.getWidth(), frameBitmap.getHeight(), frameBitmap.getConfig() );
-        Canvas canvas = new Canvas( mBmOverlay );
-        canvas.drawBitmap( currentBitmap, frameInsideLeft, frameInsideTop, null );
-        canvas.drawBitmap( frameBitmap, new Matrix(), null );
-        return mBmOverlay;
+    	try {
+	        imageBorderOverlay = Bitmap.createBitmap( imageBorderBitmap.getWidth(), imageBorderBitmap.getHeight(), imageBorderBitmap.getConfig() );
+	        Canvas canvas = new Canvas( imageBorderOverlay );
+	        canvas.drawBitmap( currentBitmap, imageBorderAnchorLeft, imageBorderAnchorTop, null );
+	        canvas.drawBitmap( imageBorderBitmap, new Matrix(), null );
+    	}
+    	catch( IllegalArgumentException iae ) {}
+        
+    	return imageBorderOverlay;
+    }
+    
+    public static void freeBitmap( Bitmap bitmap ) {
+    	if( bitmap != null && bitmap.isRecycled() ) bitmap.recycle();
     }
     
     @Override
     protected void finalize() throws Throwable {
     	super.finalize();
     	
-    	if( frameBitmap != null && frameBitmap.isRecycled() ) frameBitmap.recycle();
+    	freeBitmap( imageBorderBitmap );
+    	freeBitmap( imageBorderDrawable );
+    	freeBitmap( imageBorderOverlay );
     }
 }

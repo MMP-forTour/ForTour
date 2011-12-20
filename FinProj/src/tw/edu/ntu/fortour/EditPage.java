@@ -52,7 +52,7 @@ public class EditPage extends Activity {
 			Toast.makeText( EditPage.this, "IO Exception: " + e.toString(), Toast.LENGTH_LONG ).show();
 		}
 
-        imageViewOPImage.setImageBitmap( imgUtil.mergeBitmap( getResources().getDrawable( R.drawable.photo_frame ), bm ) );
+        imageViewOPImage.setImageBitmap( imgUtil.imageBorderMerge( getResources().getDrawable( R.drawable.photo_frame ), bm ) );
     }
 	
 	private void findviews(){        
@@ -90,9 +90,9 @@ public class EditPage extends Activity {
 	}
 	
 	private void discardStoryImages() {
-		ImageUtil.deleteImage( new File( Environment.getExternalStorageDirectory(),
+		Util.deleteFile( new File( Environment.getExternalStorageDirectory(),
 				   			    ForTour.WORK_DIR + "/" + ForTour.THUMB_DIR + "/" + mFileName ) );
-		ImageUtil.deleteImage( new File( Environment.getExternalStorageDirectory(),
+		Util.deleteFile( new File( Environment.getExternalStorageDirectory(),
    			    ForTour.WORK_DIR + "/" + mFileName ) );
 	}
 	
@@ -110,7 +110,7 @@ public class EditPage extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 		
-		if( bm != null && bm.isRecycled() ) bm.recycle();
+		ImageUtil.freeBitmap( bm );
 		
 		try {
 			imgUtil.finalize();

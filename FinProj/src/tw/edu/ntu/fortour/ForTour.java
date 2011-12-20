@@ -36,9 +36,10 @@ public class ForTour extends Activity {
 	private static final int CROP_FROM_CAMERA = 2;
 	private static final int PICK_FROM_FILE = 3;
 	
-	protected static final String WORK_DIR  = "ForTour";
-	protected static final String TEMP_DIR  = ".tmp";
-	protected static final String THUMB_DIR = ".thumbs";
+	protected static final String WORK_DIR   = "ForTour";
+	protected static final String TEMP_DIR   = ".tmp";
+	protected static final String THUMB_DIR  = ".thumbs";
+	protected static final String RECORD_DIR = ".records";
 	
 	/** Called when the activity is first created. */
     @Override
@@ -77,6 +78,7 @@ public class ForTour extends Activity {
     	checkDir( true, WORK_DIR + "/" );
     	checkDir( true, WORK_DIR + "/" + TEMP_DIR + "/" );
     	checkDir( true, WORK_DIR + "/" + THUMB_DIR + "/" );
+    	checkDir( true, WORK_DIR + "/" + RECORD_DIR + "/" );
     }
     
     private void findviews(){
@@ -164,14 +166,13 @@ public class ForTour extends Activity {
 					Intent intent1 = new Intent();
 					intent1.setClass(ForTour.this, EditPage.class);
 					Bundle bundle = new Bundle();
-					//bundle.putString( "FILE", mImageDirayUri.toString() );
 					bundle.putString( "FILE", mFilename );
 					intent1.putExtras(bundle);
 					startActivity(intent1);  
 		        }
 
-		        // Delete the temp photo
-		        ImageUtil.deleteImage( new File( mImageCaptureUri.getPath() ) );
+		        // Delete the template photo
+		        Util.deleteFile( new File( mImageCaptureUri.getPath() ) );
 		        break;
 	    }
 	}
@@ -246,6 +247,7 @@ public class ForTour extends Activity {
     @Override
     protected void onDestroy() {
     	super.onDestroy();
+    	
     	if( mDbHelper != null ) mDbHelper.close();
     }
 }
