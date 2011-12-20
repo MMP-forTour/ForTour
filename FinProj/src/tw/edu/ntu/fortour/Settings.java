@@ -229,7 +229,7 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
     public void uploadDB(String fileName) {
     	if (mApi.getSession().authenticationSuccessful()) {
     		Uri uri = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
-    				  ForTour.WORK_DIR + "/" + fileName ) );
+    				  ForTour.DIR_WORK + "/" + fileName ) );
     		File file;
             try {
 	            file = new File(new URI(uri.toString()));

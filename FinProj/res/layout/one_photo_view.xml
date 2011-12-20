@@ -36,6 +36,12 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Title of Story" android:layout_marginTop="10dp" android:textSize="40dp"/>
 
+        <Button
+            android:id="@+id/buttonOPPlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Play" />
+
     </FrameLayout>
 
     <FrameLayout

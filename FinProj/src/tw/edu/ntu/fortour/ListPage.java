@@ -123,7 +123,7 @@ public class ListPage extends ListActivity {
 							try {
 								// First Try Thumb
 								bmUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
-																	ForTour.WORK_DIR + "/" + ForTour.THUMB_DIR + "/" + cursor.getString( 2 ) ) );
+																	ForTour.DIR_WORK + "/" + ForTour.DIR_THUMB + "/" + cursor.getString( 2 ) ) );
 								bm = MediaStore.Images.Media.getBitmap( ListPage.this.getContentResolver(), bmUriPath );
 								ftImage.setImageBitmap( bm );
 							}
@@ -131,7 +131,7 @@ public class ListPage extends ListActivity {
 								// Second Try original image
 								try {
 									bmUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
-																		ForTour.WORK_DIR + "/" + cursor.getString( 2 ) ) );
+																		ForTour.DIR_WORK + "/" + cursor.getString( 2 ) ) );
 									bm = MediaStore.Images.Media.getBitmap( ListPage.this.getContentResolver(), bmUriPath );
 									ftImage.setImageBitmap( bm );
 								}
@@ -145,7 +145,7 @@ public class ListPage extends ListActivity {
 							else ftTitle.setText( cursor.getString( 1 ) );
 							break;
 						case R.id.textViewLMRTime:
-							ftTime.setText( sdf.format( new Date( Long.parseLong( cursor.getString( 5 ) ) ) ) );
+							ftTime.setText( sdf.format( new Date( Long.parseLong( cursor.getString( 6 ) ) ) ) );
 							break;
 						default:
 							break;

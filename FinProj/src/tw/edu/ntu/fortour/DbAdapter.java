@@ -23,6 +23,7 @@ public class DbAdapter {
 	public static final String KEY_IMAGE		= "ftImage";
 	public static final String KEY_STORY		= "ftStory";
 	public static final String KEY_LOCATION	= "ftLocation";
+	public static final String KEY_HAS_RECORD	= "ftHasRecord";
 	public static final String KEY_TIME		= "ftTime";
 	
 	private static final String DATABASE_CREATE =
@@ -32,6 +33,7 @@ public class DbAdapter {
 					KEY_IMAGE + " TEXT NOT NULL, " +
 					KEY_STORY + " TEXT NULL," +
 					KEY_LOCATION + " TEXT NULL," +
+					KEY_HAS_RECORD + " INTEGER NOT NULL," +
 					KEY_TIME + " LONG" + " );";
 	
 	private static final String DATABASE_UPGRADE =
@@ -70,12 +72,13 @@ public class DbAdapter {
 	}
 	
 	public long ftStoryAdd( final String ftTitle, final String ftImage,
-							 final String ftStory, final String ftLocation ) {
+							 final String ftStory, final String ftLocation, final int ftHasRecord ) {
 		ContentValues initValues = new ContentValues();
 		initValues.put( KEY_TITLE, ftTitle );
 		initValues.put( KEY_IMAGE, ftImage );
 		initValues.put( KEY_STORY, ftStory );
 		initValues.put( KEY_LOCATION, ftLocation );
+		initValues.put( KEY_HAS_RECORD, ftHasRecord );
 		initValues.put( KEY_TIME, ( new Date() ).getTime() );
 		
 		return mDb.insert( DATABASE_TABLE, null, initValues );
@@ -87,13 +90,13 @@ public class DbAdapter {
 	
 	public Cursor ftStoryFetchAll() {
 		return mDb.query(	DATABASE_TABLE , 
-							new String[] { KEY_ROWID, KEY_TITLE, KEY_IMAGE, KEY_STORY, KEY_LOCATION, KEY_TIME },
+							new String[] { KEY_ROWID, KEY_TITLE, KEY_IMAGE, KEY_STORY, KEY_LOCATION, KEY_HAS_RECORD, KEY_TIME },
 							null, null, null, null, null );
 	}
 	
 	public Cursor ftStoryFetchByID( final String ftID ) {
 		return mDb.query(	DATABASE_TABLE , 
-							new String[] { KEY_ROWID, KEY_TITLE, KEY_IMAGE, KEY_STORY, KEY_LOCATION, KEY_TIME },
+							new String[] { KEY_ROWID, KEY_TITLE, KEY_IMAGE, KEY_STORY, KEY_LOCATION, KEY_HAS_RECORD, KEY_TIME },
 							"_id=?",
 							new String[] { ftID },
 							null, null, null );

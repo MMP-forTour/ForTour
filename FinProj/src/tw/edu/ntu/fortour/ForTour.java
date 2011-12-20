@@ -36,10 +36,12 @@ public class ForTour extends Activity {
 	private static final int CROP_FROM_CAMERA = 2;
 	private static final int PICK_FROM_FILE = 3;
 	
-	protected static final String WORK_DIR   = "ForTour";
-	protected static final String TEMP_DIR   = ".tmp";
-	protected static final String THUMB_DIR  = ".thumbs";
-	protected static final String RECORD_DIR = ".records";
+	protected static final String EXT_PHOTO  = ".png";
+	protected static final String EXT_RECORD = ".3gp";
+	
+	protected static final String DIR_WORK   = "ForTour";
+	protected static final String DIR_TEMP   = ".tmp";
+	protected static final String DIR_THUMB  = ".thumbs";
 	
 	/** Called when the activity is first created. */
     @Override
@@ -75,10 +77,9 @@ public class ForTour extends Activity {
     }
     
     private void checkWorkDirs() {
-    	checkDir( true, WORK_DIR + "/" );
-    	checkDir( true, WORK_DIR + "/" + TEMP_DIR + "/" );
-    	checkDir( true, WORK_DIR + "/" + THUMB_DIR + "/" );
-    	checkDir( true, WORK_DIR + "/" + RECORD_DIR + "/" );
+    	checkDir( true, DIR_WORK + "/" );
+    	checkDir( true, DIR_WORK + "/" + DIR_TEMP + "/" );
+    	checkDir( true, DIR_WORK + "/" + DIR_THUMB + "/" );
     }
     
     private void findviews(){
@@ -95,13 +96,13 @@ public class ForTour extends Activity {
 		builder.setTitle("Select Image");
 		builder.setAdapter( adapter, new DialogInterface.OnClickListener() {
 			public void onClick( DialogInterface dialog, int item ) {
-				mFilename = String.valueOf(System.currentTimeMillis()) + ".png";
+				mFilename = String.valueOf(System.currentTimeMillis()) + EXT_PHOTO;
 				
 				if (item == 0) {
 					//pick from camera
 					Intent intent 	 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);					
 					mImageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
-									   WORK_DIR + "/" + TEMP_DIR + "/" + mFilename ));
+									   DIR_WORK + "/" + DIR_TEMP + "/" + mFilename ));
 					intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
 					
 					try {
@@ -191,7 +192,7 @@ public class ForTour extends Activity {
             return;
         } else {
         	mImageDirayUri = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
-        											  WORK_DIR + "/" + mFilename ) );
+        											  DIR_WORK + "/" + mFilename ) );
         	
         	intent.setData(mImageCaptureUri);        
             intent.putExtra("outputX", 360);

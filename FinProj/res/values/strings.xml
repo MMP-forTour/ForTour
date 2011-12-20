@@ -2,4 +2,6 @@
 <resources>
     <string name="hello">Hello World, ForTour!</string>
     <string name="app_name">ForTour</string>
+    <string name="stringRecording">Recording</string>
+    <string name="stringReleaseToStop">Release To Stop</string>
 </resources>
