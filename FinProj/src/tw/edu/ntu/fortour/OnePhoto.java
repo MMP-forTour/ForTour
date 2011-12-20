@@ -6,11 +6,15 @@ import java.io.IOException;
 import java.util.Date;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,6 +34,7 @@ public class OnePhoto extends Activity{
 	private ImageUtil imgUtil;
 	private Uri bmUriPath, mpUriPath;
 	private MediaPlayer mMediaPlayer;
+	private ProgressDialog mProgressDlg;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -67,19 +72,33 @@ public class OnePhoto extends Activity{
 			@Override
 			public void onClick(View v) {
 				mMediaPlayer = new MediaPlayer();
+				
+				mProgressDlg = ProgressDialog.show( OnePhoto.this, 
+													getString( R.string.stringNowPlaying ),
+													getString( R.string.stringStoryMedia ) );
+				mProgressDlg.setCancelable( true );
+				mProgressDlg.setOnCancelListener( new OnCancelListener() {
+					@Override
+					public void onCancel(DialogInterface arg0) {
+						if( mMediaPlayer.isPlaying() ) mMediaPlayer.stop();
+					}
+				} );
+				
 				try {
 					mMediaPlayer.setAudioStreamType( AudioManager.STREAM_MUSIC );
 					mMediaPlayer.setDataSource( getApplicationContext(), mpUriPath );;
 					mMediaPlayer.prepare();
 					mMediaPlayer.start();
+					
+					mMediaPlayer.setOnCompletionListener( new OnCompletionListener() {
+						@Override
+						public void onCompletion(MediaPlayer mp) {
+							mProgressDlg.dismiss();
+							mp.release();
+						}
+					} );
 				}
-				catch( IllegalArgumentException e ) {
-					Toast.makeText( OnePhoto.this, "Unable To Play Media: " + e.toString(), Toast.LENGTH_LONG ).show();
-				}
-				catch( IllegalStateException e ) {
-					Toast.makeText( OnePhoto.this, "Unable To Play Media: " + e.toString(), Toast.LENGTH_LONG ).show();
-				}
-				catch( IOException e ) {
+				catch( Exception e ) {
 					Toast.makeText( OnePhoto.this, "Unable To Play Media: " + e.toString(), Toast.LENGTH_LONG ).show();
 				}
 			}
@@ -127,8 +146,6 @@ public class OnePhoto extends Activity{
     	super.onDestroy();
     	
     	ImageUtil.freeBitmap( bm );
-    	
-    	if( mMediaPlayer != null ) mMediaPlayer.release();
     	
     	try {
 			imgUtil.finalize();

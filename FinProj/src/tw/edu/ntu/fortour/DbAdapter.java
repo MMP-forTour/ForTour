@@ -91,7 +91,7 @@ public class DbAdapter {
 	public Cursor ftStoryFetchAll() {
 		return mDb.query(	DATABASE_TABLE , 
 							new String[] { KEY_ROWID, KEY_TITLE, KEY_IMAGE, KEY_STORY, KEY_LOCATION, KEY_HAS_RECORD, KEY_TIME },
-							null, null, null, null, null );
+							null, null, null, null, KEY_ROWID + " DESC" );
 	}
 	
 	public Cursor ftStoryFetchByID( final String ftID ) {

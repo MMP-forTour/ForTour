@@ -2,14 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="tw.edu.ntu.fortour"
       android:versionCode="1"
-      android:versionName="0.4">
+      android:versionName="0.5">
     <uses-sdk android:minSdkVersion="8" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
     <uses-permission android:name="android.permission.CAMERA"></uses-permission>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
-    <application android:icon="@drawable/icon" android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar" >
+    <application android:icon="@drawable/icon" android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         <activity android:name="tw.edu.ntu.fortour.ForTour"
                   android:label="@string/app_name"
                   android:screenOrientation="portrait">
@@ -21,7 +23,7 @@
         <activity
           android:name="com.dropbox.client2.android.AuthActivity"
           android:launchMode="singleTask"
-          android:configChanges="orientation|keyboard">
+          android:configChanges="orientation|keyboard" android:screenOrientation="portrait">
           <intent-filter>
             <!-- Change this to be db- followed by your app key -->
             <data android:scheme="db-t80g3k4j17kbyjb" />
@@ -31,9 +33,9 @@
           </intent-filter>
         </activity>
         <activity android:name="tw.edu.ntu.fortour.EditPage" android:screenOrientation="portrait"></activity>
-        <activity android:name="tw.edu.ntu.fortour.ListPage"></activity>
-        <activity android:name="tw.edu.ntu.fortour.OnePhoto"></activity>
-        <activity android:name="tw.edu.ntu.fortour.Settings"></activity>
+        <activity android:name="tw.edu.ntu.fortour.ListPage" android:screenOrientation="portrait"></activity>
+        <activity android:name="tw.edu.ntu.fortour.OnePhoto" android:screenOrientation="portrait"></activity>
+        <activity android:name="tw.edu.ntu.fortour.Settings" android:screenOrientation="portrait"></activity>
         
 
     </application>

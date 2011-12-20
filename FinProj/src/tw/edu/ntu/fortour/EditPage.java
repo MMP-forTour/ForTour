@@ -6,7 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -31,7 +33,7 @@ public class EditPage extends Activity {
 	private Bitmap bm;
 	private Uri bmUriPath;
 	private ImageUtil imgUtil;
-	private String mFileName;
+	private String mFileName, mMediaFileName;
 	private Button buttonOPRecord;
 	private MediaRecorder mMediaRecorder;
 	private ProgressDialog mProgressDlg;
@@ -48,6 +50,8 @@ public class EditPage extends Activity {
         
         Bundle b  = this.getIntent().getExtras();
         mFileName = b.getString( "FILE" );
+        
+        mMediaFileName = mFileName.replace( ForTour.EXT_PHOTO, ForTour.EXT_RECORD );
         
         bmUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
 									   		ForTour.DIR_WORK + "/" + mFileName ) );
@@ -98,7 +102,7 @@ public class EditPage extends Activity {
 					}
 					catch( FileNotFoundException e ) { }
 					
-					Toast.makeText( EditPage.this, "Save story success.", Toast.LENGTH_LONG ).show();
+					Toast.makeText( EditPage.this, getString( R.string.stringHoldDownButtonToRecord ), Toast.LENGTH_LONG ).show();
 					finish();
 				}
 			}
@@ -106,7 +110,6 @@ public class EditPage extends Activity {
 		
 		buttonOPRecord.setOnTouchListener( new OnTouchListener() {
 			File mMediaFile;
-			String mMediaFileName = mFileName.replace( ForTour.EXT_PHOTO, ForTour.EXT_RECORD );
 			
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -114,7 +117,7 @@ public class EditPage extends Activity {
 					case MotionEvent.ACTION_DOWN:
 						mProgressDlg = ProgressDialog.show( EditPage.this,
 															getString( R.string.stringRecording ),
-															getString( R.string.stringReleaseToStop ) );
+															getString( R.string.stringReleaseButtonToStop ) );
 						try {
 							mMediaFile = new File( Environment.getExternalStorageDirectory(), ForTour.DIR_WORK + "/" + mMediaFileName );
 							
@@ -136,9 +139,25 @@ public class EditPage extends Activity {
 							mMediaRecorder.stop();
 							mMediaRecorder.release();
 							
-							hasRecord = true;
+							AlertDialog.Builder builder = new AlertDialog.Builder( EditPage.this );
+							builder.setTitle( getString( R.string.stringSave ) + " " + getString( R.string.stringStoryMedia ) );
+							builder.setMessage( getString( R.string.stringNote ) + ": " + getString( R.string.stringHoldDownButtonToRecord ) );
+							builder.setPositiveButton( R.string.stringYes, new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									hasRecord = true;
+									Toast.makeText( EditPage.this, "Save media success.", Toast.LENGTH_LONG ).show();
+								}
+							});
+							builder.setNegativeButton( R.string.stringNo, new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									Util.deleteFile( mMediaFile );
+									Toast.makeText( EditPage.this, "Discard save.", Toast.LENGTH_LONG ).show();
+								}
+							});
 							
-							Toast.makeText( EditPage.this, "Save media success.", Toast.LENGTH_LONG ).show();
+							builder.show();
 						}
 						else {
 							Toast.makeText( EditPage.this, "Save media fail.", Toast.LENGTH_LONG ).show();
@@ -165,6 +184,7 @@ public class EditPage extends Activity {
 		
 		if( keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0 ) {
 			discardStoryImages();
+			Util.deleteFile( new File( Environment.getExternalStorageDirectory(), ForTour.DIR_WORK + "/" + mMediaFileName ) );
 		}
 		
 		return super.onKeyDown(keyCode, event);
