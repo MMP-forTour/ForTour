@@ -25,6 +25,8 @@ public class DbAdapter {
 	public static final String KEY_LOCATION	= "ftLocation";
 	public static final String KEY_HAS_RECORD	= "ftHasRecord";
 	public static final String KEY_TIME		= "ftTime";
+	public static final String KEY_LONGITUDE	= "ftLongitude";
+	public static final String KEY_LATITUDE	= "ftLatitude";
 	
 	private static final String DATABASE_CREATE =
 			"CREATE TABLE " + DATABASE_TABLE + " ( " +
@@ -34,7 +36,10 @@ public class DbAdapter {
 					KEY_STORY + " TEXT NULL," +
 					KEY_LOCATION + " TEXT NULL," +
 					KEY_HAS_RECORD + " INTEGER NOT NULL," +
-					KEY_TIME + " LONG" + " );";
+					KEY_TIME + " LONG," +
+					KEY_LONGITUDE + " DOUBLE NULL," +
+					KEY_LATITUDE + " DOUBLE NULL" +
+					" );";
 	
 	private static final String DATABASE_UPGRADE =
 			"DROP TABLE IF EXISTS " + DATABASE_TABLE + ";";
@@ -72,7 +77,10 @@ public class DbAdapter {
 	}
 	
 	public long ftStoryAdd( final String ftTitle, final String ftImage,
-							 final String ftStory, final String ftLocation, final int ftHasRecord ) {
+							 final String ftStory, final String ftLocation,
+							 final int ftHasRecord, final double ftLongitude,
+							 final double ftLatitude ) {
+		
 		ContentValues initValues = new ContentValues();
 		initValues.put( KEY_TITLE, ftTitle );
 		initValues.put( KEY_IMAGE, ftImage );
@@ -80,6 +88,8 @@ public class DbAdapter {
 		initValues.put( KEY_LOCATION, ftLocation );
 		initValues.put( KEY_HAS_RECORD, ftHasRecord );
 		initValues.put( KEY_TIME, ( new Date() ).getTime() );
+		initValues.put( KEY_LONGITUDE, ftLongitude );
+		initValues.put( KEY_LATITUDE, ftLatitude );
 		
 		return mDb.insert( DATABASE_TABLE, null, initValues );
 	}

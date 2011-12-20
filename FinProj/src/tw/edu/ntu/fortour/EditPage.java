@@ -8,13 +8,20 @@ import java.io.IOException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,10 +41,14 @@ public class EditPage extends Activity {
 	private Uri bmUriPath;
 	private ImageUtil imgUtil;
 	private String mFileName, mMediaFileName;
-	private Button buttonOPRecord;
+	private Button buttonOPRecord, buttonOPLocation;
 	private MediaRecorder mMediaRecorder;
 	private ProgressDialog mProgressDlg;
 	private boolean hasRecord;
+	private LocationManager mLocationManager;
+	private Location mLocation;
+	
+	private String bestLocationProvider = LocationManager.GPS_PROVIDER;
 	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +56,7 @@ public class EditPage extends Activity {
         setContentView( R.layout.one_photo );
         
         hasRecord = false;
+        mLocationManager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
         
         imgUtil = new ImageUtil();
         
@@ -69,14 +81,13 @@ public class EditPage extends Activity {
 		}
 
         imageViewOPImage.setImageBitmap( imgUtil.imageBorderMerge( getResources().getDrawable( R.drawable.photo_frame ), bm ) );
-        
-        Toast.makeText( EditPage.this, "Long press Record to record media.", Toast.LENGTH_LONG ).show();
     }
 	
 	private void findviews(){        
 		imageViewOPImage  	= (ImageView) findViewById( R.id.imageViewOPImage );
         buttonOPOK    		= (ImageButton) findViewById( R.id.buttonOPOK );
         buttonOPRecord		= (Button) findViewById( R.id.buttonOPRecord );
+        buttonOPLocation	= (Button) findViewById( R.id.buttonOPLocation );
 	}
 	
 	private void setButtonListener(){
@@ -87,10 +98,12 @@ public class EditPage extends Activity {
 															mFileName,
 															( (EditText) findViewById( R.id.editTextOPStory ) ).getText().toString(),
 															( (EditText) findViewById( R.id.editTextOPLocation ) ).getText().toString(),
-															( ( hasRecord != false ) ? 1 : 0 )
+															( ( hasRecord != false ) ? 1 : 0 ),
+															( ( mLocation == null ) ? -1 : mLocation.getLongitude() ),
+															( ( mLocation == null ) ? -1 : mLocation.getLatitude() )
 														);
 				
-				if( rst == -1 ) Toast.makeText( EditPage.this, "Save story fail.", Toast.LENGTH_LONG ).show();
+				if( rst == -1 ) Toast.makeText( EditPage.this, getString( R.string.stringSaveStoryFail ), Toast.LENGTH_LONG ).show();
 				else {
 					try {
 						FileOutputStream thumbFile = new FileOutputStream(
@@ -102,7 +115,7 @@ public class EditPage extends Activity {
 					}
 					catch( FileNotFoundException e ) { }
 					
-					Toast.makeText( EditPage.this, getString( R.string.stringHoldDownButtonToRecord ), Toast.LENGTH_LONG ).show();
+					Toast.makeText( EditPage.this, getString( R.string.stringSaveStorySuccess ), Toast.LENGTH_LONG ).show();
 					finish();
 				}
 			}
@@ -168,6 +181,40 @@ public class EditPage extends Activity {
 				}
 				
 				return true;
+			}
+		} );
+		
+		buttonOPLocation.setOnClickListener( new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if( mLocationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ||
+					mLocationManager.isProviderEnabled( LocationManager.NETWORK_PROVIDER ) ) {
+					
+					bestLocationProvider = mLocationManager.getBestProvider( new Criteria(), true ); 
+					mLocation = mLocationManager.getLastKnownLocation( bestLocationProvider );
+					
+					if( mLocation != null ) Log.i( "loc", mLocation.toString() );
+					else Toast.makeText( EditPage.this, getString( R.string.stringUnableToRetrieveDataNow ), Toast.LENGTH_LONG ).show();
+				}
+				else {
+					AlertDialog.Builder builder = new AlertDialog.Builder( EditPage.this );
+					builder.setTitle( R.string.stringEnableLocationServices );
+					builder.setMessage( R.string.stringDoYouWantToEnableIt );
+					builder.setPositiveButton( R.string.stringYes, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface arg0, int arg1) {
+							startActivity( new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS ) );
+						}
+					} );
+					builder.setNegativeButton( R.string.stringNo, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface arg0, int arg1) {
+							Toast.makeText( EditPage.this, getString( R.string.stringServiceCanNotBeUsedNow ), Toast.LENGTH_LONG ).show();
+						}
+					} );
+					builder.show();
+				}
 			}
 		} );
 	}

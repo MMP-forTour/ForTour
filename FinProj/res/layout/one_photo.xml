@@ -146,10 +146,10 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/buttonOPGPS"
+            android:id="@+id/buttonOPLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="GPS" />
+            android:text="Location" />
 
     </FrameLayout> 
 </LinearLayout>

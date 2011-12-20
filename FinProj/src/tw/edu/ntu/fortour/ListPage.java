@@ -156,7 +156,7 @@ public class ListPage extends ListActivity {
 			setListAdapter( contacts );
 		}
 		else {
-			Toast.makeText( ListPage.this, "There is no data now.", Toast.LENGTH_LONG ).show();
+			Toast.makeText( ListPage.this, getString( R.string.stringThereIsNoDataNow ), Toast.LENGTH_LONG ).show();
 		}
 	}
 	
