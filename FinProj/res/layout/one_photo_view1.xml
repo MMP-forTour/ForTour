@@ -36,7 +36,7 @@
                 android:id="@+id/frameLayout1"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.05">
+                android:layout_weight="0.4">
 
                 <LinearLayout
                     android:id="@+id/linearLayout2"
@@ -48,8 +48,8 @@
             			android:layout_width="wrap_content"
             			android:layout_height="fill_parent"
             			android:layout_gravity="center_vertical|center"
-            			android:hint="Title of Story"
-            			android:singleLine="true" android:layout_marginTop="10dp"/>
+            			android:hint="Title of Story..........."
+            			android:singleLine="true" android:layout_marginTop="10dp" android:visibility="invisible"/>
 
                     <TextView
                         android:id="@+id/textViewOPTitle"

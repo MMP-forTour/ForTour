@@ -66,7 +66,6 @@ public class UploadPicture extends AsyncTask<Void, Long, Boolean> {
 
     private String mErrorMsg;
 
-
     public UploadPicture(Context context, DropboxAPI<?> api, String dropboxPath,
             File file) {
         // We set the context this way so we don't accidentally leak activities
@@ -169,7 +168,7 @@ public class UploadPicture extends AsyncTask<Void, Long, Boolean> {
 
     @Override
     protected void onPostExecute(Boolean result) {
-        mDialog.dismiss();
+        //mDialog.dismiss();
         if (result) {
             showToast("Image successfully uploaded");
         } else {

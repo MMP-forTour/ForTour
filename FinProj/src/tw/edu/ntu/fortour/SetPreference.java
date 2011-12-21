@@ -20,6 +20,7 @@ import android.preference.PreferenceActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
@@ -50,7 +51,7 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
     static DropboxAPI<AndroidAuthSession> mApi;
     private boolean mLoggedIn = false;
     private final static String PHOTO_DIR = "/Photos/"; 
-    private Button btn_done;
+    private ImageButton btn_done;
     CheckBoxPreference sync_db;
     private String fileName = null;
     
@@ -67,7 +68,7 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
         sync_db = (CheckBoxPreference)findPreference(SYNC_DROPBOX); 
         sync_db.setOnPreferenceChangeListener(this);  
         sync_db.setOnPreferenceClickListener(this); 
-        btn_done = (Button) findViewById(R.id.btn_done);
+        btn_done = (ImageButton) findViewById(R.id.btn_done);
         
         checkAppKeySetup();
 

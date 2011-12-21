@@ -2,7 +2,7 @@
 <PreferenceScreen 
 	xmlns:android="http://schemas.android.com/apk/res/android" >
 	<PreferenceCategory
-                android:title="Dropbox Setting">
+                android:title="Upload options">
 	<CheckBoxPreference
 	    android:key="sync_db"
 		android:title="Sync to Dropbox" 

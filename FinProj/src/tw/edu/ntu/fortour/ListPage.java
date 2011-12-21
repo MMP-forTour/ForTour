@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.SimpleCursorAdapter.ViewBinder;
@@ -117,10 +119,20 @@ public class ListPage extends ListActivity {
 					ImageView ftImage   = (ImageView) view.findViewById( R.id.imageViewLMRImage );
 					TextView ftTitle    = (TextView) view.findViewById( R.id.textViewLMRTitle );
 					TextView ftTime     = (TextView) view.findViewById( R.id.textViewLMRTime );
+					LinearLayout ftLayout = (LinearLayout) ((View)view.getParent()).findViewById(R.id.ftLinearLayout);
+					
+					if (((View) view.getParent()).getId() == R.id.ftLinearLayout) {
+						int colorPos = cursor.getPosition() % 2;
+						if (colorPos == 0)
+							ftLayout.setBackgroundResource(R.drawable.listitem_r);
+						else
+							ftLayout.setBackgroundResource(R.drawable.listitem_g);
+					}
 					
 					switch( view.getId() ) {
 						case R.id.imageViewLMRImage:
 							try {
+								Log.i("ListPage", "image");
 								// First Try Thumb
 								bmUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
 																	ForTour.DIR_WORK + "/" + ForTour.DIR_THUMB + "/" + cursor.getString( 2 ) ) );
@@ -147,6 +159,7 @@ public class ListPage extends ListActivity {
 						case R.id.textViewLMRTime:
 							ftTime.setText( sdf.format( new Date( Long.parseLong( cursor.getString( 6 ) ) ) ) );
 							break;
+
 						default:
 							break;
 					}

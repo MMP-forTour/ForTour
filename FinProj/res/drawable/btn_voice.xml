@@ -3,15 +3,15 @@
   <item
 	android:state_focused="true"
 	android:state_pressed="false"
-	android:drawable="@drawable/voice_pressed" />
+	android:drawable="@drawable/btn_rec2" />
   <item
 	android:state_focused="true"
 	android:state_pressed="true"
-	android:drawable="@drawable/voice_pressed" />
+	android:drawable="@drawable/btn_rec2" />
   <item
 	android:state_focused="false"
 	android:state_pressed="true"
-	android:drawable="@drawable/voice_pressed" />
+	android:drawable="@drawable/btn_rec2" />
   <item 
-	android:drawable="@drawable/voice" />  
+	android:drawable="@drawable/btn_rec1" />  
 </selector>
