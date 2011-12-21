@@ -3,13 +3,13 @@ package tw.edu.ntu.fortour;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Date;
+import java.sql.Date;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 public class OnePhoto extends Activity{
 	private String ftID;
 	private Bitmap bm; 
@@ -42,7 +43,7 @@ public class OnePhoto extends Activity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.one_photo_view);
+        setContentView(R.layout.one_photo_view1);
         
         ftID = this.getIntent().getExtras().getString( "_ID" );
         
@@ -63,8 +64,9 @@ public class OnePhoto extends Activity{
         ImageView imageViewOPImage	= (ImageView) findViewById( R.id.imageViewOPImage );
         
         ImageButton buttonOPOK			= (ImageButton) findViewById( R.id.buttonOPOK );
-        Button buttonOPPlay				= (Button) findViewById( R.id.buttonOPPlay );
-        Button buttonOPLocation			= (Button) findViewById( R.id.buttonOPLocation );
+        ImageButton buttonOPPlay		= (ImageButton) findViewById( R.id.buttonOPPlay );
+        ImageButton buttonOPLocation	= (ImageButton) findViewById( R.id.buttonOPLocation );
+
         
         mpUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
 			     							 ForTour.DIR_WORK + "/" + c.getString( 2 ).replace( ForTour.EXT_PHOTO , ForTour.EXT_RECORD ) ) );
