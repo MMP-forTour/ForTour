@@ -9,8 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minHeight="70dp"
-        android:padding="4dp" 
-        android:background="@drawable/listitem_g">
+        android:padding="4dp" android:background="@drawable/listitem_r">
 
         <ImageView
             android:scaleType="centerInside"

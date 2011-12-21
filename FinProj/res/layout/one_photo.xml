@@ -100,79 +100,67 @@
                 </LinearLayout>
             </FrameLayout>
 
-            <LinearLayout
-                android:id="@+id/linearLayout9"
-                android:layout_width="wrap_content"
+            <FrameLayout
+                android:id="@+id/frameLayout1"
+                android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_weight="2.5"
-                android:orientation="vertical" >
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="25dp"
+                android:layout_weight="2.5" >
 
-                <FrameLayout
-                    android:id="@+id/frameLayout1"
+                <ImageView
+                    android:id="@+id/note"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="25dp">
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/photo_frame" />
 
-                    <ImageView
-                        android:id="@+id/note"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_gravity="center_horizontal"
-                        android:src="@drawable/photo_frame" />
+                <ImageView
+                    android:id="@+id/imageViewOPImage"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center_horizontal" />
 
-                    <ImageView
-                        android:id="@+id/imageViewOPImage"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_gravity="center_horizontal" />
+                <ImageView
+                    android:id="@+id/pframe"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/photo_frame" />
 
-                    <ImageView
-                        android:id="@+id/pframe"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_gravity="center_horizontal"
-                        android:src="@drawable/photo_frame" />
+                <EditText
+                    android:id="@+id/editTextOPStory"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="100dp"
+                    android:background="#00000000"
+                    android:hint="About this Story..."
+                    android:singleLine="true" />
 
-                    <EditText
-                        android:id="@+id/editTextOPStory"
-                        android:layout_width="220dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="100dp"
-                        android:background="#00000000"
-                        android:hint="About this Story..."
-                        android:singleLine="true" >
+                <ImageButton
+                    android:id="@+id/emotion_sticker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="68dp"
+                    android:layout_gravity="bottom|right"
+                    android:layout_marginBottom="70dp"
+                    android:background="#00000000"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/mood_sunny" />
 
-                        <requestFocus />
-                    </EditText>
-
-                    <ImageButton
-                        android:id="@+id/emotion_sticker"
-                        android:layout_width="wrap_content"
-                        android:layout_height="68dp"
-                        android:layout_gravity="bottom|right"
-                        android:layout_marginBottom="70dp"
-                        android:background="#00000000"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/mood_sunny" />
-
-                    <TextView
-                        android:id="@+id/textViewOPStory"
-                        android:layout_width="220dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center"
-                        android:layout_marginBottom="30dp"
-                        android:maxLines="2"
-                        android:text="About this Story..."
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@android:color/black"
-                        android:textStyle="bold"
-                        android:visibility="gone" />
-
-                </FrameLayout>
-
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/textViewOPStory"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginBottom="30dp"
+                    android:maxLines="2"
+                    android:text="About this Story..."
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/frameLayout2"
