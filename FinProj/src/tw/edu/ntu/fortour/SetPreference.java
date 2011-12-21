@@ -74,8 +74,8 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
         	fileName = extras.getString("FILE");
-            Toast.makeText(this, "FILENAME is: " + extras.getString("FILE"),
-            Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "FILENAME is: " + extras.getString("FILE"),
+            //Toast.LENGTH_SHORT).show();
         }
         
         // Display the proper UI state if logged in or not
@@ -263,8 +263,8 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
             }
     	}
     	else {
-    		Toast error = Toast.makeText(this, "Couldn't authenticate with Dropbox", Toast.LENGTH_LONG);
-            error.show();
+    		//Toast error = Toast.makeText(this, "Couldn't authenticate with Dropbox", Toast.LENGTH_LONG);
+            //error.show();
     	}
     }
 }
