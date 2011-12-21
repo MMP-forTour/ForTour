@@ -3,7 +3,10 @@ package tw.edu.ntu.fortour;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +22,7 @@ import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 
 public class LocationMap extends MapActivity {
+	private ProgressDialog mProgressDialog;
 	private Button mButtonLMOk, mButtonLMDetermine, mButtonLMCancel, mButtonLMBack;
 	private MapView mMapView;
 	private MapController mMapController;
@@ -36,6 +40,15 @@ public class LocationMap extends MapActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.location_map);
 
+        mProgressDialog = ProgressDialog.show( LocationMap.this, getString( R.string.stringLoading ), getString( R.string.stringPleaseWait ) );
+        mProgressDialog.setCancelable( true );
+        mProgressDialog.setOnCancelListener( new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface arg0) {
+				Toast.makeText( LocationMap.this, getString( R.string.stringUnableToRetrieveLocationNow ), Toast.LENGTH_LONG ).show();
+			}
+		} );
+        
         Bundle b = this.getIntent().getExtras();
         
         if( b != null ) {
@@ -96,6 +109,8 @@ public class LocationMap extends MapActivity {
 			else mGeoPoint = new GeoPoint( Integer.valueOf( locLatitude ) , Integer.valueOf( locLongitude ) );
 			
 			mMapController.animateTo( mGeoPoint );
+			
+			if( mProgressDialog != null ) mProgressDialog.dismiss();
 		}
 	}; 
     
@@ -103,6 +118,7 @@ public class LocationMap extends MapActivity {
 		mButtonLMDetermine.setOnClickListener( new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				mProgressDialog.show();
 				mMyLocationOverlay.runOnFirstFix( determinLocation );
 			}
 		} );
@@ -115,10 +131,12 @@ public class LocationMap extends MapActivity {
 				Intent i = new Intent();
 				Bundle b = new Bundle();
 				
-				b.putString( KEY_LONGITUDE, Integer.toString( mGeoPoint.getLongitudeE6() ) );
-				b.putString( KEY_LATITUDE, Integer.toString( mGeoPoint.getLatitudeE6() ) );
-				
-				i.putExtras( b );
+				if( mGeoPoint != null ) {
+					b.putString( KEY_LONGITUDE, Integer.toString( mGeoPoint.getLongitudeE6() ) );
+					b.putString( KEY_LATITUDE, Integer.toString( mGeoPoint.getLatitudeE6() ) );
+					
+					i.putExtras( b );
+				}
 				setResult( Activity.RESULT_OK, i );
 				
 				LocationMap.this.finish();
