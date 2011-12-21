@@ -4,10 +4,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Calendar;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,10 +32,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.Window;
-import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class EditPage extends Activity {
@@ -41,7 +46,7 @@ public class EditPage extends Activity {
 	private Uri bmUriPath;
 	private ImageUtil imgUtil;
 	private String mFileName, mMediaFileName;
-	private Button buttonOPRecord, buttonOPLocation;
+	private ImageButton buttonOPRecord, buttonOPLocation;
 	private MediaRecorder mMediaRecorder;
 	private ProgressDialog mProgressDlg;
 	private boolean hasRecord;
@@ -49,11 +54,16 @@ public class EditPage extends Activity {
 	private Location mLocation;
 	
 	private String bestLocationProvider = LocationManager.GPS_PROVIDER;
+	private final int DATE_DIALOG = 1;      
+    private final int TIME_DIALOG = 2;
+    EditText editTextOPDate, editTextOPTime;
 	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);          
-        setContentView( R.layout.one_photo );
+        setContentView( R.layout.one_photo_view1 );
+        
+        setDateTimePicker();
         
         hasRecord = false;
         mLocationManager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
@@ -86,8 +96,8 @@ public class EditPage extends Activity {
 	private void findviews(){        
 		imageViewOPImage  	= (ImageView) findViewById( R.id.imageViewOPImage );
         buttonOPOK    		= (ImageButton) findViewById( R.id.buttonOPOK );
-        buttonOPRecord		= (Button) findViewById( R.id.buttonOPRecord );
-        buttonOPLocation	= (Button) findViewById( R.id.buttonOPLocation );
+        buttonOPRecord		= (ImageButton) findViewById( R.id.buttonOPRecord );
+        buttonOPLocation	= (ImageButton) findViewById( R.id.buttonOPLocation );
 	}
 	
 	private void setButtonListener(){
@@ -112,6 +122,13 @@ public class EditPage extends Activity {
 														)
 													 );
 						Bitmap.createScaledBitmap( bm, imgUtil.THUMB_SIZE, imgUtil.THUMB_SIZE, true ).compress( Bitmap.CompressFormat.PNG, 90, thumbFile );
+						
+						Intent i = new Intent();
+						i.setClass(EditPage.this, SetPreference.class);
+						Bundle bundle = new Bundle();
+						bundle.putString( "FILE", mFileName );
+						i.putExtras(bundle);
+						startActivity(i);
 					}
 					catch( FileNotFoundException e ) { }
 					
@@ -248,4 +265,70 @@ public class EditPage extends Activity {
 		}
 		catch( Throwable e ) { }
 	}
+	
+	private void setDateTimePicker(){
+    	View.OnClickListener dateBtnListener =   
+                new BtnOnClickListener(DATE_DIALOG);  
+    	View.OnClickListener timeBtnListener =   
+                new BtnOnClickListener(TIME_DIALOG);      
+    	editTextOPDate =(EditText) findViewById(R.id.editTextOPDate);
+    	editTextOPTime =(EditText) findViewById(R.id.editTextOPTime);
+    	editTextOPDate.setOnClickListener(dateBtnListener);
+    	editTextOPTime.setOnClickListener(timeBtnListener);
+    }
+    
+    protected Dialog onCreateDialog(int id) {  
+        //Get date and time
+        Calendar calendar = Calendar.getInstance();
+        Dialog dialog = null;  
+        switch(id) {  
+            case DATE_DIALOG:  
+                DatePickerDialog.OnDateSetListener dateListener =   
+                    new DatePickerDialog.OnDateSetListener() {  
+                        public void onDateSet(DatePicker datePicker,   
+                                int year, int month, int dayOfMonth) {  
+                            
+                             //Calendar starts from month 0, so add 1 to month
+                            editTextOPDate.setText(year + "/"+(month+1) + "/" + dayOfMonth );  
+                        }  
+                    };  
+                dialog = new DatePickerDialog(this,  
+                        dateListener,  
+                        calendar.get(Calendar.YEAR),  
+                        calendar.get(Calendar.MONTH),  
+                        calendar.get(Calendar.DAY_OF_MONTH));  
+                break;  
+            case TIME_DIALOG:  
+                TimePickerDialog.OnTimeSetListener timeListener =   
+                    new TimePickerDialog.OnTimeSetListener() {  
+                          
+                        public void onTimeSet(TimePicker timerPicker,  
+                                int hourOfDay, int minute) {  
+                            
+                            editTextOPTime.setText(hourOfDay + ":" + minute );  
+                        }  
+                    };  
+                    dialog = new TimePickerDialog(this, timeListener,  
+                            calendar.get(Calendar.HOUR_OF_DAY),  
+                            calendar.get(Calendar.MINUTE),  
+                            false);   //24h or pm/am
+                break;  
+            default:  
+                break;  
+        }  
+        return dialog;  
+    }  
+
+    private class BtnOnClickListener implements View.OnClickListener {  
+          
+        private int dialogId = 0;   //'0'->no dialog
+  
+        public BtnOnClickListener(int dialogId) {  
+            this.dialogId = dialogId;  
+        }  
+        public void onClick(View view) {  
+            showDialog(dialogId);  
+        }  
+          
+    }  
 }

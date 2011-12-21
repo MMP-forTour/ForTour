@@ -134,7 +134,7 @@ public class ForTour extends Activity {
         set.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View arg0){
         		Intent intent = new Intent();
-        		intent.setClass( ForTour.this, Settings.class );
+        		intent.setClass( ForTour.this, SetPreference.class );
         		startActivity( intent );
         	}
         });

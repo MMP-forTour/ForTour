@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -17,18 +18,19 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
-
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.android.AuthActivity;
 import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.AppKeyPair;
-import com.dropbox.client2.session.TokenPair;
 import com.dropbox.client2.session.Session.AccessType;
+import com.dropbox.client2.session.TokenPair;
 
-public class Settings extends PreferenceActivity 
+public class SetPreference extends PreferenceActivity 
 implements OnPreferenceChangeListener, OnPreferenceClickListener {
 	private static final String TAG = "Settings";
 	private static final String SYNC_DROPBOX = "sync_db";
@@ -45,10 +47,12 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
     final static private String ACCESS_KEY_NAME = "ACCESS_KEY";
     final static private String ACCESS_SECRET_NAME = "ACCESS_SECRET";
 
-    DropboxAPI<AndroidAuthSession> mApi;
+    static DropboxAPI<AndroidAuthSession> mApi;
     private boolean mLoggedIn = false;
     private final static String PHOTO_DIR = "/Photos/"; 
+    private Button btn_done;
     CheckBoxPreference sync_db;
+    private String fileName = null;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,15 +63,30 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
 
         // Basic Android widgets
         addPreferencesFromResource(R.xml.settings);
+        setContentView(R.layout.settings_main);
         sync_db = (CheckBoxPreference)findPreference(SYNC_DROPBOX); 
         sync_db.setOnPreferenceChangeListener(this);  
         sync_db.setOnPreferenceClickListener(this); 
+        btn_done = (Button) findViewById(R.id.btn_done);
         
         checkAppKeySetup();
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+        	fileName = extras.getString("FILE");
+            Toast.makeText(this, "FILENAME is: " + extras.getString("FILE"),
+            Toast.LENGTH_SHORT).show();
+        }
         
         // Display the proper UI state if logged in or not
         setLoggedIn(mApi.getSession().isLinked());
-
+        btn_done.setOnClickListener(new View.OnClickListener() {	
+			public void onClick(View v) {
+				if (fileName != null) 
+					uploadDB(fileName);
+				finish();
+			}
+		});
     }
     
     @Override
@@ -217,7 +236,7 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
         	mLoggedIn = (Boolean) newValue;
             if (mLoggedIn) {
             	// Start the remote authentication
-                mApi.getSession().startAuthentication(Settings.this);
+                mApi.getSession().startAuthentication(SetPreference.this);
             }
             else
             	logOut();
@@ -228,6 +247,7 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
 	//This is what get called when save a picture
     public void uploadDB(String fileName) {
     	if (mApi.getSession().authenticationSuccessful()) {
+    		Log.i(TAG, "upload!!!!!!!!");
     		Uri uri = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
     				  ForTour.DIR_WORK + "/" + fileName ) );
     		File file;
@@ -241,6 +261,10 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
 	            // TODO Auto-generated catch block
 	            e.printStackTrace();
             }
+    	}
+    	else {
+    		Toast error = Toast.makeText(this, "Couldn't authenticate with Dropbox", Toast.LENGTH_LONG);
+            error.show();
     	}
     }
 }

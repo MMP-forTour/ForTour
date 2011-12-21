@@ -40,7 +40,7 @@ public class OnePhoto extends Activity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.one_photo_view);
+        setContentView(R.layout.one_photo_view1);
         
         ftID = this.getIntent().getExtras().getString( "_ID" );
         
@@ -61,7 +61,7 @@ public class OnePhoto extends Activity{
         ImageView imageViewOPImage	= (ImageView) findViewById( R.id.imageViewOPImage );
         
         ImageButton buttonOPOK			= (ImageButton) findViewById( R.id.buttonOPOK );
-        Button buttonOPPlay				= (Button) findViewById( R.id.buttonOPPlay );
+        ImageButton buttonOPPlay		= (ImageButton) findViewById( R.id.buttonOPPlay );
         
         mpUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
 			     							 ForTour.DIR_WORK + "/" + c.getString( 2 ).replace( ForTour.EXT_PHOTO , ForTour.EXT_RECORD ) ) );
