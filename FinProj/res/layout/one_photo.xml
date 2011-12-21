@@ -2,14 +2,14 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:orientation="vertical"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
   android:background="@drawable/background"
   >
 
     <FrameLayout
         android:id="@+id/frameLayout1"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center_horizontal"
         android:layout_weight="8.3" >
@@ -17,14 +17,14 @@
         <EditText
             android:id="@+id/editTextOPTitle"
             android:layout_width="225dp"
-            android:layout_height="match_parent"
+            android:layout_height="fill_parent"
             android:layout_gravity="center"
             android:hint="Title of Story..."
             android:singleLine="true" />
 
         <TextView
             android:id="@+id/textViewOPTitle"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_gravity="center_vertical"
@@ -48,7 +48,7 @@
 
     <FrameLayout
         android:id="@+id/frameLayout1"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center_horizontal"
         android:layout_weight="3" >
@@ -97,7 +97,7 @@
 
     <FrameLayout
         android:id="@+id/frameLayout2"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center_horizontal"
         android:layout_weight="7" >
@@ -105,14 +105,14 @@
         <LinearLayout
             android:id="@+id/linearLayout1"
             android:layout_width="225dp"
-            android:layout_height="match_parent"
+            android:layout_height="fill_parent"
             android:gravity="center_vertical"
             android:layout_gravity="center_horizontal"
             android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/textViewOPTime"
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Time of Story..."
                 android:visibility="gone"
@@ -120,7 +120,7 @@
 
             <TextView
                 android:id="@+id/textViewOPLocation"
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Location of Story..."
                 android:ellipsize="end"
@@ -130,14 +130,14 @@
 
             <EditText
                 android:id="@+id/editTextOPLocation"
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:hint="Location of Story..."
                 android:singleLine="true" />
             
             <ImageButton
                     android:id="@+id/buttonOPOK"
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:background="#00000000"
                     android:scaleType="centerInside"
