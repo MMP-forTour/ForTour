@@ -259,7 +259,7 @@ public class EditPage extends Activity {
 		}
 		
 		return super.onKeyDown(keyCode, event);
-	}
+	} 
 	
 	@Override
 	protected void onDestroy() {
