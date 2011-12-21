@@ -22,13 +22,11 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 public class OnePhoto extends Activity{
 	private String ftID;
@@ -138,6 +136,7 @@ public class OnePhoto extends Activity{
 			@Override
 			public void onClick(View v) {
 				if( locLatitude != -1 && locLongitute != -1 ) {
+					
 					Intent i = new Intent();
 					Bundle b = new Bundle();
 					

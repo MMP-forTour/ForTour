@@ -4,7 +4,6 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;

@@ -16,7 +16,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.location.Location;
 import android.location.LocationManager;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -49,13 +48,11 @@ public class EditPage extends Activity {
 	private ProgressDialog mProgressDlg;
 	private boolean hasRecord;
 	private LocationManager mLocationManager;
-	private Location mLocation;
-	
-	private String bestLocationProvider = LocationManager.GPS_PROVIDER;
+	private EditText editTextOPDate, editTextOPTime;
+	private double locLongitute, locLatitude;
+
 	private final int DATE_DIALOG = 1;      
     private final int TIME_DIALOG = 2;
-    EditText editTextOPDate, editTextOPTime;
-	private double locLongitute, locLatitude;
 
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -280,7 +277,7 @@ public class EditPage extends Activity {
 		}
 		
 		return super.onKeyDown(keyCode, event);
-	}
+	} 
 	
 	@Override
 	protected void onDestroy() {
