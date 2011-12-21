@@ -10,8 +10,11 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+        <uses-library android:name="com.google.android.maps"/>
+        
         <activity android:name="tw.edu.ntu.fortour.ForTour"
                   android:label="@string/app_name"
                   android:screenOrientation="portrait">
@@ -36,7 +39,6 @@
         <activity android:name="tw.edu.ntu.fortour.ListPage" android:screenOrientation="portrait"></activity>
         <activity android:name="tw.edu.ntu.fortour.OnePhoto" android:screenOrientation="portrait"></activity>
         <activity android:name="tw.edu.ntu.fortour.Settings" android:screenOrientation="portrait"></activity>
-        
-
+        <activity android:name="tw.edu.ntu.fortour.LocationMap" android:screenOrientation="portrait"></activity>
     </application>
 </manifest>

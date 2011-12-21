@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <com.google.android.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="8"
+        android:apiKey="0rqcx9putsFRGDSaK44e1acJsyN3zDLHM73RGRw" >
+   	</com.google.android.maps.MapView>
+   	
+    <LinearLayout
+        android:id="@+id/linearLayoutActions"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_weight="1" >
+
+        <Button
+            android:id="@+id/buttonLMOk"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@android:string/ok" />
+
+        <Button
+            android:id="@+id/buttonLMDetermine"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@string/stringDetermine" />
+
+        <Button
+            android:id="@+id/buttonLMCancel"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@android:string/cancel" />
+
+    </LinearLayout>
+
+</LinearLayout>

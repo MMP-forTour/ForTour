@@ -12,8 +12,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.location.Criteria;
-import android.location.Location;
 import android.location.LocationManager;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -21,7 +19,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,16 +43,17 @@ public class EditPage extends Activity {
 	private ProgressDialog mProgressDlg;
 	private boolean hasRecord;
 	private LocationManager mLocationManager;
-	private Location mLocation;
-	
-	private String bestLocationProvider = LocationManager.GPS_PROVIDER;
-	
+	private double locLongitute, locLatitude;
+
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);          
         setContentView( R.layout.one_photo );
         
         hasRecord = false;
+        locLongitute = -1;
+        locLatitude = -1;
+        
         mLocationManager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
         
         imgUtil = new ImageUtil();
@@ -99,8 +97,8 @@ public class EditPage extends Activity {
 															( (EditText) findViewById( R.id.editTextOPStory ) ).getText().toString(),
 															( (EditText) findViewById( R.id.editTextOPLocation ) ).getText().toString(),
 															( ( hasRecord != false ) ? 1 : 0 ),
-															( ( mLocation == null ) ? -1 : mLocation.getLongitude() ),
-															( ( mLocation == null ) ? -1 : mLocation.getLatitude() )
+															locLatitude,
+															locLongitute
 														);
 				
 				if( rst == -1 ) Toast.makeText( EditPage.this, getString( R.string.stringSaveStoryFail ), Toast.LENGTH_LONG ).show();
@@ -155,14 +153,14 @@ public class EditPage extends Activity {
 							AlertDialog.Builder builder = new AlertDialog.Builder( EditPage.this );
 							builder.setTitle( getString( R.string.stringSave ) + " " + getString( R.string.stringStoryMedia ) );
 							builder.setMessage( getString( R.string.stringNote ) + ": " + getString( R.string.stringHoldDownButtonToRecord ) );
-							builder.setPositiveButton( R.string.stringYes, new DialogInterface.OnClickListener() {
+							builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
 									hasRecord = true;
 									Toast.makeText( EditPage.this, "Save media success.", Toast.LENGTH_LONG ).show();
 								}
 							});
-							builder.setNegativeButton( R.string.stringNo, new DialogInterface.OnClickListener() {
+							builder.setNegativeButton( android.R.string.no, new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
 									Util.deleteFile( mMediaFile );
@@ -191,23 +189,21 @@ public class EditPage extends Activity {
 				if( mLocationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ||
 					mLocationManager.isProviderEnabled( LocationManager.NETWORK_PROVIDER ) ) {
 					
-					bestLocationProvider = mLocationManager.getBestProvider( new Criteria(), true ); 
-					mLocation = mLocationManager.getLastKnownLocation( bestLocationProvider );
-					
-					if( mLocation != null ) Log.i( "loc", mLocation.toString() );
-					else Toast.makeText( EditPage.this, getString( R.string.stringUnableToRetrieveDataNow ), Toast.LENGTH_LONG ).show();
+					Intent intent = new Intent();
+					intent.setClass( EditPage.this, LocationMap.class );
+					startActivityForResult( intent, ForTour.LOCATION_MAP_PICK );
 				}
 				else {
 					AlertDialog.Builder builder = new AlertDialog.Builder( EditPage.this );
 					builder.setTitle( R.string.stringEnableLocationServices );
 					builder.setMessage( R.string.stringDoYouWantToEnableIt );
-					builder.setPositiveButton( R.string.stringYes, new DialogInterface.OnClickListener() {
+					builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface arg0, int arg1) {
 							startActivity( new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS ) );
 						}
 					} );
-					builder.setNegativeButton( R.string.stringNo, new DialogInterface.OnClickListener() {
+					builder.setNegativeButton( android.R.string.no, new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface arg0, int arg1) {
 							Toast.makeText( EditPage.this, getString( R.string.stringServiceCanNotBeUsedNow ), Toast.LENGTH_LONG ).show();
@@ -217,6 +213,34 @@ public class EditPage extends Activity {
 				}
 			}
 		} );
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch( requestCode ) {
+			case ForTour.LOCATION_MAP_PICK:
+				if( resultCode == Activity.RESULT_OK ) {
+					Bundle extras = data.getExtras();
+			        if( extras != null ) {
+			        	String locLong = extras.getString( LocationMap.KEY_LONGITUDE );
+			        	String locLati = extras.getString( LocationMap.KEY_LATITUDE );
+
+			        	try {
+				        	if( locLong != null ) locLongitute = Double.parseDouble( locLong ) / 1E6;
+				        	if( locLati != null ) locLatitude = Double.parseDouble( locLati ) / 1E6;
+			        	}
+			        	catch( NumberFormatException nfe ) {}
+			        }
+			        
+			        if( locLatitude == -1 || locLongitute == -1 ) {
+			        	locLatitude = -1;
+			        	locLongitute = -1;
+			        }
+				}
+				break;
+			default:
+				break;
+		}
 	}
 	
 	private void discardStoryImages() {

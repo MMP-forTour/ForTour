@@ -8,6 +8,7 @@ import java.util.Date;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.DialogInterface.OnCancelListener;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -35,6 +36,7 @@ public class OnePhoto extends Activity{
 	private Uri bmUriPath, mpUriPath;
 	private MediaPlayer mMediaPlayer;
 	private ProgressDialog mProgressDlg;
+	private double locLongitute, locLatitude;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -62,10 +64,36 @@ public class OnePhoto extends Activity{
         
         ImageButton buttonOPOK			= (ImageButton) findViewById( R.id.buttonOPOK );
         Button buttonOPPlay				= (Button) findViewById( R.id.buttonOPPlay );
+        Button buttonOPLocation			= (Button) findViewById( R.id.buttonOPLocation );
         
         mpUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
 			     							 ForTour.DIR_WORK + "/" + c.getString( 2 ).replace( ForTour.EXT_PHOTO , ForTour.EXT_RECORD ) ) );
 
+        Typeface font = Typeface.createFromAsset( getAssets(), "PEIXE.ttf" );
+        textViewOPTitle.setTypeface( font );
+        textViewOPTitle.setTextSize( 30 );
+        
+        textViewOPTitle.setText( c.getString( 1 ) );
+        textViewOPStory.setText( c.getString( 3 ) );
+        textViewOPLocation.setText( "@" + " " + c.getString( 4 ) );
+        textViewOPTime.setText( new Date(Long.parseLong(c.getString( 6 ))).toLocaleString() );
+
+        locLongitute = c.getDouble( 7 );
+        locLatitude  = c.getDouble( 8 );
+        
+        textViewOPTitle.setVisibility( View.VISIBLE );
+        editTextOPTitle.setVisibility( View.GONE );
+        
+        textViewOPStory.setVisibility( View.VISIBLE );
+        editTextOPStory.setVisibility( View.GONE );
+        
+        textViewOPLocation.setVisibility( View.VISIBLE );
+        editTextOPLocation.setVisibility( View.GONE );
+        
+        textViewOPTime.setVisibility( View.VISIBLE );
+        
+        buttonOPOK.setVisibility( View.GONE );
+        
         /* TODO: Check file exists first. */
         buttonOPPlay.setOnClickListener( new OnClickListener() {
 			
@@ -104,27 +132,22 @@ public class OnePhoto extends Activity{
 			}
 		} );
         
-        Typeface font = Typeface.createFromAsset( getAssets(), "PEIXE.ttf" );
-        textViewOPTitle.setTypeface( font );
-        textViewOPTitle.setTextSize( 30 );
-        
-        textViewOPTitle.setText( c.getString( 1 ) );
-        textViewOPStory.setText( c.getString( 3 ) );
-        textViewOPLocation.setText( "@" + " " + c.getString( 4 ) );
-        textViewOPTime.setText( new Date(Long.parseLong(c.getString( 6 ))).toLocaleString() );
-
-        textViewOPTitle.setVisibility( View.VISIBLE );
-        editTextOPTitle.setVisibility( View.GONE );
-        
-        textViewOPStory.setVisibility( View.VISIBLE );
-        editTextOPStory.setVisibility( View.GONE );
-        
-        textViewOPLocation.setVisibility( View.VISIBLE );
-        editTextOPLocation.setVisibility( View.GONE );
-        
-        textViewOPTime.setVisibility( View.VISIBLE );
-        
-        buttonOPOK.setVisibility( View.GONE );
+        buttonOPLocation.setOnClickListener( new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if( locLatitude != -1 && locLongitute != -1 ) {
+					Intent i = new Intent();
+					Bundle b = new Bundle();
+					
+					b.putString( LocationMap.KEY_LONGITUDE, String.valueOf( (int) ( locLongitute * 1E6 ) ) );
+					b.putString( LocationMap.KEY_LATITUDE, String.valueOf( (int) ( locLatitude * 1E6 ) ) );
+					i.putExtras( b );
+					i.setClass( OnePhoto.this, LocationMap.class );
+					
+					startActivity( i );
+				}
+			}
+		} );
         
         try {
         	bmUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
