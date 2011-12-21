@@ -121,13 +121,13 @@ public class ListPage extends ListActivity {
 					TextView ftTime     = (TextView) view.findViewById( R.id.textViewLMRTime );
 					LinearLayout ftLayout = (LinearLayout) ((View)view.getParent()).findViewById(R.id.ftLinearLayout);
 					
-					/*if (((View) view.getParent()).getId() == R.id.ftLinearLayout) {
+					if (((View) view.getParent()).getId() == R.id.ftLinearLayout) {
 						int colorPos = cursor.getPosition() % 2;
 						if (colorPos == 0)
 							ftLayout.setBackgroundResource(R.drawable.listitem_r);
 						else
 							ftLayout.setBackgroundResource(R.drawable.listitem_g);
-					}*/
+					}
 					
 					switch( view.getId() ) {
 						case R.id.imageViewLMRImage:
