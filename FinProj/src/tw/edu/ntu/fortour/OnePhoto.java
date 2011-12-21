@@ -136,7 +136,6 @@ public class OnePhoto extends Activity{
 			@Override
 			public void onClick(View v) {
 				if( locLatitude != -1 && locLongitute != -1 ) {
-					
 					Intent i = new Intent();
 					Bundle b = new Bundle();
 					

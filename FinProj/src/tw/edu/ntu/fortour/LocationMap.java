@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
@@ -20,7 +19,7 @@ import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 
 public class LocationMap extends MapActivity {
-	private Button mButtonLMOk, mButtonLMDetermine, mButtonLMCancel;
+	private Button mButtonLMOk, mButtonLMDetermine, mButtonLMCancel, mButtonLMBack;
 	private MapView mMapView;
 	private MapController mMapController;
 	private GeoPoint mGeoPoint;
@@ -37,7 +36,6 @@ public class LocationMap extends MapActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.location_map);
 
-        LinearLayout mLinearLayoutActions = (LinearLayout) findViewById( R.id.linearLayoutActions );
         Bundle b = this.getIntent().getExtras();
         
         if( b != null ) {
@@ -50,6 +48,7 @@ public class LocationMap extends MapActivity {
         mButtonLMOk        = (Button) findViewById( R.id.buttonLMOk );
         mButtonLMDetermine = (Button) findViewById( R.id.buttonLMDetermine );
         mButtonLMCancel    = (Button) findViewById( R.id.buttonLMCancel );
+        mButtonLMBack      = (Button) findViewById( R.id.buttonLMBack );
         
         mMapView = (MapView) findViewById( R.id.mapView );
         
@@ -72,7 +71,10 @@ public class LocationMap extends MapActivity {
 	        mMyLocationOverlay.enableMyLocation();
         }
         else {
-        	mLinearLayoutActions.setVisibility( View.GONE );
+        	mButtonLMOk.setVisibility( View.GONE );
+        	mButtonLMDetermine.setVisibility( View.GONE );
+        	mButtonLMCancel.setVisibility( View.GONE );
+        	mButtonLMBack.setVisibility( View.VISIBLE );
         }
         mMyLocationOverlay.runOnFirstFix( determinLocation );
         
@@ -126,6 +128,13 @@ public class LocationMap extends MapActivity {
 		mButtonLMCancel.setOnClickListener( new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				LocationMap.this.finish();
+			}
+		} );
+		
+		mButtonLMBack.setOnClickListener( new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
 				LocationMap.this.finish();
 			}
 		} );

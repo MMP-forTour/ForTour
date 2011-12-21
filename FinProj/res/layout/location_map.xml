@@ -40,6 +40,14 @@
             android:layout_weight="1"
             android:text="@android:string/cancel" />
 
+        <Button
+            android:id="@+id/buttonLMBack"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:text="@string/stringBack" />
+
     </LinearLayout>
 
 </LinearLayout>

@@ -7,6 +7,7 @@
     <string name="stringReleaseButtonToStop">Release the button to stop recording</string>
     <string name="stringSave">Save</string>
     <string name="stringNote">Note</string>
+    <string name="stringBack">Back</string>
     <string name="stringNowPlaying">Now Playing</string>
     <string name="stringStoryMedia">Story Media</string>
     <string name="stringEnableLocationServices">Enable Location Services</string>
@@ -18,4 +19,6 @@
     <string name="stringSaveStorySuccess">Save Story Success</string>
     <string name="stringSaveStoryFail">Save Story Fail</string>
     <string name="stringDetermine">Determine</string>
+    <string name="stringLoading">Loading</string>
+    <string name="stringPleaseWait">Please Wait</string>
 </resources>
