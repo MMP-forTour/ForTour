@@ -23,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 
+
 public class ForTour extends Activity {
     ImageButton add, view, set;
     
@@ -30,10 +31,11 @@ public class ForTour extends Activity {
     
     private Uri mImageCaptureUri, mImageDirayUri;
     private String mFilename;
-	
-	private static final int PICK_FROM_CAMERA = 1;
-	private static final int CROP_FROM_CAMERA = 2;
-	private static final int PICK_FROM_FILE = 3;
+
+	private static final int PICK_FROM_CAMERA    = 0x100001;
+	private static final int CROP_FROM_CAMERA    = 0x100002;
+	private static final int PICK_FROM_FILE      = 0x100003;
+	protected static final int LOCATION_MAP_PICK = 0x100004;
 	
 	protected static final String EXT_PHOTO  = ".png";
 	protected static final String EXT_RECORD = ".3gp";

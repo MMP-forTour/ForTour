@@ -6,16 +6,16 @@
     <string name="stringHoldDownButtonToRecord">Hold down the button to record</string>
     <string name="stringReleaseButtonToStop">Release the button to stop recording</string>
     <string name="stringSave">Save</string>
-    <string name="stringYes">Yes</string>
-    <string name="stringNo">No</string>
     <string name="stringNote">Note</string>
     <string name="stringNowPlaying">Now Playing</string>
     <string name="stringStoryMedia">Story Media</string>
     <string name="stringEnableLocationServices">Enable Location Services</string>
     <string name="stringDoYouWantToEnableIt">Do you want to enable it?</string>
     <string name="stringServiceCanNotBeUsedNow">Service can not be used now.</string>
-    <string name="stringUnableToRetrieveDataNow">Unable to retrieve data now</string>
+    <string name="stringUnableToRetrieveLocationNow">Unable to retrieve location now</string>
+    <string name="stringNoInternetConnection">No Internet connection</string>
     <string name="stringThereIsNoDataNow">There is no data now</string>
-    <string name="stringSaveStorySuccess">SaveStorySuccess</string>
-    <string name="stringSaveStoryFail">SaveStoryFail</string>
+    <string name="stringSaveStorySuccess">Save Story Success</string>
+    <string name="stringSaveStoryFail">Save Story Fail</string>
+    <string name="stringDetermine">Determine</string>
 </resources>

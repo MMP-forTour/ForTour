@@ -106,7 +106,7 @@ public class DbAdapter {
 	
 	public Cursor ftStoryFetchByID( final String ftID ) {
 		return mDb.query(	DATABASE_TABLE , 
-							new String[] { KEY_ROWID, KEY_TITLE, KEY_IMAGE, KEY_STORY, KEY_LOCATION, KEY_HAS_RECORD, KEY_TIME },
+							new String[] { KEY_ROWID, KEY_TITLE, KEY_IMAGE, KEY_STORY, KEY_LOCATION, KEY_HAS_RECORD, KEY_TIME, KEY_LONGITUDE, KEY_LATITUDE },
 							"_id=?",
 							new String[] { ftID },
 							null, null, null );
