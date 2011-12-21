@@ -35,7 +35,7 @@ public class OnePhoto extends Activity{
 	private Uri bmUriPath, mpUriPath;
 	private MediaPlayer mMediaPlayer;
 	private ProgressDialog mProgressDlg;
-	private double locLongitute, locLatitude;
+	private double locLatitude, locLongitute;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -78,8 +78,8 @@ public class OnePhoto extends Activity{
         textViewOPLocation.setText( "@" + " " + c.getString( 4 ) );
         textViewOPTime.setText( new Date(Long.parseLong(c.getString( 6 ))).toLocaleString() );
 
-        locLongitute = c.getDouble( 7 );
-        locLatitude  = c.getDouble( 8 );
+        locLatitude   = c.getDouble( 7 );
+        locLongitute  = c.getDouble( 8 );
         
         textViewOPTitle.setVisibility( View.VISIBLE );
         editTextOPTitle.setVisibility( View.GONE );
@@ -139,8 +139,9 @@ public class OnePhoto extends Activity{
 					Intent i = new Intent();
 					Bundle b = new Bundle();
 					
-					b.putString( LocationMap.KEY_LONGITUDE, String.valueOf( (int) ( locLongitute * 1E6 ) ) );
 					b.putString( LocationMap.KEY_LATITUDE, String.valueOf( (int) ( locLatitude * 1E6 ) ) );
+					b.putString( LocationMap.KEY_LONGITUDE, String.valueOf( (int) ( locLongitute * 1E6 ) ) );
+					
 					i.putExtras( b );
 					i.setClass( OnePhoto.this, LocationMap.class );
 					

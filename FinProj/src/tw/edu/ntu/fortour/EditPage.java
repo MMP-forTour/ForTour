@@ -49,7 +49,7 @@ public class EditPage extends Activity {
 	private boolean hasRecord;
 	private LocationManager mLocationManager;
 	private EditText editTextOPDate, editTextOPTime;
-	private double locLongitute, locLatitude;
+	private double locLatitude, locLongitute;
 
 	private final int DATE_DIALOG = 1;      
     private final int TIME_DIALOG = 2;
@@ -62,8 +62,9 @@ public class EditPage extends Activity {
         setDateTimePicker();
         
         hasRecord = false;
-        locLongitute = -1;
+        
         locLatitude = -1;
+        locLongitute = -1;
         
         mLocationManager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
         
@@ -240,12 +241,12 @@ public class EditPage extends Activity {
 				if( resultCode == Activity.RESULT_OK ) {
 					Bundle extras = data.getExtras();
 			        if( extras != null ) {
-			        	String locLong = extras.getString( LocationMap.KEY_LONGITUDE );
 			        	String locLati = extras.getString( LocationMap.KEY_LATITUDE );
+			        	String locLong = extras.getString( LocationMap.KEY_LONGITUDE );
 
 			        	try {
-				        	if( locLong != null ) locLongitute = Double.parseDouble( locLong ) / 1E6;
 				        	if( locLati != null ) locLatitude = Double.parseDouble( locLati ) / 1E6;
+				        	if( locLong != null ) locLongitute = Double.parseDouble( locLong ) / 1E6;
 			        	}
 			        	catch( NumberFormatException nfe ) {}
 			        }

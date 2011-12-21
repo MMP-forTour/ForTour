@@ -25,8 +25,8 @@ public class DbAdapter {
 	public static final String KEY_LOCATION	= "ftLocation";
 	public static final String KEY_HAS_RECORD	= "ftHasRecord";
 	public static final String KEY_TIME		= "ftTime";
-	public static final String KEY_LONGITUDE	= "ftLongitude";
 	public static final String KEY_LATITUDE	= "ftLatitude";
+	public static final String KEY_LONGITUDE	= "ftLongitude";
 	
 	private static final String DATABASE_CREATE =
 			"CREATE TABLE " + DATABASE_TABLE + " ( " +
@@ -37,8 +37,8 @@ public class DbAdapter {
 					KEY_LOCATION + " TEXT NULL," +
 					KEY_HAS_RECORD + " INTEGER NOT NULL," +
 					KEY_TIME + " LONG," +
-					KEY_LONGITUDE + " DOUBLE NULL," +
-					KEY_LATITUDE + " DOUBLE NULL" +
+					KEY_LATITUDE + " DOUBLE NULL," +
+					KEY_LONGITUDE + " DOUBLE NULL" +
 					" );";
 	
 	private static final String DATABASE_UPGRADE =
@@ -78,8 +78,8 @@ public class DbAdapter {
 	
 	public long ftStoryAdd( final String ftTitle, final String ftImage,
 							 final String ftStory, final String ftLocation,
-							 final int ftHasRecord, final double ftLongitude,
-							 final double ftLatitude ) {
+							 final int ftHasRecord, final double ftLatitude,
+							 final double ftLongitude ) {
 		
 		ContentValues initValues = new ContentValues();
 		initValues.put( KEY_TITLE, ftTitle );
@@ -88,8 +88,8 @@ public class DbAdapter {
 		initValues.put( KEY_LOCATION, ftLocation );
 		initValues.put( KEY_HAS_RECORD, ftHasRecord );
 		initValues.put( KEY_TIME, ( new Date() ).getTime() );
-		initValues.put( KEY_LONGITUDE, ftLongitude );
 		initValues.put( KEY_LATITUDE, ftLatitude );
+		initValues.put( KEY_LONGITUDE, ftLongitude );
 		
 		return mDb.insert( DATABASE_TABLE, null, initValues );
 	}
@@ -106,7 +106,7 @@ public class DbAdapter {
 	
 	public Cursor ftStoryFetchByID( final String ftID ) {
 		return mDb.query(	DATABASE_TABLE , 
-							new String[] { KEY_ROWID, KEY_TITLE, KEY_IMAGE, KEY_STORY, KEY_LOCATION, KEY_HAS_RECORD, KEY_TIME, KEY_LONGITUDE, KEY_LATITUDE },
+							new String[] { KEY_ROWID, KEY_TITLE, KEY_IMAGE, KEY_STORY, KEY_LOCATION, KEY_HAS_RECORD, KEY_TIME, KEY_LATITUDE, KEY_LONGITUDE },
 							"_id=?",
 							new String[] { ftID },
 							null, null, null );

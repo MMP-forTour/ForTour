@@ -31,8 +31,8 @@ public class LocationMap extends MapActivity {
 	private String locLongitude, locLatitude;
 	private boolean hasLocation = false;
 	
-	protected static String KEY_LONGITUDE = "KEY_LONGITUDE";
 	protected static String KEY_LATITUDE  = "KEY_LATITUDE";
+	protected static String KEY_LONGITUDE = "KEY_LONGITUDE";
 	
 	/** Called when the activity is first created. */
     @Override
@@ -52,8 +52,8 @@ public class LocationMap extends MapActivity {
         Bundle b = this.getIntent().getExtras();
         
         if( b != null ) {
+        	locLatitude  = b.getString( KEY_LATITUDE );
 	        locLongitude = b.getString( KEY_LONGITUDE );
-	        locLatitude  = b.getString( KEY_LATITUDE );
 
 	        if( locLatitude != null && locLongitude != null ) hasLocation = true;
         }
@@ -82,14 +82,15 @@ public class LocationMap extends MapActivity {
         if( !hasLocation ) {
 	        mMyLocationOverlay.enableCompass();
 	        mMyLocationOverlay.enableMyLocation();
+	        mMyLocationOverlay.runOnFirstFix( determinLocation );
         }
         else {
         	mButtonLMOk.setVisibility( View.GONE );
         	mButtonLMDetermine.setVisibility( View.GONE );
         	mButtonLMCancel.setVisibility( View.GONE );
         	mButtonLMBack.setVisibility( View.VISIBLE );
+        	determinLocation.run();
         }
-        mMyLocationOverlay.runOnFirstFix( determinLocation );
         
         mMapOverlays.add( mMyLocationOverlay );
         
@@ -132,8 +133,8 @@ public class LocationMap extends MapActivity {
 				Bundle b = new Bundle();
 				
 				if( mGeoPoint != null ) {
-					b.putString( KEY_LONGITUDE, Integer.toString( mGeoPoint.getLongitudeE6() ) );
 					b.putString( KEY_LATITUDE, Integer.toString( mGeoPoint.getLatitudeE6() ) );
+					b.putString( KEY_LONGITUDE, Integer.toString( mGeoPoint.getLongitudeE6() ) );
 					
 					i.putExtras( b );
 				}
