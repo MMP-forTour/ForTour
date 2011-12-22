@@ -16,6 +16,20 @@ public class ImageUtil {
 	
 	protected int THUMB_SIZE = 72;
 	
+	protected static int[] imageMoodFiles = new int[] {    
+		R.drawable.pic1, R.drawable.pic2, R.drawable.pic3,   
+	    R.drawable.pic4, R.drawable.pic5, R.drawable.pic6,   
+	    R.drawable.pic7, R.drawable.pic8, R.drawable.pic9,
+	    R.drawable.pic10, R.drawable.pic11, R.drawable.pic12,   
+	    R.drawable.pic13, R.drawable.pic14, R.drawable.pic15,   
+	    R.drawable.pic16, R.drawable.pic17
+	};
+	
+	protected static String[] imageMoodTitles = new String[]{ 
+		"pic1", "pic2", "pic3", "pic4", "pic5", "pic6", "pic7", "pic8", "pic9"
+		, "pic10", "pic11", "pic12", "pic13", "pic14", "pic15", "pic16", "pic17"
+	};  
+	
 	public ImageUtil() {
 		/* TODO: A better way to merge border images. */
 		imageBorderWidth      = 427;

@@ -28,7 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class OnePhoto extends Activity{
-	private String ftID;
+	private String ftID, mFileName;
 	private Bitmap bm; 
 	private ImageUtil imgUtil;
 	private Uri bmUriPath, mpUriPath;
@@ -49,35 +49,37 @@ public class OnePhoto extends Activity{
         Cursor c = ForTour.mDbHelper.ftStoryFetchByID( ftID );
         c.moveToFirst();
         
-        TextView textViewOPTitle	= (TextView) findViewById( R.id.textViewOPTitle );
         TextView textViewOPStory	= (TextView) findViewById( R.id.textViewOPStory );
         TextView textViewOPTime		= (TextView) findViewById( R.id.textViewOPTime );
         TextView textViewOPLocation	= (TextView) findViewById( R.id.textViewOPLocation );
         
-        EditText editTextOPTitle    = (EditText) findViewById( R.id.editTextOPTitle );
         EditText editTextOPStory    = (EditText) findViewById( R.id.editTextOPStory );
         EditText editTextOPLocation = (EditText) findViewById( R.id.editTextOPLocation );
+        EditText editTextOPDate	    = (EditText) findViewById( R.id.editTextOPDate );
+        EditText editTextOPTime     = (EditText) findViewById( R.id.editTextOPTime );
         
         ImageView imageViewOPImage	= (ImageView) findViewById( R.id.imageViewOPImage );
         
         ImageButton buttonOPOK			= (ImageButton) findViewById( R.id.buttonOPOK );
-        ImageButton buttonOPPlay		= (ImageButton) findViewById( R.id.buttonOPPlay );
+        ImageButton buttonOPPlay		= (ImageButton) findViewById( R.id.buttonOPRecord );
         ImageButton buttonOPLocation	= (ImageButton) findViewById( R.id.buttonOPLocation );
+        ImageButton buttonOPMood		= (ImageButton) findViewById( R.id.emotion_sticker );
 
+        mFileName = c.getString( 0 );
         
         mpUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
-			     							 ForTour.DIR_WORK + "/" + c.getString( 2 ).replace( ForTour.EXT_PHOTO , ForTour.EXT_RECORD ) ) );
+			     							 ForTour.DIR_WORK + "/" + mFileName.replace( ForTour.EXT_PHOTO , ForTour.EXT_RECORD ) ) );
 
-        textViewOPTitle.setText( c.getString( 1 ) );
-        textViewOPStory.setText( c.getString( 3 ) );
-        textViewOPLocation.setText( "@" + " " + c.getString( 4 ) );
-        textViewOPTime.setText( new Date(Long.parseLong(c.getString( 6 ))).toLocaleString() );
+        textViewOPStory.setText( c.getString( 1 ) );
+        textViewOPLocation.setText( "@" + " " + c.getString( 2 ) );
+        textViewOPTime.setText( new Date(Long.parseLong(c.getString( 4 ))).toLocaleString() );
 
-        locLatitude   = c.getDouble( 7 );
-        locLongitute  = c.getDouble( 8 );
+        locLatitude   = c.getDouble( 5 );
+        locLongitute  = c.getDouble( 6 );
         
-        textViewOPTitle.setVisibility( View.VISIBLE );
-        editTextOPTitle.setVisibility( View.GONE );
+        if( c.getInt( 3 ) == 0 ) {
+        	buttonOPPlay.setVisibility( View.INVISIBLE );
+        }
         
         textViewOPStory.setVisibility( View.VISIBLE );
         editTextOPStory.setVisibility( View.GONE );
@@ -87,7 +89,11 @@ public class OnePhoto extends Activity{
         
         textViewOPTime.setVisibility( View.VISIBLE );
         
+        editTextOPDate.setVisibility( View.GONE );
+        editTextOPTime.setVisibility( View.GONE );
+        
         buttonOPOK.setVisibility( View.GONE );
+        buttonOPMood.setImageResource( ImageUtil.imageMoodFiles[ c.getInt( 7 ) ] );
         
         /* TODO: Check file exists first. */
         buttonOPPlay.setOnClickListener( new OnClickListener() {
@@ -147,7 +153,7 @@ public class OnePhoto extends Activity{
         
         try {
         	bmUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
-			   									ForTour.DIR_WORK + "/" + c.getString( 2 ) ) );
+			   									ForTour.DIR_WORK + "/" + mFileName ) );
 			bm = MediaStore.Images.Media.getBitmap( this.getContentResolver(), bmUriPath );
 		} catch (FileNotFoundException e) {
 			Toast.makeText( OnePhoto.this, "File Not Found: " + e.toString(), Toast.LENGTH_LONG ).show();

@@ -33,7 +33,6 @@ public class LocationMap extends MapActivity {
 	private GeoPoint mGeoPoint;
 	private MyLocationOverlay mMyLocationOverlay;
 	private String locLongitude, locLatitude;
-	private Drawable mDrawable;
 	private boolean hasLocation = false;
 	
 	protected static String KEY_LATITUDE  = "KEY_LATITUDE";
@@ -72,16 +71,14 @@ public class LocationMap extends MapActivity {
         
         mMapView.setSatellite( false );
         mMapView.setStreetView( true );
-        if( !hasLocation ) {
-	        mMapView.setClickable( true );
-	        mMapView.setBuiltInZoomControls( true );
-	        mMapView.displayZoomControls( true );
-        }
+        mMapView.setClickable( true );
+        mMapView.setBuiltInZoomControls( true );
+        mMapView.displayZoomControls( true );
         
         List<Overlay> mMapOverlays = mMapView.getOverlays();
         
         mMapController = mMapView.getController();
-        mMapController.setZoom( 16 );
+        mMapController.setZoom( 17 );
         
         mMyLocationOverlay = new MyLocationOverlay( LocationMap.this, mMapView );
         if( !hasLocation ) {

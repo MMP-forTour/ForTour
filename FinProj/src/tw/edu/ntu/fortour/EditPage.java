@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -34,13 +32,11 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -59,6 +55,7 @@ public class EditPage extends Activity {
 	private LocationManager mLocationManager;
 	private EditText editTextOPDate, editTextOPTime;
 	private double locLatitude, locLongitute;
+	private int mMoodIndex;
 
 	private final int DATE_DIALOG = 1;      
     private final int TIME_DIALOG = 2;
@@ -67,13 +64,16 @@ public class EditPage extends Activity {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);          
         setContentView( R.layout.one_photo );
-        
+
         setDateTimePicker();
         
         hasRecord = false;
         
         locLatitude = -1;
         locLongitute = -1;
+        
+		// TODO: should has a 0 for no mood
+		mMoodIndex = 17;
         
         mLocationManager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
         
@@ -102,7 +102,7 @@ public class EditPage extends Activity {
         imageViewOPImage.setImageBitmap( imgUtil.imageBorderMerge( getResources().getDrawable( R.drawable.photo_frame ), bm ) );
     }
 	
-	private void findviews(){        
+	private void findviews(){
 		imageViewOPImage  	= (ImageView)   findViewById( R.id.imageViewOPImage );
         buttonOPOK    		= (ImageButton) findViewById( R.id.buttonOPOK );
         buttonOPRecord		= (ImageButton) findViewById( R.id.buttonOPRecord );
@@ -114,13 +114,13 @@ public class EditPage extends Activity {
 		buttonOPOK.setOnClickListener( new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				long rst = ForTour.mDbHelper.ftStoryAdd(	( (EditText) findViewById( R.id.editTextOPTitle ) ).getText().toString(),
-															mFileName,
+				long rst = ForTour.mDbHelper.ftStoryAdd(	mFileName,
 															( (EditText) findViewById( R.id.editTextOPStory ) ).getText().toString(),
 															( (EditText) findViewById( R.id.editTextOPLocation ) ).getText().toString(),
 															( ( hasRecord != false ) ? 1 : 0 ),
 															locLatitude,
-															locLongitute
+															locLongitute,
+															mMoodIndex
 														);
 				
 				if( rst == -1 ) Toast.makeText( EditPage.this, getString( R.string.stringSaveStoryFail ), Toast.LENGTH_LONG ).show();
@@ -379,42 +379,32 @@ public class EditPage extends Activity {
     private GridView gridView; 
 	  
 	ProgressDialog mydialog;
-	  
-	private String[] titles = new String[]{ 
-		"pic1", "pic2", "pic3", "pic4", "pic5", "pic6", "pic7", "pic8", "pic9"
-		, "pic10", "pic11", "pic12", "pic13", "pic14", "pic15", "pic16", "pic17"
-	};  
-	    
-	private int[] images = new int[]{         
-		R.drawable.pic1, R.drawable.pic2, R.drawable.pic3,   
-	    R.drawable.pic4, R.drawable.pic5, R.drawable.pic6,   
-	    R.drawable.pic7, R.drawable.pic8,R.drawable.pic9,
-	    R.drawable.pic10, R.drawable.pic11, R.drawable.pic12,   
-	    R.drawable.pic13, R.drawable.pic14, R.drawable.pic15,   
-	    R.drawable.pic16, R.drawable.pic17
-	};  
-    
+
 	private void popdialogue(){
-	    //This class is used to instantiate layout XML file into its corresponding View objects.
-	    	
+		final AlertDialog builder = new AlertDialog.Builder( EditPage.this ).create();
+		
 	    LayoutInflater inflater = LayoutInflater.from(this);  
 	    View selectView = inflater.inflate(R.layout.picture_dialog,(ViewGroup) findViewById(R.id.layout_root));
 	    gridView = (GridView) selectView.findViewById(R.id.gridview);  
-	    PictureAdapter adapter= new PictureAdapter(titles, images, this);	       
+	    
+	    PictureAdapter adapter= new PictureAdapter( ImageUtil.imageMoodTitles , ImageUtil.imageMoodFiles, this);	       
 	    gridView.setAdapter(adapter);  
-	    gridView.setOnItemClickListener(new OnItemClickListener(){
+	    gridView.setOnItemClickListener( new OnItemClickListener(){
 	    	@Override
-	    	public void onItemClick(AdapterView<?> parent, View v, int position, long id){  
-	    		//Toast.makeText(this, "pic" + (position+1), Toast.LENGTH_SHORT).show();  
-	    }});
-	        
-	    final AlertDialog.Builder builder = new AlertDialog.Builder(EditPage.this);      
-	        
+	    	public void onItemClick(AdapterView<?> parent, View v, int position, long id){
+	    		mMoodIndex = position;
+	    		
+				ImageButton mMoodButton = (ImageButton) findViewById( R.id.emotion_sticker );
+				mMoodButton.setImageResource( ImageUtil.imageMoodFiles[ position ] );
+	    		
+	    		if( builder != null ) builder.dismiss();
+	    	}
+	    });
+	    
 	    builder.setCancelable(false);
-	    builder.setTitle("Describe your mood");  
+	    builder.setTitle( R.string.stringHowAboutYourMood );  
 	    builder.setView(selectView);
 	    builder.setCancelable(true);
 	    builder.show(); 
-
-	}  
+	}
 }

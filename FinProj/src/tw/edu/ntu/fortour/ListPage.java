@@ -14,12 +14,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-//import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -30,8 +27,6 @@ import android.widget.Toast;
 
 public class ListPage extends ListActivity {
 	private static final int LENGTH_TITLE = 5;
-	
-	protected static final int MENU_EXPORT = Menu.FIRST;
 	
 	private SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd" );
 	
@@ -66,47 +61,18 @@ public class ListPage extends ListActivity {
 		}
 	};
 	
-	public boolean onCreateOptionsMenu( Menu menu ) {
-		super.onCreateOptionsMenu(menu);
-		
-		//menu.add( 0, MENU_EXPORT, 0, "Export Mode" );
-		
-		return true;
-	};
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		super.onOptionsItemSelected(item);
-		
-		switch( item.getItemId() ) {
-			case MENU_EXPORT:
-				/*CheckBox checkBoxLMRCheckbox = (CheckBox) findViewById( R.id.checkBoxLMRCheckbox );
-				if( checkBoxLMRCheckbox.getVisibility() == View.VISIBLE ) {
-					checkBoxLMRCheckbox.setVisibility( View.INVISIBLE );
-					item.setTitle( "Export Mode" );
-				}
-				else {
-					checkBoxLMRCheckbox.setVisibility( View.VISIBLE );
-					item.setTitle( "List Mode" );
-				}*/
-				break;
-		}
-		
-		return true;
-	}
-	
 	private void updateListView() {
 		Cursor c = ForTour.mDbHelper.ftStoryFetchAll();
 		startManagingCursor( c );
 		if( c.getCount() != 0 ) { 	        
 	        String[] from = new String[] {
 	        		DbAdapter.KEY_IMAGE,
-	        		DbAdapter.KEY_TITLE,
-	        		DbAdapter.KEY_TIME
+	        		DbAdapter.KEY_STORY,
+	        		DbAdapter.KEY_SAVETIME
 	        };
 			int[] to = new int[] {
 					R.id.imageViewLMRImage,
-					R.id.textViewLMRTitle,
+					R.id.textViewLMRStory,
 					R.id.textViewLMRTime
 			};
 			
@@ -116,7 +82,7 @@ public class ListPage extends ListActivity {
 				@Override
 				public boolean setViewValue(View view, Cursor cursor, int index) {
 					ImageView ftImage   = (ImageView) view.findViewById( R.id.imageViewLMRImage );
-					TextView ftTitle    = (TextView) view.findViewById( R.id.textViewLMRTitle );
+					TextView ftStory    = (TextView) view.findViewById( R.id.textViewLMRStory );
 					TextView ftTime     = (TextView) view.findViewById( R.id.textViewLMRTime );
 					LinearLayout ftLayout = (LinearLayout) ((View)view.getParent()).findViewById(R.id.ftLinearLayout);
 					
@@ -133,7 +99,7 @@ public class ListPage extends ListActivity {
 							try {
 								// First Try Thumb
 								bmUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
-																	ForTour.DIR_WORK + "/" + ForTour.DIR_THUMB + "/" + cursor.getString( 2 ) ) );
+																	ForTour.DIR_WORK + "/" + ForTour.DIR_THUMB + "/" + cursor.getString( 1 ) ) );
 								bm = MediaStore.Images.Media.getBitmap( ListPage.this.getContentResolver(), bmUriPath );
 								ftImage.setImageBitmap( bm );
 							}
@@ -141,7 +107,7 @@ public class ListPage extends ListActivity {
 								// Second Try original image
 								try {
 									bmUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
-																		ForTour.DIR_WORK + "/" + cursor.getString( 2 ) ) );
+																		ForTour.DIR_WORK + "/" + cursor.getString( 1 ) ) );
 									bm = MediaStore.Images.Media.getBitmap( ListPage.this.getContentResolver(), bmUriPath );
 									ftImage.setImageBitmap( bm );
 								}
@@ -150,12 +116,12 @@ public class ListPage extends ListActivity {
 							}
 							catch (IOException e) { }
 							break;
-						case R.id.textViewLMRTitle:
-							if( cursor.getString( 1 ).length() > LENGTH_TITLE ) ftTitle.setText( cursor.getString( 1 ).substring( 0, LENGTH_TITLE ) + "..." );
-							else ftTitle.setText( cursor.getString( 1 ) );
+						case R.id.textViewLMRStory:
+							if( cursor.getString( 2 ).length() > LENGTH_TITLE ) ftStory.setText( cursor.getString( 2 ).substring( 0, LENGTH_TITLE ) + "..." );
+							else ftStory.setText( cursor.getString( 2 ) );
 							break;
 						case R.id.textViewLMRTime:
-							ftTime.setText( sdf.format( new Date( Long.parseLong( cursor.getString( 6 ) ) ) ) );
+							ftTime.setText( sdf.format( new Date( Long.parseLong( cursor.getString( 3 ) ) ) ) );
 							break;
 
 						default:
