@@ -14,13 +14,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.CheckBox;
+//import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -70,7 +69,7 @@ public class ListPage extends ListActivity {
 	public boolean onCreateOptionsMenu( Menu menu ) {
 		super.onCreateOptionsMenu(menu);
 		
-		menu.add( 0, MENU_EXPORT, 0, "Export Mode" );
+		//menu.add( 0, MENU_EXPORT, 0, "Export Mode" );
 		
 		return true;
 	};
@@ -81,7 +80,7 @@ public class ListPage extends ListActivity {
 		
 		switch( item.getItemId() ) {
 			case MENU_EXPORT:
-				CheckBox checkBoxLMRCheckbox = (CheckBox) findViewById( R.id.checkBoxLMRCheckbox );
+				/*CheckBox checkBoxLMRCheckbox = (CheckBox) findViewById( R.id.checkBoxLMRCheckbox );
 				if( checkBoxLMRCheckbox.getVisibility() == View.VISIBLE ) {
 					checkBoxLMRCheckbox.setVisibility( View.INVISIBLE );
 					item.setTitle( "Export Mode" );
@@ -89,7 +88,7 @@ public class ListPage extends ListActivity {
 				else {
 					checkBoxLMRCheckbox.setVisibility( View.VISIBLE );
 					item.setTitle( "List Mode" );
-				}
+				}*/
 				break;
 		}
 		
@@ -132,7 +131,6 @@ public class ListPage extends ListActivity {
 					switch( view.getId() ) {
 						case R.id.imageViewLMRImage:
 							try {
-								Log.i("ListPage", "image");
 								// First Try Thumb
 								bmUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
 																	ForTour.DIR_WORK + "/" + ForTour.DIR_THUMB + "/" + cursor.getString( 2 ) ) );

@@ -12,7 +12,6 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -69,10 +68,6 @@ public class OnePhoto extends Activity{
         mpUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
 			     							 ForTour.DIR_WORK + "/" + c.getString( 2 ).replace( ForTour.EXT_PHOTO , ForTour.EXT_RECORD ) ) );
 
-        Typeface font = Typeface.createFromAsset( getAssets(), "PEIXE.ttf" );
-        textViewOPTitle.setTypeface( font );
-        textViewOPTitle.setTextSize( 30 );
-        
         textViewOPTitle.setText( c.getString( 1 ) );
         textViewOPStory.setText( c.getString( 3 ) );
         textViewOPLocation.setText( "@" + " " + c.getString( 4 ) );
