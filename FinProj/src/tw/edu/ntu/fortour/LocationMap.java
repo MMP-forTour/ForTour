@@ -1,5 +1,6 @@
 package tw.edu.ntu.fortour;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,11 +17,13 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
+import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 
 public class LocationMap extends MapActivity {
 	private ProgressDialog mProgressDialog;
@@ -29,6 +33,7 @@ public class LocationMap extends MapActivity {
 	private GeoPoint mGeoPoint;
 	private MyLocationOverlay mMyLocationOverlay;
 	private String locLongitude, locLatitude;
+	private Drawable mDrawable;
 	private boolean hasLocation = false;
 	
 	protected static String KEY_LATITUDE  = "KEY_LATITUDE";
@@ -90,6 +95,12 @@ public class LocationMap extends MapActivity {
         	mButtonLMCancel.setVisibility( View.GONE );
         	mButtonLMBack.setVisibility( View.VISIBLE );
         	determinLocation.run();
+        	
+        	/* add landmark */
+        	landmarkOverlay mLMOverlay = new landmarkOverlay( getResources().getDrawable( R.drawable.btn_loc ) );
+        	OverlayItem mOverlayItem = new OverlayItem( mGeoPoint, "", "" );
+        	mLMOverlay.addLandmark( mOverlayItem );
+        	mMapOverlays.add( mLMOverlay );
         }
         
         mMapOverlays.add( mMyLocationOverlay );
@@ -175,5 +186,28 @@ public class LocationMap extends MapActivity {
 	protected boolean isRouteDisplayed() {
 		return false;
 	}
+	
+	class landmarkOverlay extends ItemizedOverlay<OverlayItem> {
+		private ArrayList<OverlayItem> mOverlayList = new ArrayList<OverlayItem>();
+		
+		public landmarkOverlay( Drawable defaultMarker ) {
+			super( boundCenterBottom(defaultMarker) );
+		}
+		
+		private void addLandmark( OverlayItem item ) {
+			mOverlayList.add( item );
+			populate();
+		}
 
+		@Override
+		protected OverlayItem createItem(int i) {
+			return mOverlayList.get( i );
+		}
+
+		@Override
+		public int size() {
+			return mOverlayList.size();
+		}
+		
+	}
 }
