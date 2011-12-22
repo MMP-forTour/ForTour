@@ -402,7 +402,8 @@ public class EditPage extends Activity {
 	    gridView = (GridView) selectView.findViewById(R.id.gridview);  
 	    PictureAdapter adapter= new PictureAdapter(titles, images, this);	       
 	    gridView.setAdapter(adapter);  
-	    gridView.setOnItemClickListener(new OnItemClickListener(){  
+	    gridView.setOnItemClickListener(new OnItemClickListener(){
+	    	@Override
 	    	public void onItemClick(AdapterView<?> parent, View v, int position, long id){  
 	    		//Toast.makeText(this, "pic" + (position+1), Toast.LENGTH_SHORT).show();  
 	    }});
