@@ -78,7 +78,7 @@
                         android:layout_weight="1"
                         android:background="#00000000"
                         android:scaleType="centerInside"
-                        android:src="@drawable/btn_voice" />
+                        android:src="@drawable/btn_rec" />
 
                     <ImageButton
                         android:id="@+id/buttonOPPlay"
@@ -95,7 +95,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:scaleType="centerInside" android:src="@drawable/btn_next" android:background="#00000000" android:layout_marginRight="10dp" android:layout_marginTop="5dp"/>
+                        android:scaleType="centerInside" 
+                        android:src="@drawable/btn_save" 
+                        android:background="#00000000" 
+                        android:layout_marginRight="10dp" 
+                        android:layout_marginTop="5dp"/>
 
                 </LinearLayout>
             </FrameLayout>
@@ -132,11 +136,11 @@
                     android:id="@+id/editTextOPStory"
                     android:layout_width="220dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="100dp"
+                    android:layout_gravity="bottom|center"
                     android:background="#00000000"
                     android:hint="About this Story..."
-                    android:singleLine="true" />
+                    android:singleLine="true" 
+                    android:layout_marginBottom="50dp"/>
 
                 <ImageButton
                     android:id="@+id/emotion_sticker"
@@ -181,7 +185,11 @@
                         android:layout_height="wrap_content"
                         android:background="#00000000"
                         android:scaleType="centerInside"
-                        android:layout_gravity="left" android:src="@drawable/btn_locate" android:layout_weight="0.3" android:layout_marginLeft="10dp" android:layout_marginBottom="10dp"/>
+                        android:layout_gravity="left" 
+                        android:src="@drawable/btn_locate" 
+                        android:layout_weight="0.3" 
+                        android:layout_marginLeft="10dp" 
+                        android:layout_marginBottom="10dp"/>
 
                     <LinearLayout
                         android:id="@+id/linearLayout7"
@@ -222,7 +230,11 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="hh:ss" android:background="#00000000" android:layout_marginLeft="5dp" android:editable="false" android:cursorVisible="false"/>
+                                android:text="hh:ss" 
+                                android:background="#00000000" 
+                                android:layout_marginLeft="5dp" 
+                                android:editable="false" 
+                                android:cursorVisible="false"/>
 
                         </LinearLayout>
 
