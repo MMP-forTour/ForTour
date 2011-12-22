@@ -43,18 +43,18 @@
 
                     <ImageButton
                         android:id="@+id/ques"
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="#00000000"
                         android:scaleType="centerInside"
-                        android:src="@drawable/btn_ques" android:layout_gravity="center"/>
+                        android:src="@drawable/btn_ques" android:layout_gravity="center" android:layout_weight="1" android:layout_marginLeft="10dp"/>
 
                     <EditText
             			android:id="@+id/editTextOPTitle"
             			android:layout_width="wrap_content"
             			android:layout_height="fill_parent"
             			android:layout_gravity="center_vertical|center"
-            			android:hint="Title................."
+            			android:hint="Title........"
             			android:singleLine="true" android:layout_marginTop="10dp" android:visibility="invisible"/>
 
                     <TextView
@@ -155,7 +155,7 @@
                     android:layout_marginBottom="64dp"
                     android:background="#00000000"
                     android:scaleType="centerInside"
-                    android:src="@drawable/no_mood1" />
+                    android:src="@drawable/no_mood2" />
 
                 <TextView
                     android:id="@+id/textViewOPStory"
