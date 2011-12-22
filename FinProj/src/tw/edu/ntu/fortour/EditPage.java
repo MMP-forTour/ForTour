@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -57,6 +59,10 @@ public class EditPage extends Activity {
 	private EditText editTextOPDate, editTextOPTime;
 	private double locLatitude, locLongitute;
 	private int mMoodIndex;
+	
+	private Date mNowTime = new Date();
+	private SimpleDateFormat sdfDate = new SimpleDateFormat( "yyyy/MM/dd" );
+	private SimpleDateFormat sdfTime = new SimpleDateFormat( "HH:mm" );
 
 	private final int DATE_DIALOG = 1;      
     private final int TIME_DIALOG = 2;
@@ -326,6 +332,10 @@ public class EditPage extends Activity {
                 new BtnOnClickListener(TIME_DIALOG);      
     	editTextOPDate =(EditText) findViewById(R.id.editTextOPDate);
     	editTextOPTime =(EditText) findViewById(R.id.editTextOPTime);
+    	
+    	editTextOPDate.setText( sdfDate.format( mNowTime ) );
+    	editTextOPTime.setText( sdfTime.format( mNowTime ) );
+    	
     	editTextOPDate.setOnClickListener(dateBtnListener);
     	editTextOPTime.setOnClickListener(timeBtnListener);
     }
