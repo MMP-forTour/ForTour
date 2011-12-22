@@ -77,6 +77,16 @@
                         android:visibility="gone" />
 
                     <ImageButton
+                        android:id="@+id/buttonOPPlay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="#00000000"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/btn_play"
+                        android:visibility="gone" />
+
+                    <ImageButton
                         android:id="@+id/buttonOPRecord"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -84,17 +94,6 @@
                         android:background="#00000000"
                         android:scaleType="centerInside"
                         android:src="@drawable/btn_rec" 
-                        android:layout_gravity="center_vertical"/>
-
-                    <ImageButton
-                        android:id="@+id/buttonOPPlay"
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="1"
-                        android:background="#00000000"
-                        android:scaleType="centerInside"
-                        android:visibility="gone" 
-                        android:src="@drawable/btn_play" 
                         android:layout_gravity="center_vertical"/>
 
                     <ImageButton

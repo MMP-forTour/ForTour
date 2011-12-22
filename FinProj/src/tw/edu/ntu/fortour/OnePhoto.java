@@ -62,6 +62,7 @@ public class OnePhoto extends Activity{
         
         ImageButton buttonOPOK			= (ImageButton) findViewById( R.id.buttonOPOK );
         ImageButton buttonOPPlay		= (ImageButton) findViewById( R.id.buttonOPPlay );
+        ImageButton buttonOPRecord		= (ImageButton) findViewById( R.id.buttonOPRecord );
         ImageButton buttonOPLocation	= (ImageButton) findViewById( R.id.buttonOPLocation );
         ImageButton buttonOPMood		= (ImageButton) findViewById( R.id.emotion_sticker );
         ImageButton ques				= (ImageButton) findViewById( R.id.ques );
@@ -78,6 +79,8 @@ public class OnePhoto extends Activity{
         locLatitude   = c.getDouble( 5 );
         locLongitute  = c.getDouble( 6 );
         
+        buttonOPRecord.setVisibility( View.INVISIBLE );
+        buttonOPPlay.setVisibility( View.VISIBLE );
         if( c.getInt( 3 ) == 0 ) {
         	buttonOPPlay.setVisibility( View.INVISIBLE );
         }
