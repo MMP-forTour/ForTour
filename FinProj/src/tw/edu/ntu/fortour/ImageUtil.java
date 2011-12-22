@@ -17,7 +17,7 @@ public class ImageUtil {
 	protected int THUMB_SIZE = 72;
 	
 	protected static int[] imageMoodFiles = new int[] {    
-		R.drawable.no_mood1,
+		R.drawable.no_mood,
 		R.drawable.pic1, R.drawable.pic2, R.drawable.pic3,   
 	    R.drawable.pic4, R.drawable.pic5, R.drawable.pic6,   
 	    R.drawable.pic7, R.drawable.pic8, R.drawable.pic9,
