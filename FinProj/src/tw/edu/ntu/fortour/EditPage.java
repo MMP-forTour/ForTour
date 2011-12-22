@@ -46,7 +46,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class EditPage extends Activity {
 	private ImageView imageViewOPImage;
-	private ImageButton buttonOPOK, buttonOPSticker, ques;
+	private ImageButton buttonOPOK, buttonOPSticker, buttonOPHelp;
 	private Bitmap bm;
 	private Uri bmUriPath;
 	private ImageUtil imgUtil;
@@ -114,7 +114,7 @@ public class EditPage extends Activity {
         buttonOPRecord		= (ImageButton) findViewById( R.id.buttonOPRecord );
         buttonOPLocation	= (ImageButton) findViewById( R.id.buttonOPLocation );
         buttonOPSticker		= (ImageButton) findViewById( R.id.emotion_sticker );
-        ques 				= (ImageButton) findViewById( R.id.ques);
+        buttonOPHelp 		= (ImageButton) findViewById( R.id.ques);
 	}
 	
 	private void setButtonListener(){
@@ -258,11 +258,12 @@ public class EditPage extends Activity {
 			}
 		} );
 		
-        ques.setOnClickListener(new Button.OnClickListener(){
+		buttonOPHelp.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View arg0){
             	Intent intent = new Intent();
             	intent.setClass( EditPage.this, EditPageInfo.class );
             	startActivity( intent );
+            	overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
         	}
         });
 	}

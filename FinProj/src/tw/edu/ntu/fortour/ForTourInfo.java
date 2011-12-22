@@ -18,6 +18,7 @@ public class ForTourInfo extends Activity {
         close.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View arg0){
             	finish();
+            	overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
         	}
         });
     }
