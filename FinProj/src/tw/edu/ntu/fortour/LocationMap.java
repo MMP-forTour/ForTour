@@ -69,8 +69,7 @@ public class LocationMap extends MapActivity {
         
         mMapView = (MapView) findViewById( R.id.mapView );
         
-        mMapView.setSatellite( false );
-        mMapView.setStreetView( true );
+        /* NOTE: DO NOT USE 'setStreetView( true )' or it may be a strange layout. */
         mMapView.setClickable( true );
         mMapView.setBuiltInZoomControls( true );
         mMapView.displayZoomControls( true );
