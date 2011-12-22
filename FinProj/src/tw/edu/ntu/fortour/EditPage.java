@@ -72,8 +72,7 @@ public class EditPage extends Activity {
         locLatitude = -1;
         locLongitute = -1;
         
-		// TODO: should has a 0 for no mood
-		mMoodIndex = 17;
+		mMoodIndex = 0;
         
         mLocationManager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
         

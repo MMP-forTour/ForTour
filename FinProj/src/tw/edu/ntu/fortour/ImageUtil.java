@@ -17,6 +17,7 @@ public class ImageUtil {
 	protected int THUMB_SIZE = 72;
 	
 	protected static int[] imageMoodFiles = new int[] {    
+		R.drawable.no_mood1,
 		R.drawable.pic1, R.drawable.pic2, R.drawable.pic3,   
 	    R.drawable.pic4, R.drawable.pic5, R.drawable.pic6,   
 	    R.drawable.pic7, R.drawable.pic8, R.drawable.pic9,
@@ -25,7 +26,8 @@ public class ImageUtil {
 	    R.drawable.pic16, R.drawable.pic17
 	};
 	
-	protected static String[] imageMoodTitles = new String[]{ 
+	protected static String[] imageMoodTitles = new String[]{
+		"no_mood",
 		"pic1", "pic2", "pic3", "pic4", "pic5", "pic6", "pic7", "pic8", "pic9"
 		, "pic10", "pic11", "pic12", "pic13", "pic14", "pic15", "pic16", "pic17"
 	};  
