@@ -150,7 +150,7 @@
                     android:layout_marginBottom="64dp"
                     android:background="#00000000"
                     android:scaleType="centerInside"
-                    android:src="@drawable/pic17" />
+                    android:src="@drawable/no_mood1" />
 
                 <TextView
                     android:id="@+id/textViewOPStory"
