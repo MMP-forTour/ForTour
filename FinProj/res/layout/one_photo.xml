@@ -83,7 +83,8 @@
                         android:layout_weight="1"
                         android:background="#00000000"
                         android:scaleType="centerInside"
-                        android:src="@drawable/btn_rec" android:layout_gravity="center_vertical"/>
+                        android:src="@drawable/btn_rec" 
+                        android:layout_gravity="center_vertical"/>
 
                     <ImageButton
                         android:id="@+id/buttonOPPlay"
@@ -93,7 +94,8 @@
                         android:background="#00000000"
                         android:scaleType="centerInside"
                         android:visibility="gone" 
-                        android:src="@drawable/btn_play" android:layout_gravity="center_vertical"/>
+                        android:src="@drawable/btn_play" 
+                        android:layout_gravity="center_vertical"/>
 
                     <ImageButton
                         android:id="@+id/buttonOPOK"
@@ -260,7 +262,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0"
                             android:hint="Location of Story..."
-                            android:singleLine="true" android:layout_gravity="bottom"/>
+                            android:singleLine="true" 
+                            android:layout_gravity="bottom"/>
                     </LinearLayout>
 
                 </LinearLayout>

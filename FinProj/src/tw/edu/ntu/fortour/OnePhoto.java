@@ -61,7 +61,7 @@ public class OnePhoto extends Activity{
         ImageView imageViewOPImage	= (ImageView) findViewById( R.id.imageViewOPImage );
         
         ImageButton buttonOPOK			= (ImageButton) findViewById( R.id.buttonOPOK );
-        ImageButton buttonOPPlay		= (ImageButton) findViewById( R.id.buttonOPRecord );
+        ImageButton buttonOPPlay		= (ImageButton) findViewById( R.id.buttonOPPlay );
         ImageButton buttonOPLocation	= (ImageButton) findViewById( R.id.buttonOPLocation );
         ImageButton buttonOPMood		= (ImageButton) findViewById( R.id.emotion_sticker );
         ImageButton ques				= (ImageButton) findViewById( R.id.ques );
