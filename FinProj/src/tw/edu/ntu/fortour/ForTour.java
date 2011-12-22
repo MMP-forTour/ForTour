@@ -16,21 +16,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-
-
 public class ForTour extends Activity {
-    ImageButton add, view, set, ques;
-    
-    protected static DbAdapter mDbHelper;
-    
+    private ImageButton add, view, set;
     private Uri mImageCaptureUri, mImageDirayUri;
     private String mFilename;
+    
+    protected static DbAdapter mDbHelper;
+
+    private static final int MENU_HELP = Menu.FIRST;
 
 	private static final int PICK_FROM_CAMERA    = 0x100001;
 	private static final int CROP_FROM_CAMERA    = 0x100002;
@@ -59,6 +60,33 @@ public class ForTour extends Activity {
         setButtonListener();
     }
     
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	super.onCreateOptionsMenu(menu);
+    	
+    	menu.add( 0, MENU_HELP, 0, getString( R.string.stringHelp ) );
+    	
+    	return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	super.onOptionsItemSelected(item);
+    	
+    	switch( item.getItemId() ) {
+		case MENU_HELP:
+			Intent intent = new Intent();
+        	intent.setClass( ForTour.this, ForTourInfo.class );
+        	startActivity( intent );
+        	overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
+			break;
+		default:
+			break;
+		}
+    	
+    	return true;
+    }
+    
     private void checkDir( boolean isExternal, final String dirPath ) {
     	File dir;
     	
@@ -82,7 +110,6 @@ public class ForTour extends Activity {
     	add = (ImageButton) findViewById(R.id.button1);
     	view = (ImageButton) findViewById(R.id.button2);
     	set = (ImageButton) findViewById(R.id.button3);
-    	ques = (ImageButton) findViewById(R.id.ques);
     }
     
     private void setCamera(){
@@ -139,13 +166,6 @@ public class ForTour extends Activity {
         		Intent intent = new Intent();
         		intent.setClass( ForTour.this, SetPreference.class );
         		startActivity( intent );
-        	}
-        });
-        ques.setOnClickListener(new Button.OnClickListener(){
-        	public void onClick(View arg0){
-            	Intent intent = new Intent();
-            	intent.setClass( ForTour.this, ForTourInfo.class );
-            	startActivity( intent );
         	}
         });
     }
