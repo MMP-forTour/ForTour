@@ -76,6 +76,7 @@ public class LocationMap extends MapActivity {
         mMapView.displayZoomControls( true );
         
         List<Overlay> mMapOverlays = mMapView.getOverlays();
+        mMapOverlays.clear();
         
         mMapController = mMapView.getController();
         mMapController.setZoom( 17 );

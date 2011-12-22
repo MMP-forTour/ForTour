@@ -9,8 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_weight="8"
-        android:apiKey="0rqcx9putsFRGDSaK44e1acJsyN3zDLHM73RGRw" >
-   	</com.google.android.maps.MapView>
+        android:apiKey="0rqcx9putsFRGDSaK44e1acJsyN3zDLHM73RGRw" />
    	
     <LinearLayout
         android:id="@+id/linearLayoutActions"
