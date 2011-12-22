@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/cover" android:orientation="vertical">
+    android:background="@drawable/cover_s" android:orientation="vertical">
     <LinearLayout android:id="@+id/linearLayout1" android:layout_height="wrap_content" android:layout_width="fill_parent" android:orientation="vertical" android:layout_weight="1.3">
     </LinearLayout>
     <LinearLayout android:id="@+id/linearLayout2" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="0.4" android:weightSum="1">
