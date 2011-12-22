@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -24,21 +26,28 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class EditPage extends Activity {
 	private ImageView imageViewOPImage;
-	private ImageButton buttonOPOK;
+	private ImageButton buttonOPOK, buttonOPSticker;
 	private Bitmap bm;
 	private Uri bmUriPath;
 	private ImageUtil imgUtil;
@@ -94,10 +103,11 @@ public class EditPage extends Activity {
     }
 	
 	private void findviews(){        
-		imageViewOPImage  	= (ImageView) findViewById( R.id.imageViewOPImage );
+		imageViewOPImage  	= (ImageView)   findViewById( R.id.imageViewOPImage );
         buttonOPOK    		= (ImageButton) findViewById( R.id.buttonOPOK );
         buttonOPRecord		= (ImageButton) findViewById( R.id.buttonOPRecord );
         buttonOPLocation	= (ImageButton) findViewById( R.id.buttonOPLocation );
+        buttonOPSticker		= (ImageButton) findViewById( R.id.emotion_sticker );
 	}
 	
 	private void setButtonListener(){
@@ -232,6 +242,14 @@ public class EditPage extends Activity {
 				}
 			}
 		} );
+		
+		buttonOPSticker.setOnClickListener( new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				popdialogue();
+			}
+		} );
 	}
 	
 	@Override
@@ -356,5 +374,46 @@ public class EditPage extends Activity {
             showDialog(dialogId);  
         }  
           
-    }  
+    }
+    
+    private GridView gridView; 
+	  
+	ProgressDialog mydialog;
+	  
+	private String[] titles = new String[]{ 
+		"pic1", "pic2", "pic3", "pic4", "pic5", "pic6", "pic7", "pic8", "pic9"
+		, "pic10", "pic11", "pic12", "pic13", "pic14", "pic15", "pic16", "pic17"
+	};  
+	    
+	private int[] images = new int[]{         
+		R.drawable.pic1, R.drawable.pic2, R.drawable.pic3,   
+	    R.drawable.pic4, R.drawable.pic5, R.drawable.pic6,   
+	    R.drawable.pic7, R.drawable.pic8,R.drawable.pic9,
+	    R.drawable.pic10, R.drawable.pic11, R.drawable.pic12,   
+	    R.drawable.pic13, R.drawable.pic14, R.drawable.pic15,   
+	    R.drawable.pic16, R.drawable.pic17
+	};  
+    
+	private void popdialogue(){
+	    //This class is used to instantiate layout XML file into its corresponding View objects.
+	    	
+	    LayoutInflater inflater = LayoutInflater.from(this);  
+	    View selectView = inflater.inflate(R.layout.picture_dialog,(ViewGroup) findViewById(R.id.layout_root));
+	    gridView = (GridView) selectView.findViewById(R.id.gridview);  
+	    PictureAdapter adapter= new PictureAdapter(titles, images, this);	       
+	    gridView.setAdapter(adapter);  
+	    gridView.setOnItemClickListener(new OnItemClickListener(){  
+	    	public void onItemClick(AdapterView<?> parent, View v, int position, long id){  
+	    		//Toast.makeText(this, "pic" + (position+1), Toast.LENGTH_SHORT).show();  
+	    }});
+	        
+	    final AlertDialog.Builder builder = new AlertDialog.Builder(EditPage.this);      
+	        
+	    builder.setCancelable(false);
+	    builder.setTitle("Describe your mood");  
+	    builder.setView(selectView);
+	    builder.setCancelable(true);
+	    builder.show(); 
+
+	}  
 }
