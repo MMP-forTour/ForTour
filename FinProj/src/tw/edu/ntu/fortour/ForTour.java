@@ -25,7 +25,7 @@ import android.widget.Toast;
 
 
 public class ForTour extends Activity {
-    ImageButton add, view, set;
+    ImageButton add, view, set, ques;
     
     protected static DbAdapter mDbHelper;
     
@@ -82,6 +82,7 @@ public class ForTour extends Activity {
     	add = (ImageButton) findViewById(R.id.button1);
     	view = (ImageButton) findViewById(R.id.button2);
     	set = (ImageButton) findViewById(R.id.button3);
+    	ques = (ImageButton) findViewById(R.id.ques);
     }
     
     private void setCamera(){
@@ -138,6 +139,13 @@ public class ForTour extends Activity {
         		Intent intent = new Intent();
         		intent.setClass( ForTour.this, SetPreference.class );
         		startActivity( intent );
+        	}
+        });
+        ques.setOnClickListener(new Button.OnClickListener(){
+        	public void onClick(View arg0){
+            	Intent intent = new Intent();
+            	intent.setClass( ForTour.this, ForTourInfo.class );
+            	startActivity( intent );
         	}
         });
     }

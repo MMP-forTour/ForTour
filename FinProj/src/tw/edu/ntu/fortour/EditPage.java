@@ -32,6 +32,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -43,7 +44,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class EditPage extends Activity {
 	private ImageView imageViewOPImage;
-	private ImageButton buttonOPOK, buttonOPSticker;
+	private ImageButton buttonOPOK, buttonOPSticker, ques;
 	private Bitmap bm;
 	private Uri bmUriPath;
 	private ImageUtil imgUtil;
@@ -62,7 +63,7 @@ public class EditPage extends Activity {
 
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);          
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);     
         setContentView( R.layout.one_photo );
 
         setDateTimePicker();
@@ -107,6 +108,7 @@ public class EditPage extends Activity {
         buttonOPRecord		= (ImageButton) findViewById( R.id.buttonOPRecord );
         buttonOPLocation	= (ImageButton) findViewById( R.id.buttonOPLocation );
         buttonOPSticker		= (ImageButton) findViewById( R.id.emotion_sticker );
+        ques 				= (ImageButton) findViewById( R.id.ques);
 	}
 	
 	private void setButtonListener(){
@@ -249,6 +251,14 @@ public class EditPage extends Activity {
 				popdialogue();
 			}
 		} );
+		
+        ques.setOnClickListener(new Button.OnClickListener(){
+        	public void onClick(View arg0){
+            	Intent intent = new Intent();
+            	intent.setClass( EditPage.this, EditPageInfo.class );
+            	startActivity( intent );
+        	}
+        });
 	}
 	
 	@Override
