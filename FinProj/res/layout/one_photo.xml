@@ -145,12 +145,12 @@
                 <ImageButton
                     android:id="@+id/emotion_sticker"
                     android:layout_width="wrap_content"
-                    android:layout_height="68dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="bottom|right"
                     android:layout_marginBottom="70dp"
                     android:background="#00000000"
                     android:scaleType="centerInside"
-                    android:src="@drawable/mood_sunny" />
+                    android:src="@drawable/pic17" />
 
                 <TextView
                     android:id="@+id/textViewOPStory"
