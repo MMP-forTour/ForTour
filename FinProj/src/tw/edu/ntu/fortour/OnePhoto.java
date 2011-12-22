@@ -79,11 +79,10 @@ public class OnePhoto extends Activity{
         locLatitude   = c.getDouble( 5 );
         locLongitute  = c.getDouble( 6 );
         
-        buttonOPRecord.setVisibility( View.INVISIBLE );
-        buttonOPPlay.setVisibility( View.VISIBLE );
-        if( c.getInt( 3 ) == 0 ) {
-        	buttonOPPlay.setVisibility( View.INVISIBLE );
+        if( c.getInt( 3 ) != 0 ) {
+        	buttonOPPlay.setVisibility( View.VISIBLE );
         }
+        
         ques.setVisibility( View.GONE );
         
         textViewOPStory.setVisibility( View.VISIBLE );
@@ -98,6 +97,8 @@ public class OnePhoto extends Activity{
         editTextOPTime.setVisibility( View.GONE );
         
         buttonOPOK.setVisibility( View.GONE );
+        
+        buttonOPRecord.setVisibility( View.INVISIBLE );
         buttonOPMood.setImageResource( ImageUtil.imageMoodFiles[ c.getInt( 7 ) ] );
         
         /* TODO: Check file exists first. */
