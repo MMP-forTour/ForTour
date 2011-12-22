@@ -113,8 +113,14 @@ public class ListPage extends ListActivity {
 								}
 								catch (FileNotFoundException e1) { }
 								catch (IOException e1) { }
+								finally {
+									ImageUtil.freeBitmap( bm );
+								}
 							}
 							catch (IOException e) { }
+							finally {
+								ImageUtil.freeBitmap( bm );
+							}
 							break;
 						case R.id.textViewLMRStory:
 							if( cursor.getString( 2 ).length() > LENGTH_TITLE ) ftStory.setText( cursor.getString( 2 ).substring( 0, LENGTH_TITLE ) + "..." );
