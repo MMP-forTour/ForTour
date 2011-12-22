@@ -93,8 +93,9 @@ public class LocationMap extends MapActivity {
         	mButtonLMBack.setVisibility( View.VISIBLE );
         	determinLocation.run();
         	
-        	/* add landmark */
-        	landmarkOverlay mLMOverlay = new landmarkOverlay( getResources().getDrawable( R.drawable.btn_loc ) );
+        	// Add a marker
+        	markerOverlay mLMOverlay = new markerOverlay( getResources().getDrawable( R.drawable.locate ) );
+        	
         	OverlayItem mOverlayItem = new OverlayItem( mGeoPoint, "", "" );
         	mLMOverlay.addLandmark( mOverlayItem );
         	mMapOverlays.add( mLMOverlay );
@@ -184,11 +185,11 @@ public class LocationMap extends MapActivity {
 		return false;
 	}
 	
-	class landmarkOverlay extends ItemizedOverlay<OverlayItem> {
+	class markerOverlay extends ItemizedOverlay<OverlayItem> {
 		private ArrayList<OverlayItem> mOverlayList = new ArrayList<OverlayItem>();
 		
-		public landmarkOverlay( Drawable defaultMarker ) {
-			super( boundCenterBottom(defaultMarker) );
+		public markerOverlay( Drawable defaultMarker ) {
+			super( boundCenterBottom( defaultMarker ) );
 		}
 		
 		private void addLandmark( OverlayItem item ) {
