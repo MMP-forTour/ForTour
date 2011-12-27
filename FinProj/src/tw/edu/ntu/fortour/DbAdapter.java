@@ -105,6 +105,14 @@ public class DbAdapter {
 							null, null, null, null, KEY_ROWID + " DESC" );
 	}
 	
+	public Cursor ftStoryFetchPartial( final int amount ) {
+		final String queryString =	"SELECT " + KEY_ROWID + ", " + KEY_IMAGE + ", " + KEY_STORY + ", " + KEY_SAVETIME + " " +
+									"FROM " + DATABASE_TABLE + " " +
+									"ORDER BY " + KEY_ROWID + " DESC " +
+									"LIMIT 0, " + amount + " "; 
+		return mDb.rawQuery( queryString , null );
+	}
+	
 	public Cursor ftStoryFetchByID( final String ftID ) {
 		return mDb.query(	DATABASE_TABLE , 
 							new String[] { KEY_IMAGE, KEY_STORY,

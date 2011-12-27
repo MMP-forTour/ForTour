@@ -60,7 +60,7 @@ public class ImageUtil {
     	try {
 	        imageBorderOverlay = Bitmap.createBitmap( imageBorderBitmap.getWidth(), imageBorderBitmap.getHeight(), imageBorderBitmap.getConfig() );
 	        Canvas canvas = new Canvas( imageBorderOverlay );
-	        canvas.drawBitmap( currentBitmap, imageBorderAnchorLeft, imageBorderAnchorTop, null );
+	        if( currentBitmap != null ) canvas.drawBitmap( currentBitmap, imageBorderAnchorLeft, imageBorderAnchorTop, null );
 	        canvas.drawBitmap( imageBorderBitmap, new Matrix(), null );
     	}
     	catch( IllegalArgumentException iae ) {}

@@ -17,10 +17,16 @@ public class ForTourInfo extends Activity {
         Button close = (Button) findViewById(R.id.btn_close);
         close.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View arg0){
-            	finish();
-            	overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
+            	onBackPressed();
         	}
         });
     }
  
+    @Override
+    public void onBackPressed() {
+    	super.onBackPressed();
+    	
+    	finish();
+		overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
+    }
 }
