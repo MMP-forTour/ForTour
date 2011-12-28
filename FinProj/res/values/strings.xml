@@ -24,4 +24,5 @@
     <string name="stringHowAboutYourMood">How about your mood</string>
     <string name="stringHelp">Help</string>
     <string name="stringThereIsNoMoreData">There is no more data</string>
+    <string name="stringDiscardSavingStory">Discard saving story?</string>
 </resources>

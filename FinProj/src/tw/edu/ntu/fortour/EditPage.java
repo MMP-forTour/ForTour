@@ -17,21 +17,15 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.DialogInterface.OnCancelListener;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.location.LocationManager;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -52,13 +46,12 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class EditPage extends Activity {
 	private ImageView imageViewOPImage;
-	private MediaPlayer mMediaPlayer;
 	private EditText editTextOPStory, editTextOPLocation;
-	private ImageButton buttonOPOK, buttonOPSticker, buttonOPHelp, buttonOPPlay;
+	private ImageButton buttonOPOK, buttonOPSticker, buttonOPHelp;
 	private Bitmap bm;
-	private Uri bmUriPath, mpUriPath;;
+	private Uri bmUriPath;
 	private ImageUtil imgUtil;
-	private String mFileName, mMediaFileName, ftID = null;
+	private String mFileName, mMediaFileName;
 	private ImageButton buttonOPRecord, buttonOPLocation;
 	private MediaRecorder mMediaRecorder;
 	private ProgressDialog mProgressDlg;
@@ -66,7 +59,10 @@ public class EditPage extends Activity {
 	private LocationManager mLocationManager;
 	private EditText editTextOPDate, editTextOPTime;
 	private double locLatitude, locLongitute;
+	
+	private String ftID = null;
 	private int mMoodIndex = 0;
+	private boolean pastEdit = false;
 	
 	private Date mNowTime = new Date();
 	private SimpleDateFormat sdfDate = new SimpleDateFormat( "yyyy/MM/dd" );
@@ -79,6 +75,7 @@ public class EditPage extends Activity {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);     
         setContentView( R.layout.one_photo );
+        
         findviews();
         setButtonListener();
         setDateTimePicker();
@@ -97,14 +94,15 @@ public class EditPage extends Activity {
             mFileName = extras.getString( "FILE" );
             ftID = extras.getString("_ID");
         }
-        if( ftID!=null ) {
-        	Log.i("DBTEST", "ftID = "+ftID);
+        
+        if( ftID != null ) {
+        	pastEdit = true;
+        	
         	Cursor c = ForTour.mDbHelper.ftStoryFetchByID( ftID );
             c.moveToFirst();
+            
             mFileName = c.getString( 0 );
-            mpUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
-					 ForTour.DIR_WORK + "/" + mFileName.replace( ForTour.EXT_PHOTO , ForTour.EXT_RECORD ) ) );
-
+            
             editTextOPStory.setText( c.getString( 1 ) );
             editTextOPLocation.setText( c.getString( 2 ) );
             //textViewOPTime.setText( new Date(Long.parseLong(c.getString( 4 ))).toLocaleString() );
@@ -115,9 +113,7 @@ public class EditPage extends Activity {
             mMoodIndex = c.getInt( 7 );
             buttonOPSticker.setImageResource( ImageUtil.imageMoodFiles[ mMoodIndex ] );
             
-            if( c.getInt( 3 ) != 0 ) {
-            	buttonOPPlay.setVisibility( View.VISIBLE );
-            }
+            c.close();
         }
         
         mMediaFileName = mFileName.replace( ForTour.EXT_PHOTO, ForTour.EXT_RECORD );
@@ -125,9 +121,6 @@ public class EditPage extends Activity {
         bmUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
 									   		ForTour.DIR_WORK + "/" + mFileName ) );
 
-        /* NOTE: Should after all parameters done. eg: mFileName */
-        
-        
         try {
 			bm = MediaStore.Images.Media.getBitmap( this.getContentResolver(), bmUriPath );
 		} catch (FileNotFoundException e) {
@@ -146,90 +139,56 @@ public class EditPage extends Activity {
         buttonOPLocation	= (ImageButton) findViewById( R.id.buttonOPLocation );
         buttonOPSticker		= (ImageButton) findViewById( R.id.emotion_sticker );
         buttonOPHelp 		= (ImageButton) findViewById( R.id.ques);
-        buttonOPPlay		= (ImageButton) findViewById( R.id.buttonOPPlay);
         editTextOPStory		= (EditText) findViewById( R.id.editTextOPStory );
         editTextOPLocation	= (EditText) findViewById( R.id.editTextOPLocation );
         
 	}
 	
 	private void setButtonListener(){
-		/* TODO: Check file exists first. */
-        buttonOPPlay.setOnClickListener( new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				mMediaPlayer = new MediaPlayer();
-				
-				mProgressDlg = ProgressDialog.show( EditPage.this, 
-													getString( R.string.stringNowPlaying ),
-													getString( R.string.stringStoryMedia ) );
-				mProgressDlg.setCancelable( true );
-				mProgressDlg.setOnCancelListener( new OnCancelListener() {
-					@Override
-					public void onCancel(DialogInterface arg0) {
-						if( mMediaPlayer.isPlaying() ) mMediaPlayer.stop();
-					}
-				} );
-				
-				try {
-					mMediaPlayer.setAudioStreamType( AudioManager.STREAM_MUSIC );
-					mMediaPlayer.setDataSource( getApplicationContext(), mpUriPath );;
-					mMediaPlayer.prepare();
-					mMediaPlayer.start();
-					
-					mMediaPlayer.setOnCompletionListener( new OnCompletionListener() {
-						@Override
-						public void onCompletion(MediaPlayer mp) {
-							mProgressDlg.dismiss();
-							mp.release();
-						}
-					} );
-				}
-				catch( Exception e ) {
-					Toast.makeText( EditPage.this, "Unable To Play Media: " + e.toString(), Toast.LENGTH_LONG ).show();
-				}
-			}
-		} );
-		
 		buttonOPOK.setOnClickListener( new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				long rst = ForTour.mDbHelper.ftStoryAdd(	mFileName,
-															editTextOPStory.getText().toString(),
-															editTextOPLocation.getText().toString(),
-															( ( hasRecord != false ) ? 1 : 0 ),
-															locLatitude,
-															locLongitute,
-															mMoodIndex
-														);
-				
-				if( rst == -1 ) Toast.makeText( EditPage.this, getString( R.string.stringSaveStoryFail ), Toast.LENGTH_LONG ).show();
-				else {
-					try {
-						FileOutputStream thumbFile = new FileOutputStream(
-														new File( Environment.getExternalStorageDirectory(),
-																   ForTour.DIR_WORK + "/" + ForTour.DIR_THUMB + "/" + mFileName
-														)
-													 );
-						Bitmap.createScaledBitmap( bm, imgUtil.THUMB_SIZE, imgUtil.THUMB_SIZE, true ).compress( Bitmap.CompressFormat.PNG, 90, thumbFile );
-						
-						Intent i = new Intent();
-						i.setClass(EditPage.this, SetPreference.class);
-						Bundle bundle = new Bundle();
-						bundle.putString( "FILE", mFileName );
-						i.putExtras(bundle);
-						startActivity(i);
-					}
-					catch( FileNotFoundException e ) { }
+				if( !pastEdit ) {
+					long rst = ForTour.mDbHelper.ftStoryAdd(	mFileName,
+																editTextOPStory.getText().toString(),
+																editTextOPLocation.getText().toString(),
+																( ( hasRecord != false ) ? 1 : 0 ),
+																locLatitude,
+																locLongitute,
+																mMoodIndex
+															);
 					
-					Toast.makeText( EditPage.this, getString( R.string.stringSaveStorySuccess ), Toast.LENGTH_LONG ).show();
-					finish();
+					if( rst == -1 ) Toast.makeText( EditPage.this, getString( R.string.stringSaveStoryFail ), Toast.LENGTH_LONG ).show();
+					else {
+						try {
+							FileOutputStream thumbFile = new FileOutputStream(
+															new File( Environment.getExternalStorageDirectory(),
+																	   ForTour.DIR_WORK + "/" + ForTour.DIR_THUMB + "/" + mFileName
+															)
+														 );
+							Bitmap.createScaledBitmap( bm, imgUtil.THUMB_SIZE, imgUtil.THUMB_SIZE, true ).compress( Bitmap.CompressFormat.PNG, 90, thumbFile );
+							
+							Intent i = new Intent();
+							i.setClass(EditPage.this, SetPreference.class);
+							Bundle bundle = new Bundle();
+							bundle.putString( "FILE", mFileName );
+							i.putExtras(bundle);
+							startActivity(i);
+						}
+						catch( FileNotFoundException e ) { }
+						
+						Toast.makeText( EditPage.this, getString( R.string.stringSaveStorySuccess ), Toast.LENGTH_LONG ).show();
+						finish();
+					}
+				}
+				else {
+					/* TODO: UPDATE mode */
 				}
 			}
 		} );
 		
 		buttonOPRecord.setOnTouchListener( new OnTouchListener() {
-			File mMediaFile;
+			File mMediaFileTemp, mMediaFile;
 			
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -240,12 +199,13 @@ public class EditPage extends Activity {
 															getString( R.string.stringReleaseButtonToStop ) );
 						try {
 							mMediaFile = new File( Environment.getExternalStorageDirectory(), ForTour.DIR_WORK + "/" + mMediaFileName );
+							mMediaFileTemp = new File( Environment.getExternalStorageDirectory(), ForTour.DIR_WORK + "/" + ForTour.DIR_TEMP + "/" + mMediaFileName );
 							
 							mMediaRecorder = new MediaRecorder();
 							mMediaRecorder.setAudioSource( MediaRecorder.AudioSource.MIC );
 							mMediaRecorder.setOutputFormat( MediaRecorder.OutputFormat.THREE_GPP );
 							mMediaRecorder.setAudioEncoder( MediaRecorder.AudioEncoder.AMR_NB );
-							mMediaRecorder.setOutputFile( mMediaFile.getAbsolutePath() );
+							mMediaRecorder.setOutputFile( mMediaFileTemp.getAbsolutePath() );
 							
 							mMediaRecorder.prepare();
 							mMediaRecorder.start();
@@ -255,32 +215,43 @@ public class EditPage extends Activity {
 						break;
 					case MotionEvent.ACTION_UP:
 						mProgressDlg.dismiss();
-						if( mMediaFile != null ) {
+						if( mMediaFileTemp != null ) {
 							mMediaRecorder.stop();
 							mMediaRecorder.release();
 							
-							AlertDialog.Builder builder = new AlertDialog.Builder( EditPage.this );
-							builder.setTitle( getString( R.string.stringSave ) + " " + getString( R.string.stringStoryMedia ) );
-							builder.setMessage( getString( R.string.stringNote ) + ": " + getString( R.string.stringHoldDownButtonToRecord ) );
-							builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									hasRecord = true;
-									Toast.makeText( EditPage.this, "Save media success.", Toast.LENGTH_LONG ).show();
-								}
-							});
-							builder.setNegativeButton( android.R.string.no, new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									Util.deleteFile( mMediaFile );
-									Toast.makeText( EditPage.this, "Discard save.", Toast.LENGTH_LONG ).show();
-								}
-							});
-							
-							builder.show();
+							if( !pastEdit ) {
+								AlertDialog.Builder builder = new AlertDialog.Builder( EditPage.this );
+								builder.setTitle( getString( R.string.stringSave ) + " " + getString( R.string.stringStoryMedia ) );
+								builder.setMessage( getString( R.string.stringNote ) + ": " + getString( R.string.stringHoldDownButtonToRecord ) );
+								builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										if( mMediaFileTemp.renameTo( mMediaFile ) ) {
+											hasRecord = true;
+											Util.deleteFile( mMediaFileTemp );
+											Toast.makeText( EditPage.this, "Save media success.", Toast.LENGTH_LONG ).show();
+										}
+										else {
+											Toast.makeText( EditPage.this, "Save media fail", Toast.LENGTH_LONG ).show();
+										}
+									}
+								});
+								builder.setNegativeButton( android.R.string.no, new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										Util.deleteFile( mMediaFileTemp );
+										Toast.makeText( EditPage.this, "Discard save", Toast.LENGTH_LONG ).show();
+									}
+								});
+								
+								builder.show();
+							}
+							else {
+								/* TODO: update mode */
+							}
 						}
 						else {
-							Toast.makeText( EditPage.this, "Save media fail.", Toast.LENGTH_LONG ).show();
+							Toast.makeText( EditPage.this, "Save media fail", Toast.LENGTH_LONG ).show();
 						}
 						break;
 					default:
@@ -379,22 +350,30 @@ public class EditPage extends Activity {
 		}
 	}
 	
-	private void discardStoryImages() {
+	private void discardStory() {
 		Util.deleteFile( new File( Environment.getExternalStorageDirectory(),
 				   			    ForTour.DIR_WORK + "/" + ForTour.DIR_THUMB + "/" + mFileName ) );
 		Util.deleteFile( new File( Environment.getExternalStorageDirectory(),
-   			    ForTour.DIR_WORK + "/" + mFileName ) );
+   			    				ForTour.DIR_WORK + "/" + mFileName ) );
+		Util.deleteFile( new File( Environment.getExternalStorageDirectory(),
+								ForTour.DIR_WORK + "/" + mMediaFileName ) );
 	}
 	
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		
-		if( keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0 ) {
-			discardStoryImages();
-			Util.deleteFile( new File( Environment.getExternalStorageDirectory(), ForTour.DIR_WORK + "/" + mMediaFileName ) );
-		}
-		
-		return super.onKeyDown(keyCode, event);
+	public void onBackPressed() {
+		AlertDialog.Builder builder = new AlertDialog.Builder( EditPage.this );
+		builder.setIcon( android.R.drawable.ic_dialog_alert );
+		builder.setTitle( android.R.string.dialog_alert_title );
+		builder.setMessage( R.string.stringDiscardSavingStory );
+		builder.setNegativeButton( android.R.string.no, null );
+		builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				if( !pastEdit ) discardStory();
+				finish();
+			}
+		} );
+		builder.show();
 	}
 	
 	@Override
