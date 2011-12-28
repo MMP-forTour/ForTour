@@ -6,12 +6,15 @@ import java.io.IOException;
 import java.sql.Date;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -19,13 +22,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class OnePhoto extends Activity{
 	private String ftID, mFileName;
@@ -35,7 +47,14 @@ public class OnePhoto extends Activity{
 	private MediaPlayer mMediaPlayer;
 	private ProgressDialog mProgressDlg;
 	private double locLatitude, locLongitute;
+	private LocationManager mLocationManager;
 	
+	private TextView textViewOPStory, textViewOPTime, textViewOPLocation; 
+    private EditText editTextOPStory, editTextOPLocation, editTextOPDate, 
+    				 editTextOPTime;
+    private ImageButton buttonOPMood, buttonOPOK, buttonOPRecord, 
+    					buttonOPLocation, buttonOPPlay, ques; 
+    
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,23 +68,23 @@ public class OnePhoto extends Activity{
         Cursor c = ForTour.mDbHelper.ftStoryFetchByID( ftID );
         c.moveToFirst();
         
-        TextView textViewOPStory	= (TextView) findViewById( R.id.textViewOPStory );
-        TextView textViewOPTime		= (TextView) findViewById( R.id.textViewOPTime );
-        TextView textViewOPLocation	= (TextView) findViewById( R.id.textViewOPLocation );
+        textViewOPStory	   = (TextView) findViewById( R.id.textViewOPStory );
+        textViewOPTime	   = (TextView) findViewById( R.id.textViewOPTime );
+        textViewOPLocation = (TextView) findViewById( R.id.textViewOPLocation );
         
-        EditText editTextOPStory    = (EditText) findViewById( R.id.editTextOPStory );
-        EditText editTextOPLocation = (EditText) findViewById( R.id.editTextOPLocation );
-        EditText editTextOPDate	    = (EditText) findViewById( R.id.editTextOPDate );
-        EditText editTextOPTime     = (EditText) findViewById( R.id.editTextOPTime );
+        editTextOPStory    = (EditText) findViewById( R.id.editTextOPStory );
+        editTextOPLocation = (EditText) findViewById( R.id.editTextOPLocation );
+        editTextOPDate	   = (EditText) findViewById( R.id.editTextOPDate );
+        editTextOPTime     = (EditText) findViewById( R.id.editTextOPTime );
         
         ImageView imageViewOPImage	= (ImageView) findViewById( R.id.imageViewOPImage );
         
-        ImageButton buttonOPOK			= (ImageButton) findViewById( R.id.buttonOPOK );
-        ImageButton buttonOPPlay		= (ImageButton) findViewById( R.id.buttonOPPlay );
-        ImageButton buttonOPRecord		= (ImageButton) findViewById( R.id.buttonOPRecord );
-        ImageButton buttonOPLocation	= (ImageButton) findViewById( R.id.buttonOPLocation );
-        ImageButton buttonOPMood		= (ImageButton) findViewById( R.id.emotion_sticker );
-        ImageButton ques				= (ImageButton) findViewById( R.id.ques );
+        buttonOPOK			= (ImageButton) findViewById( R.id.buttonOPOK );
+        buttonOPPlay		= (ImageButton) findViewById( R.id.buttonOPPlay );
+        buttonOPRecord		= (ImageButton) findViewById( R.id.buttonOPRecord );
+        buttonOPLocation	= (ImageButton) findViewById( R.id.buttonOPLocation );
+        buttonOPMood		= (ImageButton) findViewById( R.id.emotion_sticker );
+        ques				= (ImageButton) findViewById( R.id.ques );
 
         mFileName = c.getString( 0 );
         
@@ -73,11 +92,14 @@ public class OnePhoto extends Activity{
 			     							 ForTour.DIR_WORK + "/" + mFileName.replace( ForTour.EXT_PHOTO , ForTour.EXT_RECORD ) ) );
 
         textViewOPStory.setText( c.getString( 1 ) );
+        editTextOPStory.setText( c.getString( 1 ) );
         textViewOPLocation.setText( "@" + " " + c.getString( 2 ) );
+        editTextOPLocation.setText( c.getString( 2 ) );
         textViewOPTime.setText( new Date(Long.parseLong(c.getString( 4 ))).toLocaleString() );
 
         locLatitude   = c.getDouble( 5 );
         locLongitute  = c.getDouble( 6 );
+        mLocationManager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
         
         if( c.getInt( 3 ) != 0 ) {
         	buttonOPPlay.setVisibility( View.VISIBLE );
@@ -183,4 +205,52 @@ public class OnePhoto extends Activity{
 		}
     	catch( Throwable e ) { }
     }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //參數1:群組id, 參數2:itemId, 參數3:item順序, 參數4:item名稱
+        menu.add(0, 0, 0, "Edit");
+        menu.add(0, 1, 1, "Delete");
+        menu.add(0, 2, 2, "Share");
+        menu.add(0, 3, 3, "Setting");
+        return super.onCreateOptionsMenu(menu);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //依據itemId來判斷使用者點選哪一個item
+        switch(item.getItemId()) {
+            case 0:
+            	Intent i0 = new Intent();
+				Bundle b = new Bundle();
+				b.putString("_ID", ftID);
+				b.putString("FILE", mFileName);
+				i0.putExtras( b );
+				i0.setClass( OnePhoto.this, EditPage.class );
+				//startActivityForResult( i0 , ForTour.EDIT_ONE_PHOTO);
+				startActivity(i0);
+                break;
+            case 1:
+
+                break;
+            case 2:
+            	share();
+                break;
+            case 3:
+            	Intent i = new Intent();
+            	i.setClass( OnePhoto.this, SetPreference.class );				
+				startActivity( i );
+                break;
+            default:
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    
+    private void share() {
+    	Intent intent=new Intent(android.content.Intent.ACTION_SEND); 
+    	intent.setType("image/png");
+    	intent.putExtra(Intent.EXTRA_STREAM, bmUriPath); 
+    	startActivity(Intent.createChooser(intent, "Choose a way to share"));
+    }
+    
 }

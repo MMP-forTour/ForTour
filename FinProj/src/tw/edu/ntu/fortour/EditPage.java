@@ -17,14 +17,20 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnCancelListener;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.location.LocationManager;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -46,11 +52,13 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class EditPage extends Activity {
 	private ImageView imageViewOPImage;
-	private ImageButton buttonOPOK, buttonOPSticker, buttonOPHelp;
+	private MediaPlayer mMediaPlayer;
+	private EditText editTextOPStory, editTextOPLocation;
+	private ImageButton buttonOPOK, buttonOPSticker, buttonOPHelp, buttonOPPlay;
 	private Bitmap bm;
-	private Uri bmUriPath;
+	private Uri bmUriPath, mpUriPath;;
 	private ImageUtil imgUtil;
-	private String mFileName, mMediaFileName;
+	private String mFileName, mMediaFileName, ftID = null;
 	private ImageButton buttonOPRecord, buttonOPLocation;
 	private MediaRecorder mMediaRecorder;
 	private ProgressDialog mProgressDlg;
@@ -58,7 +66,7 @@ public class EditPage extends Activity {
 	private LocationManager mLocationManager;
 	private EditText editTextOPDate, editTextOPTime;
 	private double locLatitude, locLongitute;
-	private int mMoodIndex;
+	private int mMoodIndex = 0;
 	
 	private Date mNowTime = new Date();
 	private SimpleDateFormat sdfDate = new SimpleDateFormat( "yyyy/MM/dd" );
@@ -71,7 +79,8 @@ public class EditPage extends Activity {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);     
         setContentView( R.layout.one_photo );
-
+        findviews();
+        setButtonListener();
         setDateTimePicker();
         
         hasRecord = false;
@@ -79,14 +88,37 @@ public class EditPage extends Activity {
         locLatitude = -1;
         locLongitute = -1;
         
-		mMoodIndex = 0;
-        
         mLocationManager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
         
         imgUtil = new ImageUtil();
         
-        Bundle b  = this.getIntent().getExtras();
-        mFileName = b.getString( "FILE" );
+		Bundle extras = getIntent().getExtras();
+        if( extras != null ) {
+            mFileName = extras.getString( "FILE" );
+            ftID = extras.getString("_ID");
+        }
+        if( ftID!=null ) {
+        	Log.i("DBTEST", "ftID = "+ftID);
+        	Cursor c = ForTour.mDbHelper.ftStoryFetchByID( ftID );
+            c.moveToFirst();
+            mFileName = c.getString( 0 );
+            mpUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
+					 ForTour.DIR_WORK + "/" + mFileName.replace( ForTour.EXT_PHOTO , ForTour.EXT_RECORD ) ) );
+
+            editTextOPStory.setText( c.getString( 1 ) );
+            editTextOPLocation.setText( c.getString( 2 ) );
+            //textViewOPTime.setText( new Date(Long.parseLong(c.getString( 4 ))).toLocaleString() );
+
+            locLatitude   = c.getDouble( 5 );
+            locLongitute  = c.getDouble( 6 );
+            mLocationManager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+            mMoodIndex = c.getInt( 7 );
+            buttonOPSticker.setImageResource( ImageUtil.imageMoodFiles[ mMoodIndex ] );
+            
+            if( c.getInt( 3 ) != 0 ) {
+            	buttonOPPlay.setVisibility( View.VISIBLE );
+            }
+        }
         
         mMediaFileName = mFileName.replace( ForTour.EXT_PHOTO, ForTour.EXT_RECORD );
         
@@ -94,8 +126,7 @@ public class EditPage extends Activity {
 									   		ForTour.DIR_WORK + "/" + mFileName ) );
 
         /* NOTE: Should after all parameters done. eg: mFileName */
-        findviews();
-        setButtonListener();
+        
         
         try {
 			bm = MediaStore.Images.Media.getBitmap( this.getContentResolver(), bmUriPath );
@@ -115,15 +146,57 @@ public class EditPage extends Activity {
         buttonOPLocation	= (ImageButton) findViewById( R.id.buttonOPLocation );
         buttonOPSticker		= (ImageButton) findViewById( R.id.emotion_sticker );
         buttonOPHelp 		= (ImageButton) findViewById( R.id.ques);
+        buttonOPPlay		= (ImageButton) findViewById( R.id.buttonOPPlay);
+        editTextOPStory		= (EditText) findViewById( R.id.editTextOPStory );
+        editTextOPLocation	= (EditText) findViewById( R.id.editTextOPLocation );
+        
 	}
 	
 	private void setButtonListener(){
+		/* TODO: Check file exists first. */
+        buttonOPPlay.setOnClickListener( new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				mMediaPlayer = new MediaPlayer();
+				
+				mProgressDlg = ProgressDialog.show( EditPage.this, 
+													getString( R.string.stringNowPlaying ),
+													getString( R.string.stringStoryMedia ) );
+				mProgressDlg.setCancelable( true );
+				mProgressDlg.setOnCancelListener( new OnCancelListener() {
+					@Override
+					public void onCancel(DialogInterface arg0) {
+						if( mMediaPlayer.isPlaying() ) mMediaPlayer.stop();
+					}
+				} );
+				
+				try {
+					mMediaPlayer.setAudioStreamType( AudioManager.STREAM_MUSIC );
+					mMediaPlayer.setDataSource( getApplicationContext(), mpUriPath );;
+					mMediaPlayer.prepare();
+					mMediaPlayer.start();
+					
+					mMediaPlayer.setOnCompletionListener( new OnCompletionListener() {
+						@Override
+						public void onCompletion(MediaPlayer mp) {
+							mProgressDlg.dismiss();
+							mp.release();
+						}
+					} );
+				}
+				catch( Exception e ) {
+					Toast.makeText( EditPage.this, "Unable To Play Media: " + e.toString(), Toast.LENGTH_LONG ).show();
+				}
+			}
+		} );
+		
 		buttonOPOK.setOnClickListener( new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				long rst = ForTour.mDbHelper.ftStoryAdd(	mFileName,
-															( (EditText) findViewById( R.id.editTextOPStory ) ).getText().toString(),
-															( (EditText) findViewById( R.id.editTextOPLocation ) ).getText().toString(),
+															editTextOPStory.getText().toString(),
+															editTextOPLocation.getText().toString(),
 															( ( hasRecord != false ) ? 1 : 0 ),
 															locLatitude,
 															locLongitute,
@@ -289,6 +362,16 @@ public class EditPage extends Activity {
 			        	locLatitude = -1;
 			        	locLongitute = -1;
 			        }
+				}
+				break;
+
+			case ForTour.PASS_ONE_PHOTO:
+				if( resultCode == Activity.RESULT_OK ) {
+					Bundle extras = data.getExtras();
+			        if( extras != null ) {
+			            mFileName = extras.getString( "FILE" );
+			        }
+
 				}
 				break;
 			default:

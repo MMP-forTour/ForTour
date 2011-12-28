@@ -17,6 +17,8 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -265,5 +267,24 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
     		//Toast error = Toast.makeText(this, "Couldn't authenticate with Dropbox", Toast.LENGTH_LONG);
             //error.show();
     	}
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //參數1:群組id, 參數2:itemId, 參數3:item順序, 參數4:item名稱
+        menu.add(0, 0, 0, "Info");
+        return super.onCreateOptionsMenu(menu);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //依據itemId來判斷使用者點選哪一個item
+        switch(item.getItemId()) {
+            case 0:
+
+                break;
+            default:
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -37,6 +37,8 @@ public class ForTour extends Activity {
 	private static final int CROP_FROM_CAMERA    = 0x100002;
 	private static final int PICK_FROM_FILE      = 0x100003;
 	protected static final int LOCATION_MAP_PICK = 0x100004;
+	protected static final int EDIT_ONE_PHOTO    = 0x100005;
+	protected static final int PASS_ONE_PHOTO    = 0x100006;
 	
 	protected static final String EXT_PHOTO  = ".png";
 	protected static final String EXT_RECORD = ".3gp";
@@ -193,7 +195,7 @@ public class ForTour extends Activity {
 					Bundle bundle = new Bundle();
 					bundle.putString( "FILE", mFilename );
 					intent1.putExtras(bundle);
-					startActivity(intent1);  
+					startActivityForResult(intent1, PASS_ONE_PHOTO);  
 		        }
 
 		        // Delete the template photo

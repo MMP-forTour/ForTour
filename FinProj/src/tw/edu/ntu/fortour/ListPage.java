@@ -16,6 +16,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
@@ -229,4 +231,35 @@ public class ListPage extends ListActivity {
 		
 		ImageUtil.freeBitmap( bm );
 	}
+	
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //參數1:群組id, 參數2:itemId, 參數3:item順序, 參數4:item名稱
+        menu.add(0, 0, 0, "Edit");
+        menu.add(0, 1, 1, "Share");
+        menu.add(0, 2, 2, "Setting");
+        return super.onCreateOptionsMenu(menu);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //依據itemId來判斷使用者點選哪一個item
+        switch(item.getItemId()) {
+            case 0://Edit, 選擇多個刪除
+            	
+                break;
+            case 1://Share, 選擇多個share...?
+
+                break;
+            case 2://Setting
+            	Intent i = new Intent();
+            	i.setClass( ListPage.this, SetPreference.class );				
+				startActivity( i );
+                break;
+            default:
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }
