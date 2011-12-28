@@ -6,15 +6,12 @@ import java.io.IOException;
 import java.sql.Date;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -22,22 +19,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.Settings;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class OnePhoto extends Activity{
 	private String ftID, mFileName;
@@ -47,7 +37,6 @@ public class OnePhoto extends Activity{
 	private MediaPlayer mMediaPlayer;
 	private ProgressDialog mProgressDlg;
 	private double locLatitude, locLongitute;
-	private LocationManager mLocationManager;
 	
 	private TextView textViewOPStory, textViewOPTime, textViewOPLocation; 
     private EditText editTextOPStory, editTextOPLocation, editTextOPDate, 
@@ -92,14 +81,11 @@ public class OnePhoto extends Activity{
 			     							 ForTour.DIR_WORK + "/" + mFileName.replace( ForTour.EXT_PHOTO , ForTour.EXT_RECORD ) ) );
 
         textViewOPStory.setText( c.getString( 1 ) );
-        editTextOPStory.setText( c.getString( 1 ) );
         textViewOPLocation.setText( "@" + " " + c.getString( 2 ) );
-        editTextOPLocation.setText( c.getString( 2 ) );
         textViewOPTime.setText( new Date(Long.parseLong(c.getString( 4 ))).toLocaleString() );
 
         locLatitude   = c.getDouble( 5 );
         locLongitute  = c.getDouble( 6 );
-        mLocationManager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
         
         if( c.getInt( 3 ) != 0 ) {
         	buttonOPPlay.setVisibility( View.VISIBLE );
