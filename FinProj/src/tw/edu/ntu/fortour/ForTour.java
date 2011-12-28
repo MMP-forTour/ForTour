@@ -66,7 +66,7 @@ public class ForTour extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
     	super.onCreateOptionsMenu(menu);
     	
-    	menu.add( 0, MENU_HELP, 0, getString( R.string.stringHelp ) );
+    	menu.add( 0, MENU_HELP, 0, getString( R.string.stringHelp ) ).setIcon( android.R.drawable.ic_menu_help );
     	
     	return true;
     }

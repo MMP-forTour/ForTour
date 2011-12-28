@@ -121,6 +121,7 @@ public class OnePhoto extends Activity{
 				mProgressDlg = ProgressDialog.show( OnePhoto.this, 
 													getString( R.string.stringNowPlaying ),
 													getString( R.string.stringStoryMedia ) );
+				mProgressDlg.setIcon( android.R.drawable.ic_media_play );
 				mProgressDlg.setCancelable( true );
 				mProgressDlg.setOnCancelListener( new OnCancelListener() {
 					@Override
@@ -197,10 +198,10 @@ public class OnePhoto extends Activity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //參數1:群組id, 參數2:itemId, 參數3:item順序, 參數4:item名稱
-        menu.add(0, 0, 0, "Edit");
-        menu.add(0, 1, 1, "Delete");
-        menu.add(0, 2, 2, "Share");
-        menu.add(0, 3, 3, "Setting");
+        menu.add(0, 0, 0, "Edit").setIcon( android.R.drawable.ic_menu_edit );
+        menu.add(0, 1, 1, "Delete").setIcon( android.R.drawable.ic_menu_delete );
+        menu.add(0, 2, 2, "Share").setIcon( android.R.drawable.ic_menu_share );
+        menu.add(0, 3, 3, "Setting").setIcon( android.R.drawable.ic_menu_preferences );
         return super.onCreateOptionsMenu(menu);
     }
     
