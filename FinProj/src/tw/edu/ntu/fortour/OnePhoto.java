@@ -38,11 +38,11 @@ public class OnePhoto extends Activity{
 	private ProgressDialog mProgressDlg;
 	private double locLatitude, locLongitute;
 	
-	private TextView textViewOPStory, textViewOPTime, textViewOPLocation; 
-    private EditText editTextOPStory, editTextOPLocation, editTextOPDate, 
+	private TextView textViewOPStory, textViewOPTime, textViewOPLocation;
+    private EditText editTextOPStory, editTextOPLocation, editTextOPDate,
     				 editTextOPTime;
-    private ImageButton buttonOPMood, buttonOPOK, buttonOPRecord, 
-    					buttonOPLocation, buttonOPPlay, ques; 
+    private ImageButton buttonOPMood, buttonOPOK, buttonOPRecord,
+    					buttonOPLocation, buttonOPPlay, buttonOPHelp;
     
 	/** Called when the activity is first created. */
     @Override
@@ -73,7 +73,7 @@ public class OnePhoto extends Activity{
         buttonOPRecord		= (ImageButton) findViewById( R.id.buttonOPRecord );
         buttonOPLocation	= (ImageButton) findViewById( R.id.buttonOPLocation );
         buttonOPMood		= (ImageButton) findViewById( R.id.emotion_sticker );
-        ques				= (ImageButton) findViewById( R.id.ques );
+        buttonOPHelp		= (ImageButton) findViewById( R.id.ques );
 
         mFileName = c.getString( 0 );
         
@@ -82,7 +82,9 @@ public class OnePhoto extends Activity{
 
         textViewOPStory.setText( c.getString( 1 ) );
         textViewOPLocation.setText( "@" + " " + c.getString( 2 ) );
-        textViewOPTime.setText( new Date(Long.parseLong(c.getString( 4 ))).toLocaleString() );
+        
+        Date ftStorySaveTime = new Date( c.getLong( 4 ) ); 
+        textViewOPTime.setText( Util.sdfDate.format( ftStorySaveTime ) + " " + Util.sdfTime.format( ftStorySaveTime ) );
 
         locLatitude   = c.getDouble( 5 );
         locLongitute  = c.getDouble( 6 );
@@ -91,7 +93,7 @@ public class OnePhoto extends Activity{
         	buttonOPPlay.setVisibility( View.VISIBLE );
         }
         
-        ques.setVisibility( View.GONE );
+        buttonOPHelp.setVisibility( View.GONE );
         
         textViewOPStory.setVisibility( View.VISIBLE );
         editTextOPStory.setVisibility( View.GONE );

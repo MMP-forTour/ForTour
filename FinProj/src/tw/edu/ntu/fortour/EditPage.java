@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -32,7 +31,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -58,6 +56,7 @@ public class EditPage extends Activity {
 	private boolean hasRecord;
 	private LocationManager mLocationManager;
 	private EditText editTextOPDate, editTextOPTime;
+	private long ftStorySavetime;
 	private double locLatitude, locLongitute;
 	
 	private String ftID = null;
@@ -65,20 +64,15 @@ public class EditPage extends Activity {
 	private boolean pastEdit = false;
 	
 	private Date mNowTime = new Date();
-	private SimpleDateFormat sdfDate = new SimpleDateFormat( "yyyy/MM/dd" );
-	private SimpleDateFormat sdfTime = new SimpleDateFormat( "HH:mm" );
 
 	private final int DATE_DIALOG = 1;      
     private final int TIME_DIALOG = 2;
 
 	public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);     
+        super.onCreate(savedInstanceState);  
         setContentView( R.layout.one_photo );
         
         findviews();
-        setButtonListener();
-        setDateTimePicker();
         
         hasRecord = false;
         
@@ -98,6 +92,8 @@ public class EditPage extends Activity {
         if( ftID != null ) {
         	pastEdit = true;
         	
+        	mLocationManager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+        	
         	Cursor c = ForTour.mDbHelper.ftStoryFetchByID( ftID );
             c.moveToFirst();
             
@@ -105,15 +101,15 @@ public class EditPage extends Activity {
             
             editTextOPStory.setText( c.getString( 1 ) );
             editTextOPLocation.setText( c.getString( 2 ) );
-            //textViewOPTime.setText( new Date(Long.parseLong(c.getString( 4 ))).toLocaleString() );
-
+            
+            ftStorySavetime = c.getLong( 4 );
             locLatitude   = c.getDouble( 5 );
             locLongitute  = c.getDouble( 6 );
-            mLocationManager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
             mMoodIndex = c.getInt( 7 );
-            buttonOPSticker.setImageResource( ImageUtil.imageMoodFiles[ mMoodIndex ] );
             
             c.close();
+            
+            buttonOPSticker.setImageResource( ImageUtil.imageMoodFiles[ mMoodIndex ] );
         }
         
         mMediaFileName = mFileName.replace( ForTour.EXT_PHOTO, ForTour.EXT_RECORD );
@@ -121,6 +117,10 @@ public class EditPage extends Activity {
         bmUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
 									   		ForTour.DIR_WORK + "/" + mFileName ) );
 
+        /* NOTE: All the buttons MUST AFTER ALL INITIAL READY, due to UPDATE mode */
+        setButtonListener();
+        setDateTimePicker();
+        
         try {
 			bm = MediaStore.Images.Media.getBitmap( this.getContentResolver(), bmUriPath );
 		} catch (FileNotFoundException e) {
@@ -396,8 +396,14 @@ public class EditPage extends Activity {
     	editTextOPDate =(EditText) findViewById(R.id.editTextOPDate);
     	editTextOPTime =(EditText) findViewById(R.id.editTextOPTime);
     	
-    	editTextOPDate.setText( sdfDate.format( mNowTime ) );
-    	editTextOPTime.setText( sdfTime.format( mNowTime ) );
+    	if( !pastEdit ) {
+	    	editTextOPDate.setText( Util.sdfDate.format( mNowTime ) );
+	    	editTextOPTime.setText( Util.sdfTime.format( mNowTime ) );
+    	}
+    	else {
+    		editTextOPDate.setText( Util.sdfDate.format( new Date( ftStorySavetime ) ) );
+	    	editTextOPTime.setText( Util.sdfTime.format( new Date( ftStorySavetime ) ) );
+    	}
     	
     	editTextOPDate.setOnClickListener(dateBtnListener);
     	editTextOPTime.setOnClickListener(timeBtnListener);
@@ -415,7 +421,8 @@ public class EditPage extends Activity {
                                 int year, int month, int dayOfMonth) {  
                             
                              //Calendar starts from month 0, so add 1 to month
-                            editTextOPDate.setText(year + "/"+(month+1) + "/" + dayOfMonth );  
+                            editTextOPDate.setText( String.format( "%d/%02d/%02d", year, month+1, dayOfMonth) );
+                            /* should save selected date */
                         }  
                     };  
                 dialog = new DatePickerDialog(this,  
@@ -431,7 +438,8 @@ public class EditPage extends Activity {
                         public void onTimeSet(TimePicker timerPicker,  
                                 int hourOfDay, int minute) {  
                             
-                            editTextOPTime.setText(hourOfDay + ":" + minute );  
+                            editTextOPTime.setText( String.format( "%02d:%02d", hourOfDay, minute) );  
+                            /* should save selected time and merge as millisecond */
                         }  
                     };  
                     dialog = new TimePickerDialog(this, timeListener,  

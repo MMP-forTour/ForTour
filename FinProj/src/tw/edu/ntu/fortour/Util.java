@@ -1,6 +1,7 @@
 package tw.edu.ntu.fortour;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -10,6 +11,9 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 
 public class Util {
+	protected static SimpleDateFormat sdfDate = new SimpleDateFormat( "yyyy/MM/dd" );
+	protected static SimpleDateFormat sdfTime = new SimpleDateFormat( "HH:mm" );
+	
 	public static void deleteFile( File file ) {
 		if( file.exists() ) file.delete(); 
 	}
