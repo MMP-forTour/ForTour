@@ -52,8 +52,10 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
     private boolean mLoggedIn = false;
     private final static String PHOTO_DIR = "/Photos/"; 
     private ImageButton btn_done;
-    CheckBoxPreference sync_db;
+    private CheckBoxPreference sync_db;
     private String fileName = null;
+    
+    static Boolean alreadySet = false;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,7 +63,8 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
         // We create a new AuthSession so that we can use the Dropbox API.
         AndroidAuthSession session = buildSession();
         mApi = new DropboxAPI<AndroidAuthSession>(session);
-
+        alreadySet = true;
+        
         // Basic Android widgets
         addPreferencesFromResource(R.xml.settings);
         setContentView(R.layout.settings_main);
