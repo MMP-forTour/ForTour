@@ -94,8 +94,12 @@ public class EditPage extends Activity {
             
             mFileName = c.getString( 0 );
             
+            Toast.makeText( EditPage.this, mFileName, Toast.LENGTH_LONG ).show();
+            
             editTextOPStory.setText( c.getString( 1 ) );
             editTextOPLocation.setText( c.getString( 2 ) );
+            
+            hasRecord = ( c.getInt( 3 ) == 0 ) ? false : true; 
             
             ftStorySavetime = c.getLong( 4 );
             locLatitude   = c.getDouble( 5 );
@@ -210,39 +214,53 @@ public class EditPage extends Activity {
 						break;
 					case MotionEvent.ACTION_UP:
 						mProgressDlg.dismiss();
+						
 						if( mMediaFileTemp != null ) {
 							mMediaRecorder.stop();
 							mMediaRecorder.release();
 							
-							if( !pastEdit ) {
-								AlertDialog.Builder builder = new AlertDialog.Builder( EditPage.this );
+							AlertDialog.Builder builder = new AlertDialog.Builder( EditPage.this );
+							
+							android.content.DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									if( mMediaFileTemp.renameTo( mMediaFile ) ) {
+										hasRecord = true;
+										Util.deleteFile( mMediaFileTemp );
+										Toast.makeText( EditPage.this, "Save media success.", Toast.LENGTH_LONG ).show();
+									}
+									else {
+										Toast.makeText( EditPage.this, "Save media fail", Toast.LENGTH_LONG ).show();
+									}
+								}
+							};
+							
+							android.content.DialogInterface.OnClickListener negtiveListener = new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									Util.deleteFile( mMediaFileTemp );
+									Toast.makeText( EditPage.this, "Discard save", Toast.LENGTH_LONG ).show();
+								}
+							};
+							
+							if( !pastEdit || ( pastEdit && !hasRecord ) ) {
 								builder.setTitle( getString( R.string.stringSave ) + " " + getString( R.string.stringStoryMedia ) );
 								builder.setMessage( getString( R.string.stringNote ) + ": " + getString( R.string.stringHoldDownButtonToRecord ) );
-								builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog, int which) {
-										if( mMediaFileTemp.renameTo( mMediaFile ) ) {
-											hasRecord = true;
-											Util.deleteFile( mMediaFileTemp );
-											Toast.makeText( EditPage.this, "Save media success.", Toast.LENGTH_LONG ).show();
-										}
-										else {
-											Toast.makeText( EditPage.this, "Save media fail", Toast.LENGTH_LONG ).show();
-										}
-									}
-								});
-								builder.setNegativeButton( android.R.string.no, new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog, int which) {
-										Util.deleteFile( mMediaFileTemp );
-										Toast.makeText( EditPage.this, "Discard save", Toast.LENGTH_LONG ).show();
-									}
-								});
+								
+								builder.setPositiveButton( android.R.string.yes, positiveListener );
+								builder.setNegativeButton( android.R.string.no, negtiveListener );
 								
 								builder.show();
 							}
-							else {
-								/* TODO: update mode */
+							else if( pastEdit && hasRecord ) {
+								builder.setTitle( getString( R.string.stringReplace ) + " " + getString( R.string.stringStoryMedia ) );
+								builder.setMessage( getString( R.string.stringDoYouWantToReplaceIt ) + "\n\n" + 
+													getString( R.string.stringNote ) + ": " + getString( R.string.stringHoldDownButtonToRecord ) );
+								
+								builder.setPositiveButton( android.R.string.yes, positiveListener );
+								builder.setNegativeButton( android.R.string.no, negtiveListener );
+								
+								builder.show();
 							}
 						}
 						else {
