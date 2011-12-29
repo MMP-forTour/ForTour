@@ -251,7 +251,6 @@ public class OnePhoto extends Activity{
 			if( resultCode == Activity.RESULT_OK ) {
 				Intent i = getIntent();
 				finish();
-				overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
 				startActivity( i );
 			}
     	}

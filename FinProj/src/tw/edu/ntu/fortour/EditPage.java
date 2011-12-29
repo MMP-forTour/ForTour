@@ -164,12 +164,12 @@ public class EditPage extends Activity {
 														 );
 							Bitmap.createScaledBitmap( bm, imgUtil.THUMB_SIZE, imgUtil.THUMB_SIZE, true ).compress( Bitmap.CompressFormat.PNG, 90, thumbFile );
 							
-							Intent i = new Intent();
-							i.setClass(EditPage.this, SetPreference.class);
-							Bundle bundle = new Bundle();
-							bundle.putString( "FILE", mFileName );
-							i.putExtras(bundle);
-							startActivity(i);
+//							Intent i = new Intent();
+//							i.setClass(EditPage.this, SetPreference.class);
+//							Bundle bundle = new Bundle();
+//							bundle.putString( "FILE", mFileName );
+//							i.putExtras(bundle);
+//							startActivity(i);
 						}
 						catch( FileNotFoundException e ) { }
 						
@@ -196,6 +196,7 @@ public class EditPage extends Activity {
 						setResult( Activity.RESULT_OK );
 						
 						finish();
+						overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
 					}
 				}
 			}
