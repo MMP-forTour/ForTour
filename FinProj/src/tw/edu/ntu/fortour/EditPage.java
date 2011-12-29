@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.dropbox.client2.android.AndroidAuthSession;
+import com.dropbox.client2.session.TokenPair;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -25,6 +28,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,6 +47,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class EditPage extends Activity {
+	private String TAG = "EditPage";
 	private ImageView imageViewOPImage;
 	private EditText editTextOPStory, editTextOPLocation, editTextOPDate, editTextOPTime;
 	private ImageButton buttonOPOK, buttonOPSticker, buttonOPHelp, buttonOPRecord, buttonOPLocation;
@@ -59,14 +64,8 @@ public class EditPage extends Activity {
 	private boolean hasRecord = false;
 	private String ftID = null;
 	private int mMoodIndex = 0;
-<<<<<<< HEAD
-	private boolean pastEdit = false;
-	
-	private Date mNowTime = new Date();
-=======
 	private boolean updateMode = false;	
 	private Date mNowTime = new Date();
->>>>>>> 3ec60168494c552c7554bec4272b68b28772a231
 
 	private final int DATE_DIALOG = 1;      
     private final int TIME_DIALOG = 2;
@@ -170,6 +169,7 @@ public class EditPage extends Activity {
 														 );
 							Bitmap.createScaledBitmap( bm, imgUtil.THUMB_SIZE, imgUtil.THUMB_SIZE, true ).compress( Bitmap.CompressFormat.PNG, 90, thumbFile );
 							
+							checkSyncDropbox();
 //							Intent i = new Intent();
 //							i.setClass(EditPage.this, SetPreference.class);
 //							Bundle bundle = new Bundle();
@@ -548,4 +548,28 @@ public class EditPage extends Activity {
 	    builder.setCancelable(true);
 	    builder.show(); 
 	}
+	
+	private void checkSyncDropbox(){
+		AndroidAuthSession session = SetPreference.mApi.getSession();
+
+        // The next part must be inserted in the onResume() method of the
+        // activity from which session.startAuthentication() was called, so
+        // that Dropbox authentication completes properly.
+        if (session.authenticationSuccessful()) {
+            try {
+                // Mandatory call to complete the auth
+                session.finishAuthentication();
+                
+                SetPreference.uploadDB(mFileName, EditPage.this);
+            } catch (IllegalStateException e) {
+                showToast("Couldn't authenticate with Dropbox:" + e.getLocalizedMessage());
+                Log.i(TAG, "Error authenticating", e);
+            }
+        }
+	}
+	
+	private void showToast(String msg) {
+        Toast error = Toast.makeText(this, msg, Toast.LENGTH_LONG);
+        error.show();
+    }
 }

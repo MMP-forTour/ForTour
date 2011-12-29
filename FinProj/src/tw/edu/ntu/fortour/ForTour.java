@@ -37,6 +37,7 @@ public class ForTour extends Activity {
 	private static final int CROP_FROM_CAMERA    = 0x100002;
 	private static final int PICK_FROM_FILE      = 0x100003;
 	protected static final int LOCATION_MAP_PICK = 0x100004;
+	protected static final int EDIT_ONE_PHOTO    = 0x100005;
 	protected static final int PASS_ONE_PHOTO    = 0x100005;
 	
 	protected static final String EXT_PHOTO  = ".png";

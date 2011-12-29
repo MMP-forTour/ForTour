@@ -170,7 +170,7 @@ public class UploadPicture extends AsyncTask<Void, Long, Boolean> {
     protected void onPostExecute(Boolean result) {
         //mDialog.dismiss();
         if (result) {
-            showToast("Image successfully uploaded");
+            showToast("Image successfully uploaded to dropbox");
         } else {
             showToast(mErrorMsg);
         }

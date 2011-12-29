@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -75,19 +76,19 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
         
         checkAppKeySetup();
 
-        Bundle extras = getIntent().getExtras();
+        /*Bundle extras = getIntent().getExtras();
         if(extras != null) {
         	fileName = extras.getString("FILE");
             //Toast.makeText(this, "FILENAME is: " + extras.getString("FILE"),
             //Toast.LENGTH_SHORT).show();
-        }
+        }*/
         
         // Display the proper UI state if logged in or not
-        setLoggedIn(mApi.getSession().isLinked());
+        //setLoggedIn(mApi.getSession().isLinked());
         btn_done.setOnClickListener(new View.OnClickListener() {	
 			public void onClick(View v) {
-				if (fileName != null) 
-					uploadDB(fileName);
+				//if (fileName != null) 
+					//uploadDB(fileName, SetPreference.this);
 				finish();
 			}
 		});
@@ -229,7 +230,7 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
 	@Override
     public boolean onPreferenceClick(Preference preference) {
 	    // TODO Auto-generated method stub
-	    return true;
+	    return false;
     }
 
 	@Override
@@ -249,7 +250,7 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
     }
 	
 	//This is what get called when save a picture
-    public void uploadDB(String fileName) {
+    public static void uploadDB(String fileName, Context ctx) {
     	if (mApi.getSession().authenticationSuccessful()) {
     		Log.i(TAG, "upload!!!!!!!!");
     		Uri uri = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
@@ -258,7 +259,7 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
             try {
 	            file = new File(new URI(uri.toString()));
 	            if (uri != null) {
-	            	UploadPicture upload = new UploadPicture(this, mApi, PHOTO_DIR, file);
+	            	UploadPicture upload = new UploadPicture(ctx, mApi, PHOTO_DIR, file);
 	            	upload.execute();
 	            }
             } catch (URISyntaxException e) {
