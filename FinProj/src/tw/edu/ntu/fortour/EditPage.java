@@ -229,6 +229,8 @@ public class EditPage extends Activity {
 						mProgressDlg = ProgressDialog.show( EditPage.this,
 															getString( R.string.stringRecording ),
 															getString( R.string.stringReleaseButtonToStop ) );
+						mProgressDlg.setIcon( android.R.drawable.ic_btn_speak_now );
+						
 						try {
 							mMediaFile = new File( Environment.getExternalStorageDirectory(), ForTour.DIR_WORK + "/" + mMediaFileName );
 							mMediaFileTemp = new File( Environment.getExternalStorageDirectory(), ForTour.DIR_WORK + "/" + ForTour.DIR_TEMP + "/" + mMediaFileName );
