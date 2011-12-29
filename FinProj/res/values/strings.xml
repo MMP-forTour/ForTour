@@ -25,7 +25,7 @@
     <string name="stringUpdateStory">Update Story?</string>
     <string name="stringUpdateStorySuccess">Update Story Success</string>
     <string name="stringUpdateStoryFail">Update Story Fail</string>
-    <string name="stringDetermine">Determine</string>
+    <string name="stringLocation">Location</string>
     <string name="stringLoading">Loading</string>
     <string name="stringPleaseWait">Please Wait</string>
     <string name="stringHowAboutYourMood">How about your mood</string>

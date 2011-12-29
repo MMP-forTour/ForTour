@@ -74,6 +74,7 @@ public class LocationMap extends MapActivity {
         if( b != null ) {
         	locLatitude  = b.getString( KEY_LATITUDE );
 	        locLongitude = b.getString( KEY_LONGITUDE );
+	        locName      = b.getString( KEY_LOCNAME );
 
 	        if( locLatitude != null && locLongitude != null ) hasLocation = true;
         }
@@ -110,9 +111,10 @@ public class LocationMap extends MapActivity {
         	determinLocation.run();
         	
         	// Add a marker
+        	/* TODO: set click as false when we can draw location text in a bubble */
         	markerOverlay mLMOverlay = new markerOverlay( getResources().getDrawable( R.drawable.locate ) );
         	
-        	OverlayItem mOverlayItem = new OverlayItem( mGeoPoint, "", "" );
+        	OverlayItem mOverlayItem = new OverlayItem( mGeoPoint, getString( R.string.stringLocation ), locName );
         	mLMOverlay.addLandmark( mOverlayItem );
         	mMapOverlays.add( mLMOverlay );
         }
@@ -132,7 +134,7 @@ public class LocationMap extends MapActivity {
 			mMapController.animateTo( mGeoPoint );
 			
 			// Translate location to location name
-			runOnUiThread( getAddressList );
+			if( !hasLocation ) runOnUiThread( getAddressList );
 			
 			if( mProgressDialog != null ) mProgressDialog.dismiss();
 		}
@@ -256,6 +258,5 @@ public class LocationMap extends MapActivity {
 		public int size() {
 			return mOverlayList.size();
 		}
-		
 	}
 }

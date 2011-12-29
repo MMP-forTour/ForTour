@@ -38,7 +38,7 @@ public class OnePhoto extends Activity{
 	private MediaPlayer mMediaPlayer;
 	private ProgressDialog mProgressDlg;
 	private double locLatitude, locLongitute;
-	private String mMediaFileName;
+	private String mMediaFileName, ftStoryLocation;
 	
 	private TextView textViewOPStory, textViewOPTime, textViewOPLocation;
     private EditText editTextOPStory, editTextOPLocation, editTextOPDate, editTextOPTime;
@@ -83,9 +83,10 @@ public class OnePhoto extends Activity{
 
         textViewOPStory.setText( c.getString( 1 ) );
         
-        String ftStoryLocation = c.getString( 2 ).trim();
-        if( !"".equals( ftStoryLocation ) ) ftStoryLocation = "@ " + ftStoryLocation;
-        textViewOPLocation.setText( ftStoryLocation );
+        ftStoryLocation = c.getString( 2 ).trim();
+        
+        if( !"".equals( ftStoryLocation ) ) textViewOPLocation.setText( "@ " + ftStoryLocation );
+        else textViewOPLocation.setText( ftStoryLocation );
         
         Date ftStorySaveTime = new Date( c.getLong( 4 ) ); 
         textViewOPTime.setText( Util.sdfDate.format( ftStorySaveTime ) + " " + Util.sdfTime.format( ftStorySaveTime ) );
@@ -161,6 +162,7 @@ public class OnePhoto extends Activity{
 					
 					b.putString( LocationMap.KEY_LATITUDE, String.valueOf( (int) ( locLatitude * 1E6 ) ) );
 					b.putString( LocationMap.KEY_LONGITUDE, String.valueOf( (int) ( locLongitute * 1E6 ) ) );
+					b.putString( LocationMap.KEY_LOCNAME, ftStoryLocation );
 					
 					i.putExtras( b );
 					i.setClass( OnePhoto.this, LocationMap.class );
