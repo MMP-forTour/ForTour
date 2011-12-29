@@ -14,6 +14,7 @@
     <string name="stringEnableLocationServices">Enable Location Services</string>
     <string name="stringDoYouWantToEnableIt">Do you want to enable it?</string>
     <string name="stringDoYouWantToReplaceIt">Do you want to replace it?</string>
+    <string name="stringDoYouWantToDeleteIt">Do you want to delete it?</string>
     <string name="stringServiceCanNotBeUsedNow">Service can not be used now.</string>
     <string name="stringUnableToRetrieveLocationNow">Unable to retrieve location now</string>
     <string name="stringNoLocationInformation">No location information</string>
@@ -35,4 +36,6 @@
     <string name="stringEdit">Edit</string>
     <string name="stringDelete">Delete</string>
     <string name="stringSettings">Settings</string>
+    <string name="stringDeleteStorySuccess">Delete Story Success</string>
+    <string name="stringDeleteStoryFail">Delete Story Fail</string>
 </resources>

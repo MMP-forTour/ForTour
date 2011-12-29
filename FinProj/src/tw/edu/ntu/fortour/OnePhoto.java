@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.sql.Date;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -228,7 +229,27 @@ public class OnePhoto extends Activity{
 				
                 break;
             case 1:
-            	
+            	AlertDialog.Builder builder = new AlertDialog.Builder( OnePhoto.this );
+				builder.setTitle( android.R.string.dialog_alert_title );
+				builder.setMessage( getString( R.string.stringDoYouWantToDeleteIt ) );
+				
+				builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						boolean rst = ForTour.mDbHelper.ftStoryDelByID( ftID );
+
+						if( !rst ) Toast.makeText( OnePhoto.this, getString( R.string.stringDeleteStoryFail ), Toast.LENGTH_LONG ).show();
+						else {
+							Toast.makeText( OnePhoto.this, getString( R.string.stringDeleteStorySuccess ), Toast.LENGTH_LONG ).show();
+							finish();
+							overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
+							/* TODO: need refocus */
+						}
+					}
+				} );
+				builder.setNegativeButton( android.R.string.no, null );
+				
+				builder.show();
                 break;
             case 2:
             	share();
