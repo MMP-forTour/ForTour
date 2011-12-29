@@ -221,8 +221,8 @@ public class ForTour extends Activity {
         											  DIR_WORK + "/" + mFilename ) );
         	
         	intent.setData(mImageCaptureUri);        
-            intent.putExtra("outputX", 360);
-            intent.putExtra("outputY", 360);
+            intent.putExtra("outputX", ImageUtil.imageInnerWidth );
+            intent.putExtra("outputY", ImageUtil.imageInnerHeight );
             intent.putExtra("aspectX", 1);
             intent.putExtra("aspectY", 1);
             intent.putExtra("scale", true);

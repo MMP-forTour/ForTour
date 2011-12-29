@@ -228,7 +228,7 @@ public class OnePhoto extends Activity{
 				
                 break;
             case 1:
-
+            	
                 break;
             case 2:
             	share();

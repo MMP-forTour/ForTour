@@ -467,7 +467,7 @@ public class EditPage extends Activity {
                             
                              //Calendar starts from month 0, so add 1 to month
                             editTextOPDate.setText( String.format( "%d/%02d/%02d", year, month+1, dayOfMonth) );
-                            /* should save selected date */
+                            /* TODO: should save selected date */
                         }  
                     };  
                 dialog = new DatePickerDialog(this,  
@@ -484,7 +484,7 @@ public class EditPage extends Activity {
                                 int hourOfDay, int minute) {  
                             
                             editTextOPTime.setText( String.format( "%02d:%02d", hourOfDay, minute) );  
-                            /* should save selected time and merge as millisecond */
+                            /* TODO: should save selected time and merge as millisecond, then save */
                         }  
                     };  
                     dialog = new TimePickerDialog(this, timeListener,  
