@@ -224,8 +224,9 @@ public class OnePhoto extends Activity{
 				
 				i.putExtras( b );
 				i.setClass( OnePhoto.this, EditPage.class );
-				startActivity(i);
-				//startActivityForResult( i, ForTour.EDIT_ONE_PHOTO );
+				startActivityForResult( i, ForTour.EDIT_ONE_PHOTO );
+				overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
+				
                 break;
             case 1:
 
@@ -241,6 +242,19 @@ public class OnePhoto extends Activity{
             	break;
         }
         return super.onOptionsItemSelected(item);
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	switch( requestCode ) {
+		case ForTour.EDIT_ONE_PHOTO:
+			if( resultCode == Activity.RESULT_OK ) {
+				Intent i = getIntent();
+				finish();
+				overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
+				startActivity( i );
+			}
+    	}
     }
     
     private void share() {

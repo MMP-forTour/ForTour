@@ -192,8 +192,10 @@ public class EditPage extends Activity {
 					if( !rst ) Toast.makeText( EditPage.this, getString( R.string.stringUpdateStoryFail ), Toast.LENGTH_LONG ).show();
 					else {
 						Toast.makeText( EditPage.this, getString( R.string.stringUpdateStorySuccess ), Toast.LENGTH_LONG ).show();
+						
+						setResult( Activity.RESULT_OK );
+						
 						finish();
-						/* TODO: need refresh one photo view */
 					}
 				}
 			}
@@ -401,6 +403,7 @@ public class EditPage extends Activity {
 			public void onClick(DialogInterface arg0, int arg1) {
 				if( !pastEdit ) discardStory();
 				finish();
+				overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
 			}
 		} );
 		builder.show();
