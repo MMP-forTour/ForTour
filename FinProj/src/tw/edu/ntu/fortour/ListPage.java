@@ -235,9 +235,9 @@ public class ListPage extends ListActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //參數1:群組id, 參數2:itemId, 參數3:item順序, 參數4:item名稱
-        menu.add(0, 0, 0, "Edit");
-        menu.add(0, 1, 1, "Share");
-        menu.add(0, 2, 2, "Setting");
+        menu.add(0, 0, 0, "Edit").setIcon( android.R.drawable.ic_menu_edit );
+        menu.add(0, 1, 1, "Share").setIcon( android.R.drawable.ic_menu_share );
+        menu.add(0, 2, 2, "Setting").setIcon( android.R.drawable.ic_menu_preferences );
         return super.onCreateOptionsMenu(menu);
     }
     

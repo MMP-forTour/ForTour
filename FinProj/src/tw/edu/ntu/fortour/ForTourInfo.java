@@ -1,9 +1,11 @@
 package tw.edu.ntu.fortour;
 
 import android.app.Activity;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 
 
@@ -20,6 +22,12 @@ public class ForTourInfo extends Activity {
             	onBackPressed();
         	}
         });
+        TextView version = (TextView) findViewById( R.id.textViewVersion );
+        try {
+			version.setText( "Ver: " + getPackageManager().getPackageInfo( getPackageName(), 0 ).versionName );
+		} catch (NameNotFoundException e) {
+			version.setVisibility( View.INVISIBLE );
+		}
     }
  
     @Override
