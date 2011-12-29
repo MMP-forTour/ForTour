@@ -178,7 +178,23 @@ public class EditPage extends Activity {
 					}
 				}
 				else {
-					/* TODO: UPDATE mode */
+					/* need confirm? */
+					boolean rst = ForTour.mDbHelper.ftStoryUpdByID(	ftID,
+																	mFileName,
+																	editTextOPStory.getText().toString(),
+																	editTextOPLocation.getText().toString(),
+																	( ( hasRecord != false ) ? 1 : 0 ),
+																	locLatitude,
+																	locLongitute,
+																	mMoodIndex
+																	);
+					
+					if( !rst ) Toast.makeText( EditPage.this, getString( R.string.stringUpdateStoryFail ), Toast.LENGTH_LONG ).show();
+					else {
+						Toast.makeText( EditPage.this, getString( R.string.stringUpdateStorySuccess ), Toast.LENGTH_LONG ).show();
+						finish();
+						/* TODO: need refresh one photo view */
+					}
 				}
 			}
 		} );
