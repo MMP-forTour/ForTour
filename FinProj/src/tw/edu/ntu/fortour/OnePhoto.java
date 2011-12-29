@@ -38,12 +38,11 @@ public class OnePhoto extends Activity{
 	private MediaPlayer mMediaPlayer;
 	private ProgressDialog mProgressDlg;
 	private double locLatitude, locLongitute;
+	private String mMediaFileName;
 	
 	private TextView textViewOPStory, textViewOPTime, textViewOPLocation;
-    private EditText editTextOPStory, editTextOPLocation, editTextOPDate,
-    				 editTextOPTime;
-    private ImageButton buttonOPMood, buttonOPOK, buttonOPRecord,
-    					buttonOPLocation, buttonOPPlay, buttonOPHelp;
+    private EditText editTextOPStory, editTextOPLocation, editTextOPDate, editTextOPTime;
+    private ImageButton buttonOPMood, buttonOPOK, buttonOPRecord, buttonOPLocation, buttonOPPlay, buttonOPHelp;
     
 	/** Called when the activity is first created. */
     @Override
@@ -77,8 +76,10 @@ public class OnePhoto extends Activity{
 
         mFileName = c.getString( 0 );
         
+        mMediaFileName = mFileName.replace( ForTour.EXT_PHOTO , ForTour.EXT_RECORD );
+        
         mpUriPath = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
-			     							 ForTour.DIR_WORK + "/" + mFileName.replace( ForTour.EXT_PHOTO , ForTour.EXT_RECORD ) ) );
+			     							 ForTour.DIR_WORK + "/" + mMediaFileName ) );
 
         textViewOPStory.setText( c.getString( 1 ) );
         
@@ -115,7 +116,6 @@ public class OnePhoto extends Activity{
         buttonOPMood.setImageResource( ImageUtil.imageMoodFiles[ c.getInt( 7 ) ] );
 
         buttonOPPlay.setOnClickListener( new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				mMediaPlayer = new MediaPlayer();
@@ -240,10 +240,16 @@ public class OnePhoto extends Activity{
 
 						if( !rst ) Toast.makeText( OnePhoto.this, getString( R.string.stringDeleteStoryFail ), Toast.LENGTH_LONG ).show();
 						else {
+							Util.deleteFile( new File( Environment.getExternalStorageDirectory(),
+					   			    					ForTour.DIR_WORK + "/" + ForTour.DIR_THUMB + "/" + mFileName ) );
+							Util.deleteFile( new File( Environment.getExternalStorageDirectory(),
+					   			    					ForTour.DIR_WORK + "/" + mFileName ) );
+							Util.deleteFile( new File( Environment.getExternalStorageDirectory(),
+														ForTour.DIR_WORK + "/" + mMediaFileName ) );
 							Toast.makeText( OnePhoto.this, getString( R.string.stringDeleteStorySuccess ), Toast.LENGTH_LONG ).show();
 							finish();
 							overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
-							/* TODO: need refocus */
+							/* TODO: may need refocus on list page */
 						}
 					}
 				} );
