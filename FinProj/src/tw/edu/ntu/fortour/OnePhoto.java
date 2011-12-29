@@ -55,7 +55,6 @@ public class OnePhoto extends Activity{
         imgUtil = new ImageUtil();
         
         Cursor c = ForTour.mDbHelper.ftStoryFetchByID( ftID );
-        c.moveToFirst();
         
         textViewOPStory	   = (TextView) findViewById( R.id.textViewOPStory );
         textViewOPTime	   = (TextView) findViewById( R.id.textViewOPTime );

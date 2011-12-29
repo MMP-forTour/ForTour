@@ -40,10 +40,7 @@ public class DbAdapter {
 					KEY_LONGITUDE + " DOUBLE NULL," +
 					KEY_MOODIMAGE + " INTEGER DEFAULT 0" +
 					" );";
-	
-	private static final String DATABASE_UPGRADE =
-			"DROP TABLE IF EXISTS " + DATABASE_TABLE + ";";
-	
+
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 
 		public DatabaseHelper( Context context ) {
@@ -57,8 +54,7 @@ public class DbAdapter {
 
 		@Override
 		public void onUpgrade( SQLiteDatabase db, int oldVersion, int newVersion ) {
-			db.execSQL( DATABASE_UPGRADE );
-			onCreate( db );
+			/* TODO: DB upgrade */
 		}
 	}
 	
@@ -95,8 +91,25 @@ public class DbAdapter {
 		return mDb.insert( DATABASE_TABLE, null, initValues );
 	}
 	
-	public boolean ftStoryDel( final long contactId ) {
-		return ( mDb.delete( DATABASE_TABLE, KEY_ROWID + "=" + contactId, null ) > 0 );
+	public boolean ftStoryUpdByID( final String ftID, final String ftImage,
+								 final String ftStory, final String ftLocation,
+								 final int ftHasRecord, final double ftLatitude,
+								 final double ftLongitude, final int ftMoodImage ) {
+		
+		ContentValues initValues = new ContentValues();
+		initValues.put( KEY_IMAGE, ftImage );
+		initValues.put( KEY_STORY, ftStory );
+		initValues.put( KEY_LOCATION, ftLocation );
+		initValues.put( KEY_HAS_RECORD, ftHasRecord );
+		initValues.put( KEY_LATITUDE, ftLatitude );
+		initValues.put( KEY_LONGITUDE, ftLongitude );
+		initValues.put( KEY_MOODIMAGE, ftMoodImage );
+		
+		return ( mDb.update( DATABASE_TABLE, initValues, KEY_ROWID + "=?", new String[] { ftID } ) > 0  );
+	}
+	
+	public boolean ftStoryDelByID( final String ftID ) {
+		return ( mDb.delete( DATABASE_TABLE, KEY_ROWID + "=?", new String[] { ftID } ) > 0 );
 	}
 	
 	public Cursor ftStoryFetchAll() {
@@ -110,16 +123,21 @@ public class DbAdapter {
 									"FROM " + DATABASE_TABLE + " " +
 									"ORDER BY " + KEY_ROWID + " DESC " +
 									"LIMIT 0, " + amount + " "; 
+		
 		return mDb.rawQuery( queryString , null );
 	}
 	
 	public Cursor ftStoryFetchByID( final String ftID ) {
-		return mDb.query(	DATABASE_TABLE , 
-							new String[] { KEY_IMAGE, KEY_STORY,
-										   KEY_LOCATION, KEY_HAS_RECORD, KEY_SAVETIME, 
-										   KEY_LATITUDE, KEY_LONGITUDE, KEY_MOODIMAGE },
-							"_id=?",
-							new String[] { ftID },
-							null, null, null );
+		Cursor cursor =  mDb.query(	DATABASE_TABLE , 
+									new String[] { KEY_IMAGE, KEY_STORY,
+												   KEY_LOCATION, KEY_HAS_RECORD, KEY_SAVETIME, 
+												   KEY_LATITUDE, KEY_LONGITUDE, KEY_MOODIMAGE },
+									KEY_ROWID + "=?",
+									new String[] { ftID },
+									null, null, null );
+		
+		if( cursor != null ) cursor.moveToFirst();
+		
+		return cursor;
 	}
 }

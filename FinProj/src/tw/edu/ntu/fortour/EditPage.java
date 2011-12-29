@@ -90,11 +90,8 @@ public class EditPage extends Activity {
         	mLocationManager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
         	
         	Cursor c = ForTour.mDbHelper.ftStoryFetchByID( ftID );
-            c.moveToFirst();
             
             mFileName = c.getString( 0 );
-            
-            Toast.makeText( EditPage.this, mFileName, Toast.LENGTH_LONG ).show();
             
             editTextOPStory.setText( c.getString( 1 ) );
             editTextOPLocation.setText( c.getString( 2 ) );
