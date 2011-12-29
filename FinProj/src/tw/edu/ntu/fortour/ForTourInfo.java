@@ -24,7 +24,7 @@ public class ForTourInfo extends Activity {
         });
         TextView version = (TextView) findViewById( R.id.textViewVersion );
         try {
-			version.setText( "Ver: " + getPackageManager().getPackageInfo( getPackageName(), 0 ).versionName );
+			version.setText( "Version: " + getPackageManager().getPackageInfo( getPackageName(), 0 ).versionName );
 		} catch (NameNotFoundException e) {
 			version.setVisibility( View.INVISIBLE );
 		}
