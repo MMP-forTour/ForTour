@@ -29,5 +29,9 @@
     <string name="stringHowAboutYourMood">How about your mood</string>
     <string name="stringHelp">Help</string>
     <string name="stringThereIsNoMoreData">There is no more data</string>
-    <string name="stringDiscardSavingStory">Discard saving story?</string>
+    <string name="stringDiscardSavingStory">Discard Saving Story?</string>
+    <string name="stringShare">Share</string>
+    <string name="stringEdit">Edit</string>
+    <string name="stringDelete">Delete</string>
+    <string name="stringSettings">Settings</string>
 </resources>

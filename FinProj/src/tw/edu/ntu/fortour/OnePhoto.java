@@ -203,26 +203,29 @@ public class OnePhoto extends Activity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //參數1:群組id, 參數2:itemId, 參數3:item順序, 參數4:item名稱
-        menu.add(0, 0, 0, "Edit").setIcon( android.R.drawable.ic_menu_edit );
-        menu.add(0, 1, 1, "Delete").setIcon( android.R.drawable.ic_menu_delete );
-        menu.add(0, 2, 2, "Share").setIcon( android.R.drawable.ic_menu_share );
-        menu.add(0, 3, 3, "Setting").setIcon( android.R.drawable.ic_menu_preferences );
+        menu.add(0, 0, 0, getString( R.string.stringEdit ) ).setIcon( android.R.drawable.ic_menu_edit );
+        menu.add(0, 1, 1, getString( R.string.stringDelete ) ).setIcon( android.R.drawable.ic_menu_delete );
+        menu.add(0, 2, 2, getString( R.string.stringShare ) ).setIcon( android.R.drawable.ic_menu_share );
+        menu.add(0, 3, 3, getString( R.string.stringSettings ) ).setIcon( android.R.drawable.ic_menu_preferences );
         return super.onCreateOptionsMenu(menu);
     }
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //依據itemId來判斷使用者點選哪一個item
+    	Intent i = new Intent();
+    	
+    	//依據itemId來判斷使用者點選哪一個item
         switch(item.getItemId()) {
             case 0:
-            	Intent i0 = new Intent();
 				Bundle b = new Bundle();
+				
 				b.putString("_ID", ftID);
 				b.putString("FILE", mFileName);
-				i0.putExtras( b );
-				i0.setClass( OnePhoto.this, EditPage.class );
-				//startActivityForResult( i0 , ForTour.EDIT_ONE_PHOTO);
-				startActivity(i0);
+				
+				i.putExtras( b );
+				i.setClass( OnePhoto.this, EditPage.class );
+				startActivity(i);
+				//startActivityForResult( i, ForTour.EDIT_ONE_PHOTO );
                 break;
             case 1:
 
@@ -231,20 +234,20 @@ public class OnePhoto extends Activity{
             	share();
                 break;
             case 3:
-            	Intent i = new Intent();
             	i.setClass( OnePhoto.this, SetPreference.class );				
 				startActivity( i );
                 break;
             default:
+            	break;
         }
         return super.onOptionsItemSelected(item);
     }
     
     private void share() {
-    	Intent intent=new Intent(android.content.Intent.ACTION_SEND); 
+    	Intent intent = new Intent(android.content.Intent.ACTION_SEND); 
     	intent.setType("image/png");
-    	intent.putExtra(Intent.EXTRA_STREAM, bmUriPath); 
-    	startActivity(Intent.createChooser(intent, "Choose a way to share"));
+    	intent.putExtra( Intent.EXTRA_STREAM, bmUriPath ); 
+    	startActivity( Intent.createChooser( intent, getString( R.string.stringShare ) ) );
     }
     
 }
