@@ -148,7 +148,7 @@ public class OnePhoto extends Activity{
 					} );
 				}
 				catch( Exception e ) {
-					Toast.makeText( OnePhoto.this, "Unable To Play Media: " + e.toString(), Toast.LENGTH_LONG ).show();
+					Toast.makeText( OnePhoto.this, "Unable To Play Media: " + e.getLocalizedMessage(), Toast.LENGTH_LONG ).show();
 				}
 			}
 		} );
