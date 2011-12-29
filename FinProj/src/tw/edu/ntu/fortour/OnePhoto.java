@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.sql.Date;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -55,7 +56,6 @@ public class OnePhoto extends Activity{
         imgUtil = new ImageUtil();
         
         Cursor c = ForTour.mDbHelper.ftStoryFetchByID( ftID );
-        c.moveToFirst();
         
         textViewOPStory	   = (TextView) findViewById( R.id.textViewOPStory );
         textViewOPTime	   = (TextView) findViewById( R.id.textViewOPTime );
@@ -81,7 +81,10 @@ public class OnePhoto extends Activity{
 			     							 ForTour.DIR_WORK + "/" + mFileName.replace( ForTour.EXT_PHOTO , ForTour.EXT_RECORD ) ) );
 
         textViewOPStory.setText( c.getString( 1 ) );
-        textViewOPLocation.setText( "@" + " " + c.getString( 2 ) );
+        
+        String ftStoryLocation = c.getString( 2 ).trim();
+        if( !"".equals( ftStoryLocation ) ) ftStoryLocation = "@ " + ftStoryLocation;
+        textViewOPLocation.setText( ftStoryLocation );
         
         Date ftStorySaveTime = new Date( c.getLong( 4 ) ); 
         textViewOPTime.setText( Util.sdfDate.format( ftStorySaveTime ) + " " + Util.sdfTime.format( ftStorySaveTime ) );
@@ -110,8 +113,7 @@ public class OnePhoto extends Activity{
         
         buttonOPRecord.setVisibility( View.INVISIBLE );
         buttonOPMood.setImageResource( ImageUtil.imageMoodFiles[ c.getInt( 7 ) ] );
-        
-        /* TODO: Check file exists first. */
+
         buttonOPPlay.setOnClickListener( new OnClickListener() {
 			
 			@Override
@@ -132,7 +134,7 @@ public class OnePhoto extends Activity{
 				
 				try {
 					mMediaPlayer.setAudioStreamType( AudioManager.STREAM_MUSIC );
-					mMediaPlayer.setDataSource( getApplicationContext(), mpUriPath );;
+					mMediaPlayer.setDataSource( getApplicationContext(), mpUriPath );
 					mMediaPlayer.prepare();
 					mMediaPlayer.start();
 					
@@ -145,7 +147,7 @@ public class OnePhoto extends Activity{
 					} );
 				}
 				catch( Exception e ) {
-					Toast.makeText( OnePhoto.this, "Unable To Play Media: " + e.toString(), Toast.LENGTH_LONG ).show();
+					Toast.makeText( OnePhoto.this, "Unable To Play Media: " + e.getLocalizedMessage(), Toast.LENGTH_LONG ).show();
 				}
 			}
 		} );
@@ -165,6 +167,9 @@ public class OnePhoto extends Activity{
 					
 					startActivity( i );
 				}
+				else {
+					Toast.makeText( OnePhoto.this, getString( R.string.stringNoLocationInformation ), Toast.LENGTH_LONG ).show();
+				}
 			}
 		} );
         
@@ -173,9 +178,9 @@ public class OnePhoto extends Activity{
 			   									ForTour.DIR_WORK + "/" + mFileName ) );
 			bm = MediaStore.Images.Media.getBitmap( this.getContentResolver(), bmUriPath );
 		} catch (FileNotFoundException e) {
-			Toast.makeText( OnePhoto.this, "File Not Found: " + e.toString(), Toast.LENGTH_LONG ).show();
+			Toast.makeText( OnePhoto.this, "File Not Found: " + e.getLocalizedMessage(), Toast.LENGTH_LONG ).show();
 		} catch (IOException e) {
-			Toast.makeText( OnePhoto.this, "IO Exception: " + e.toString(), Toast.LENGTH_LONG ).show();
+			Toast.makeText( OnePhoto.this, "IO Exception: " + e.getLocalizedMessage(), Toast.LENGTH_LONG ).show();
 		}
         
 		imageViewOPImage.setImageBitmap( imgUtil.imageBorderMerge( getResources().getDrawable( R.drawable.photo_frame ), bm ) );
@@ -198,48 +203,84 @@ public class OnePhoto extends Activity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //參數1:群組id, 參數2:itemId, 參數3:item順序, 參數4:item名稱
-        menu.add(0, 0, 0, "Edit").setIcon( android.R.drawable.ic_menu_edit );
-        menu.add(0, 1, 1, "Delete").setIcon( android.R.drawable.ic_menu_delete );
-        menu.add(0, 2, 2, "Share").setIcon( android.R.drawable.ic_menu_share );
-        menu.add(0, 3, 3, "Setting").setIcon( android.R.drawable.ic_menu_preferences );
+        menu.add(0, 0, 0, getString( R.string.stringEdit ) ).setIcon( android.R.drawable.ic_menu_edit );
+        menu.add(0, 1, 1, getString( R.string.stringDelete ) ).setIcon( android.R.drawable.ic_menu_delete );
+        menu.add(0, 2, 2, getString( R.string.stringShare ) ).setIcon( android.R.drawable.ic_menu_share );
+        menu.add(0, 3, 3, getString( R.string.stringSettings ) ).setIcon( android.R.drawable.ic_menu_preferences );
         return super.onCreateOptionsMenu(menu);
     }
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //依據itemId來判斷使用者點選哪一個item
+    	Intent i = new Intent();
+    	
+    	//依據itemId來判斷使用者點選哪一個item
         switch(item.getItemId()) {
             case 0:
-            	Intent i0 = new Intent();
 				Bundle b = new Bundle();
+				
 				b.putString("_ID", ftID);
 				b.putString("FILE", mFileName);
-				i0.putExtras( b );
-				i0.setClass( OnePhoto.this, EditPage.class );
-				//startActivityForResult( i0 , ForTour.EDIT_ONE_PHOTO);
-				startActivity(i0);
+				
+				i.putExtras( b );
+				i.setClass( OnePhoto.this, EditPage.class );
+				startActivityForResult( i, ForTour.EDIT_ONE_PHOTO );
+				overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
+				
                 break;
             case 1:
+            	AlertDialog.Builder builder = new AlertDialog.Builder( OnePhoto.this );
+				builder.setTitle( android.R.string.dialog_alert_title );
+				builder.setMessage( getString( R.string.stringDoYouWantToDeleteIt ) );
+				
+				builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						boolean rst = ForTour.mDbHelper.ftStoryDelByID( ftID );
 
+						if( !rst ) Toast.makeText( OnePhoto.this, getString( R.string.stringDeleteStoryFail ), Toast.LENGTH_LONG ).show();
+						else {
+							Toast.makeText( OnePhoto.this, getString( R.string.stringDeleteStorySuccess ), Toast.LENGTH_LONG ).show();
+							finish();
+							overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
+							/* TODO: need refocus */
+						}
+					}
+				} );
+				builder.setNegativeButton( android.R.string.no, null );
+				
+				builder.show();
                 break;
             case 2:
             	share();
                 break;
             case 3:
-            	Intent i = new Intent();
             	i.setClass( OnePhoto.this, SetPreference.class );				
 				startActivity( i );
                 break;
             default:
+            	break;
         }
         return super.onOptionsItemSelected(item);
     }
     
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	switch( requestCode ) {
+		case ForTour.EDIT_ONE_PHOTO:
+			if( resultCode == Activity.RESULT_OK ) {
+				Intent i = getIntent();
+				finish();
+				startActivity( i );
+			}
+    	}
+    }
+    
     private void share() {
-    	Intent intent=new Intent(android.content.Intent.ACTION_SEND); 
+    	Intent intent = new Intent(android.content.Intent.ACTION_SEND); 
     	intent.setType("image/png");
-    	intent.putExtra(Intent.EXTRA_STREAM, bmUriPath); 
-    	startActivity(Intent.createChooser(intent, "Choose a way to share"));
+    	intent.putExtra( Intent.EXTRA_STREAM, bmUriPath ); 
+    	startActivity( Intent.createChooser( intent, getString( R.string.stringShare ) ) );
     }
     
 }

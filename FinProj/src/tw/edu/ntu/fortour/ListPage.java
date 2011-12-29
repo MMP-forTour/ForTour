@@ -74,6 +74,7 @@ public class ListPage extends ListActivity {
 			bundle.putString( "_ID", selectedItem.getString( 0 ) );
 			intent.putExtras( bundle );
 			startActivity( intent );
+			/* TODO: may need refresh list when edit page finished */
 		}
 	};
 	
@@ -91,9 +92,6 @@ public class ListPage extends ListActivity {
 						( new asycLoading() ).execute();
 					}
 				}
-//				else {
-//					Toast.makeText( ListPage.this, getString( R.string.stringThereIsNoMoreData ), Toast.LENGTH_SHORT ).show();
-//				}
 			}
 		}
 	};
@@ -235,9 +233,9 @@ public class ListPage extends ListActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //參數1:群組id, 參數2:itemId, 參數3:item順序, 參數4:item名稱
-        menu.add(0, 0, 0, "Edit").setIcon( android.R.drawable.ic_menu_edit );
-        menu.add(0, 1, 1, "Share").setIcon( android.R.drawable.ic_menu_share );
-        menu.add(0, 2, 2, "Setting").setIcon( android.R.drawable.ic_menu_preferences );
+        /*menu.add(0, 0, 0, getString( R.string.stringEdit ) ).setIcon( android.R.drawable.ic_menu_edit );
+        menu.add(0, 1, 1, getString( R.string.stringShare ) ).setIcon( android.R.drawable.ic_menu_share );
+        menu.add(0, 2, 2, getString( R.string.stringSettings ) ).setIcon( android.R.drawable.ic_menu_preferences );*/
         return super.onCreateOptionsMenu(menu);
     }
     

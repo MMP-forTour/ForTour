@@ -14,6 +14,8 @@ public class ImageUtil {
 	private final int imageBorderAnchorLeft;
 	private final int imageBorderAnchorTop;
 	
+	protected static int imageInnerWidth  = 360;
+	protected static int imageInnerHeight = 360;
 	protected int THUMB_SIZE = 72;
 	
 	protected static int[] imageMoodFiles = new int[] {    

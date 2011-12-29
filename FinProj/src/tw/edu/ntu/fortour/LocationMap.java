@@ -2,6 +2,7 @@ package tw.edu.ntu.fortour;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -10,10 +11,16 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
@@ -32,11 +39,15 @@ public class LocationMap extends MapActivity {
 	private MapController mMapController;
 	private GeoPoint mGeoPoint;
 	private MyLocationOverlay mMyLocationOverlay;
-	private String locLongitude, locLatitude;
+	private String locLongitude, locLatitude, locName;
+	
 	private boolean hasLocation = false;
 	
 	protected static String KEY_LATITUDE  = "KEY_LATITUDE";
 	protected static String KEY_LONGITUDE = "KEY_LONGITUDE";
+	protected static String KEY_LOCNAME   = "KEY_LOCNAME";
+	
+	private final int ADDRESS_LIMIT = 10;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -44,6 +55,11 @@ public class LocationMap extends MapActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.location_map);
 
+        /* check Internet first */
+        if( !Util.isOnline( getSystemService( Context.CONNECTIVITY_SERVICE ) ) ) {
+        	Toast.makeText( LocationMap.this, getString( R.string.stringNoInternetConnection ), Toast.LENGTH_LONG ).show();
+        }
+        
         mProgressDialog = ProgressDialog.show( LocationMap.this, getString( R.string.stringLoading ), getString( R.string.stringPleaseWait ) );
         mProgressDialog.setCancelable( true );
         mProgressDialog.setOnCancelListener( new OnCancelListener() {
@@ -103,13 +119,8 @@ public class LocationMap extends MapActivity {
         
         mMapOverlays.add( mMyLocationOverlay );
         
-        /* should after all definition */
+        /* should after all variable initial */
         setButtonListener();
-        
-        /* check Internet first */
-        if( !Util.isOnline( getSystemService( Context.CONNECTIVITY_SERVICE ) ) ) {
-        	Toast.makeText( LocationMap.this, getString( R.string.stringNoInternetConnection ), Toast.LENGTH_LONG ).show();
-        }
 	}
     
     Runnable determinLocation = new Runnable() {
@@ -120,10 +131,48 @@ public class LocationMap extends MapActivity {
 			
 			mMapController.animateTo( mGeoPoint );
 			
+			// Translate location to location name
+			runOnUiThread( getAddressList );
+			
 			if( mProgressDialog != null ) mProgressDialog.dismiss();
 		}
 	}; 
-    
+
+	Runnable getAddressList = new Runnable() {
+		@Override
+		public void run() {
+	        Geocoder mGeocoder = new Geocoder( LocationMap.this, Locale.getDefault() );
+	        
+			Spinner mSpinner = (Spinner) findViewById( R.id.spinnerLMList );
+			mSpinner.setOnItemSelectedListener( new OnItemSelectedListener() {
+				@Override
+				public void onItemSelected(AdapterView<?> view, View arg1,
+						int arg2, long arg3) {
+					locName = view.getSelectedItem().toString();
+				}
+				@Override
+				public void onNothingSelected(AdapterView<?> arg0) { }
+			});
+			
+			try {
+				List<Address> addressesList = mGeocoder.getFromLocation( mGeoPoint.getLatitudeE6()/1E6, mGeoPoint.getLongitudeE6()/1E6, ADDRESS_LIMIT );
+				if( addressesList != null ) {
+					ArrayList<String> mArrayList = new ArrayList<String>();
+					for( Address addr : addressesList ) {
+						mArrayList.add( addr.getAddressLine(0) );
+					}
+					
+					ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>( LocationMap.this, android.R.layout.simple_spinner_item, mArrayList );
+					mArrayAdapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item );
+					mSpinner.setAdapter( mArrayAdapter );
+					
+					mSpinner.setVisibility( View.VISIBLE );
+				}
+			}
+			catch( Exception e ) { } 
+		}
+	};
+	
 	private void setButtonListener() {
 		mButtonLMDetermine.setOnClickListener( new OnClickListener() {
 			@Override
@@ -135,7 +184,7 @@ public class LocationMap extends MapActivity {
 		
 		mButtonLMOk.setOnClickListener( new OnClickListener() {
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v) {				
 				mGeoPoint = mMyLocationOverlay.getMyLocation();
 
 				Intent i = new Intent();
@@ -144,6 +193,7 @@ public class LocationMap extends MapActivity {
 				if( mGeoPoint != null ) {
 					b.putString( KEY_LATITUDE, Integer.toString( mGeoPoint.getLatitudeE6() ) );
 					b.putString( KEY_LONGITUDE, Integer.toString( mGeoPoint.getLongitudeE6() ) );
+					b.putString( KEY_LOCNAME, locName );
 					
 					i.putExtras( b );
 				}

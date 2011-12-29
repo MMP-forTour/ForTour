@@ -44,26 +44,29 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class EditPage extends Activity {
 	private ImageView imageViewOPImage;
-	private EditText editTextOPStory, editTextOPLocation;
-	private ImageButton buttonOPOK, buttonOPSticker, buttonOPHelp;
+	private EditText editTextOPStory, editTextOPLocation, editTextOPDate, editTextOPTime;
+	private ImageButton buttonOPOK, buttonOPSticker, buttonOPHelp, buttonOPRecord, buttonOPLocation;
 	private Bitmap bm;
 	private Uri bmUriPath;
 	private ImageUtil imgUtil;
 	private String mFileName, mMediaFileName;
-	private ImageButton buttonOPRecord, buttonOPLocation;
 	private MediaRecorder mMediaRecorder;
 	private ProgressDialog mProgressDlg;
-	private boolean hasRecord;
 	private LocationManager mLocationManager;
-	private EditText editTextOPDate, editTextOPTime;
 	private long ftStorySavetime;
 	private double locLatitude, locLongitute;
 	
+	private boolean hasRecord = false;
 	private String ftID = null;
 	private int mMoodIndex = 0;
+<<<<<<< HEAD
 	private boolean pastEdit = false;
 	
 	private Date mNowTime = new Date();
+=======
+	private boolean updateMode = false;	
+	private Date mNowTime = new Date();
+>>>>>>> 3ec60168494c552c7554bec4272b68b28772a231
 
 	private final int DATE_DIALOG = 1;      
     private final int TIME_DIALOG = 2;
@@ -73,8 +76,6 @@ public class EditPage extends Activity {
         setContentView( R.layout.one_photo );
         
         findviews();
-        
-        hasRecord = false;
         
         locLatitude = -1;
         locLongitute = -1;
@@ -90,17 +91,18 @@ public class EditPage extends Activity {
         }
         
         if( ftID != null ) {
-        	pastEdit = true;
+        	updateMode = true;
         	
         	mLocationManager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
         	
         	Cursor c = ForTour.mDbHelper.ftStoryFetchByID( ftID );
-            c.moveToFirst();
             
             mFileName = c.getString( 0 );
             
             editTextOPStory.setText( c.getString( 1 ) );
             editTextOPLocation.setText( c.getString( 2 ) );
+            
+            hasRecord = ( c.getInt( 3 ) == 0 ) ? false : true; 
             
             ftStorySavetime = c.getLong( 4 );
             locLatitude   = c.getDouble( 5 );
@@ -124,9 +126,9 @@ public class EditPage extends Activity {
         try {
 			bm = MediaStore.Images.Media.getBitmap( this.getContentResolver(), bmUriPath );
 		} catch (FileNotFoundException e) {
-			Toast.makeText( EditPage.this, "File Not Found: " + e.toString(), Toast.LENGTH_LONG ).show();
+			Toast.makeText( EditPage.this, "File Not Found: " + e.getLocalizedMessage(), Toast.LENGTH_LONG ).show();
 		} catch (IOException e) {
-			Toast.makeText( EditPage.this, "IO Exception: " + e.toString(), Toast.LENGTH_LONG ).show();
+			Toast.makeText( EditPage.this, "IO Exception: " + e.getLocalizedMessage(), Toast.LENGTH_LONG ).show();
 		}
 
         imageViewOPImage.setImageBitmap( imgUtil.imageBorderMerge( getResources().getDrawable( R.drawable.photo_frame ), bm ) );
@@ -148,7 +150,7 @@ public class EditPage extends Activity {
 		buttonOPOK.setOnClickListener( new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if( !pastEdit ) {
+				if( !updateMode ) {
 					long rst = ForTour.mDbHelper.ftStoryAdd(	mFileName,
 																editTextOPStory.getText().toString(),
 																editTextOPLocation.getText().toString(),
@@ -168,12 +170,12 @@ public class EditPage extends Activity {
 														 );
 							Bitmap.createScaledBitmap( bm, imgUtil.THUMB_SIZE, imgUtil.THUMB_SIZE, true ).compress( Bitmap.CompressFormat.PNG, 90, thumbFile );
 							
-							Intent i = new Intent();
-							i.setClass(EditPage.this, SetPreference.class);
-							Bundle bundle = new Bundle();
-							bundle.putString( "FILE", mFileName );
-							i.putExtras(bundle);
-							startActivity(i);
+//							Intent i = new Intent();
+//							i.setClass(EditPage.this, SetPreference.class);
+//							Bundle bundle = new Bundle();
+//							bundle.putString( "FILE", mFileName );
+//							i.putExtras(bundle);
+//							startActivity(i);
 						}
 						catch( FileNotFoundException e ) { }
 						
@@ -182,7 +184,37 @@ public class EditPage extends Activity {
 					}
 				}
 				else {
-					/* TODO: UPDATE mode */
+					AlertDialog.Builder builder = new AlertDialog.Builder( EditPage.this );
+					builder.setTitle( android.R.string.dialog_alert_title );
+					builder.setMessage( getString( R.string.stringUpdateStory ) );
+					
+					builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							boolean rst = ForTour.mDbHelper.ftStoryUpdByID(	ftID,
+																			mFileName,
+																			editTextOPStory.getText().toString(),
+																			editTextOPLocation.getText().toString(),
+																			( ( hasRecord != false ) ? 1 : 0 ),
+																			locLatitude,
+																			locLongitute,
+																			mMoodIndex
+																			);
+
+							if( !rst ) Toast.makeText( EditPage.this, getString( R.string.stringUpdateStoryFail ), Toast.LENGTH_LONG ).show();
+							else {
+								Toast.makeText( EditPage.this, getString( R.string.stringUpdateStorySuccess ), Toast.LENGTH_LONG ).show();
+								
+								setResult( Activity.RESULT_OK );
+								
+								finish();
+								overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
+							}
+						}
+					} );
+					builder.setNegativeButton( android.R.string.no, null );
+					
+					builder.show();
 				}
 			}
 		} );
@@ -215,39 +247,53 @@ public class EditPage extends Activity {
 						break;
 					case MotionEvent.ACTION_UP:
 						mProgressDlg.dismiss();
+						
 						if( mMediaFileTemp != null ) {
 							mMediaRecorder.stop();
 							mMediaRecorder.release();
 							
-							if( !pastEdit ) {
-								AlertDialog.Builder builder = new AlertDialog.Builder( EditPage.this );
+							AlertDialog.Builder builder = new AlertDialog.Builder( EditPage.this );
+							
+							android.content.DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									if( mMediaFileTemp.renameTo( mMediaFile ) ) {
+										hasRecord = true;
+										Util.deleteFile( mMediaFileTemp );
+										Toast.makeText( EditPage.this, "Save media success.", Toast.LENGTH_LONG ).show();
+									}
+									else {
+										Toast.makeText( EditPage.this, "Save media fail", Toast.LENGTH_LONG ).show();
+									}
+								}
+							};
+							
+							android.content.DialogInterface.OnClickListener negtiveListener = new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									Util.deleteFile( mMediaFileTemp );
+									Toast.makeText( EditPage.this, "Discard save", Toast.LENGTH_LONG ).show();
+								}
+							};
+							
+							if( !updateMode || ( updateMode && !hasRecord ) ) {
 								builder.setTitle( getString( R.string.stringSave ) + " " + getString( R.string.stringStoryMedia ) );
 								builder.setMessage( getString( R.string.stringNote ) + ": " + getString( R.string.stringHoldDownButtonToRecord ) );
-								builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog, int which) {
-										if( mMediaFileTemp.renameTo( mMediaFile ) ) {
-											hasRecord = true;
-											Util.deleteFile( mMediaFileTemp );
-											Toast.makeText( EditPage.this, "Save media success.", Toast.LENGTH_LONG ).show();
-										}
-										else {
-											Toast.makeText( EditPage.this, "Save media fail", Toast.LENGTH_LONG ).show();
-										}
-									}
-								});
-								builder.setNegativeButton( android.R.string.no, new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog, int which) {
-										Util.deleteFile( mMediaFileTemp );
-										Toast.makeText( EditPage.this, "Discard save", Toast.LENGTH_LONG ).show();
-									}
-								});
+								
+								builder.setPositiveButton( android.R.string.yes, positiveListener );
+								builder.setNegativeButton( android.R.string.no, negtiveListener );
 								
 								builder.show();
 							}
-							else {
-								/* TODO: update mode */
+							else if( updateMode && hasRecord ) {
+								builder.setTitle( getString( R.string.stringReplace ) + " " + getString( R.string.stringStoryMedia ) );
+								builder.setMessage( getString( R.string.stringDoYouWantToReplaceIt ) + "\n\n" + 
+													getString( R.string.stringNote ) + ": " + getString( R.string.stringHoldDownButtonToRecord ) );
+								
+								builder.setPositiveButton( android.R.string.yes, positiveListener );
+								builder.setNegativeButton( android.R.string.no, negtiveListener );
+								
+								builder.show();
 							}
 						}
 						else {
@@ -321,7 +367,12 @@ public class EditPage extends Activity {
 			        if( extras != null ) {
 			        	String locLati = extras.getString( LocationMap.KEY_LATITUDE );
 			        	String locLong = extras.getString( LocationMap.KEY_LONGITUDE );
+			        	String locName = extras.getString( LocationMap.KEY_LOCNAME );
 
+			        	if( locName != null ) {
+			        		editTextOPLocation.setText( locName );
+			        	}
+			        	
 			        	try {
 				        	if( locLati != null ) locLatitude = Double.parseDouble( locLati ) / 1E6;
 				        	if( locLong != null ) locLongitute = Double.parseDouble( locLong ) / 1E6;
@@ -342,7 +393,6 @@ public class EditPage extends Activity {
 			        if( extras != null ) {
 			            mFileName = extras.getString( "FILE" );
 			        }
-
 				}
 				break;
 			default:
@@ -369,8 +419,9 @@ public class EditPage extends Activity {
 		builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface arg0, int arg1) {
-				if( !pastEdit ) discardStory();
+				if( !updateMode ) discardStory();
 				finish();
+				overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
 			}
 		} );
 		builder.show();
@@ -396,7 +447,7 @@ public class EditPage extends Activity {
     	editTextOPDate =(EditText) findViewById(R.id.editTextOPDate);
     	editTextOPTime =(EditText) findViewById(R.id.editTextOPTime);
     	
-    	if( !pastEdit ) {
+    	if( !updateMode ) {
 	    	editTextOPDate.setText( Util.sdfDate.format( mNowTime ) );
 	    	editTextOPTime.setText( Util.sdfTime.format( mNowTime ) );
     	}
@@ -422,7 +473,7 @@ public class EditPage extends Activity {
                             
                              //Calendar starts from month 0, so add 1 to month
                             editTextOPDate.setText( String.format( "%d/%02d/%02d", year, month+1, dayOfMonth) );
-                            /* should save selected date */
+                            /* TODO: should save selected date */
                         }  
                     };  
                 dialog = new DatePickerDialog(this,  
@@ -439,7 +490,7 @@ public class EditPage extends Activity {
                                 int hourOfDay, int minute) {  
                             
                             editTextOPTime.setText( String.format( "%02d:%02d", hourOfDay, minute) );  
-                            /* should save selected time and merge as millisecond */
+                            /* TODO: should save selected time and merge as millisecond, then save */
                         }  
                     };  
                     dialog = new TimePickerDialog(this, timeListener,  
