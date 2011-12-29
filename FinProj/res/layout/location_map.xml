@@ -18,6 +18,7 @@
         android:layout_weight="8"
         android:apiKey="0rqcx9putsFRGDSaK44e1acJsyN3zDLHM73RGRw" />
     <!-- releasekey: android:apiKey="02gXC0ywZl69krUW8aZoDhn10k135ApymOEiL1w" /> -->
+    <!-- debugkey:   android:apiKey="0rqcx9putsFRGDSaK44e1acJsyN3zDLHM73RGRw" /> -->
     
     <LinearLayout
         android:id="@+id/linearLayoutActions"

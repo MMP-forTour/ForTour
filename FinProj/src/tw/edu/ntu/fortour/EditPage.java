@@ -59,7 +59,7 @@ public class EditPage extends Activity {
 	private boolean hasRecord = false;
 	private String ftID = null;
 	private int mMoodIndex = 0;
-	private boolean pastEdit = false;	
+	private boolean updateMode = false;	
 	private Date mNowTime = new Date();
 
 	private final int DATE_DIALOG = 1;      
@@ -85,7 +85,7 @@ public class EditPage extends Activity {
         }
         
         if( ftID != null ) {
-        	pastEdit = true;
+        	updateMode = true;
         	
         	mLocationManager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
         	
@@ -144,7 +144,7 @@ public class EditPage extends Activity {
 		buttonOPOK.setOnClickListener( new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if( !pastEdit ) {
+				if( !updateMode ) {
 					long rst = ForTour.mDbHelper.ftStoryAdd(	mFileName,
 																editTextOPStory.getText().toString(),
 																editTextOPLocation.getText().toString(),
@@ -259,7 +259,7 @@ public class EditPage extends Activity {
 								}
 							};
 							
-							if( !pastEdit || ( pastEdit && !hasRecord ) ) {
+							if( !updateMode || ( updateMode && !hasRecord ) ) {
 								builder.setTitle( getString( R.string.stringSave ) + " " + getString( R.string.stringStoryMedia ) );
 								builder.setMessage( getString( R.string.stringNote ) + ": " + getString( R.string.stringHoldDownButtonToRecord ) );
 								
@@ -268,7 +268,7 @@ public class EditPage extends Activity {
 								
 								builder.show();
 							}
-							else if( pastEdit && hasRecord ) {
+							else if( updateMode && hasRecord ) {
 								builder.setTitle( getString( R.string.stringReplace ) + " " + getString( R.string.stringStoryMedia ) );
 								builder.setMessage( getString( R.string.stringDoYouWantToReplaceIt ) + "\n\n" + 
 													getString( R.string.stringNote ) + ": " + getString( R.string.stringHoldDownButtonToRecord ) );
@@ -402,7 +402,7 @@ public class EditPage extends Activity {
 		builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface arg0, int arg1) {
-				if( !pastEdit ) discardStory();
+				if( !updateMode ) discardStory();
 				finish();
 				overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
 			}
@@ -430,7 +430,7 @@ public class EditPage extends Activity {
     	editTextOPDate =(EditText) findViewById(R.id.editTextOPDate);
     	editTextOPTime =(EditText) findViewById(R.id.editTextOPTime);
     	
-    	if( !pastEdit ) {
+    	if( !updateMode ) {
 	    	editTextOPDate.setText( Util.sdfDate.format( mNowTime ) );
 	    	editTextOPTime.setText( Util.sdfTime.format( mNowTime ) );
     	}
