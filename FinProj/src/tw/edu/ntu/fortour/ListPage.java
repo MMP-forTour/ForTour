@@ -43,11 +43,9 @@ public class ListPage extends ListActivity {
 	private Cursor mCursor;
 	private SimpleCursorAdapter mSimpleCursorAdapter;
 	
-	private int loadAmount   = LOAD_LIMIT;
-	private int lastInScreen = 0;
-	
-	private boolean noMoreData = false;
-	private boolean inLoading  = false;
+	private int loadAmount			= LOAD_LIMIT;
+	private boolean noMoreData		= false;
+	private boolean inLoading		= false;
 
 	/** Called when the activity is first created. */
     @Override
@@ -83,9 +81,7 @@ public class ListPage extends ListActivity {
 		public void onScrollStateChanged(AbsListView view, int scrollState) { }
 		
 		@Override
-		public void onScroll(	AbsListView view, int firstVisibleItem,
-								int visibleItemCount, int totalItemCount) {
-			lastInScreen = firstVisibleItem + visibleItemCount - ( LOAD_LIMIT - visibleItemCount );
+		public void onScroll(	AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 			if( firstVisibleItem + visibleItemCount == totalItemCount ) {
 				if( !noMoreData ) {
 					if( !inLoading ) {
@@ -112,10 +108,15 @@ public class ListPage extends ListActivity {
 					R.id.textViewLMRTime
 			};
 			
-			mSimpleCursorAdapter = new SimpleCursorAdapter( this, R.layout.list_mode_row, mCursor, from, to );
-			mSimpleCursorAdapter.setViewBinder( mViewBinder );
-			mSimpleCursorAdapter.notifyDataSetChanged();
-			setListAdapter( mSimpleCursorAdapter );
+			if( loadAmount == LOAD_LIMIT ) {
+				mSimpleCursorAdapter = new SimpleCursorAdapter( this, R.layout.list_mode_row, mCursor, from, to );
+				mSimpleCursorAdapter.setViewBinder( mViewBinder );
+				setListAdapter( mSimpleCursorAdapter );
+			}
+			else {
+				mSimpleCursorAdapter.changeCursor( mCursor );
+				mSimpleCursorAdapter.notifyDataSetChanged();
+			}
 			
 			if( loadAmount > mCursor.getCount() ) noMoreData = true;
 		}
@@ -154,8 +155,6 @@ public class ListPage extends ListActivity {
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
-			
-			mListView.setSelection( lastInScreen );
 			
 			if( mProgressDialog != null ) mProgressDialog.dismiss();
 			
