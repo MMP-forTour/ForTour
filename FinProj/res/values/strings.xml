@@ -21,6 +21,7 @@
     <string name="stringThereIsNoDataNow">There is no data now</string>
     <string name="stringSaveStorySuccess">Save Story Success</string>
     <string name="stringSaveStoryFail">Save Story Fail</string>
+    <string name="stringUpdateStory">Update Story?</string>
     <string name="stringUpdateStorySuccess">Update Story Success</string>
     <string name="stringUpdateStoryFail">Update Story Fail</string>
     <string name="stringDetermine">Determine</string>

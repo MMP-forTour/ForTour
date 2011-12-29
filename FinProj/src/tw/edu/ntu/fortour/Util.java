@@ -14,8 +14,12 @@ public class Util {
 	protected static SimpleDateFormat sdfDate = new SimpleDateFormat( "yyyy/MM/dd" );
 	protected static SimpleDateFormat sdfTime = new SimpleDateFormat( "HH:mm" );
 	
+	public static boolean checkFile( final File file ) {
+		return file.exists();
+	}
+	
 	public static void deleteFile( File file ) {
-		if( file.exists() ) file.delete(); 
+		if( checkFile( file ) ) file.delete(); 
 	}
 	
 	public static boolean isOnline( final Object obj ) {

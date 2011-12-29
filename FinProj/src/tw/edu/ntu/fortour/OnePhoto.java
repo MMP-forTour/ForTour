@@ -112,8 +112,7 @@ public class OnePhoto extends Activity{
         
         buttonOPRecord.setVisibility( View.INVISIBLE );
         buttonOPMood.setImageResource( ImageUtil.imageMoodFiles[ c.getInt( 7 ) ] );
-        
-        /* TODO: Check file exists first. */
+
         buttonOPPlay.setOnClickListener( new OnClickListener() {
 			
 			@Override
@@ -134,7 +133,7 @@ public class OnePhoto extends Activity{
 				
 				try {
 					mMediaPlayer.setAudioStreamType( AudioManager.STREAM_MUSIC );
-					mMediaPlayer.setDataSource( getApplicationContext(), mpUriPath );;
+					mMediaPlayer.setDataSource( getApplicationContext(), mpUriPath );
 					mMediaPlayer.prepare();
 					mMediaPlayer.start();
 					

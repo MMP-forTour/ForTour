@@ -178,26 +178,37 @@ public class EditPage extends Activity {
 					}
 				}
 				else {
-					/* need confirm? */
-					boolean rst = ForTour.mDbHelper.ftStoryUpdByID(	ftID,
-																	mFileName,
-																	editTextOPStory.getText().toString(),
-																	editTextOPLocation.getText().toString(),
-																	( ( hasRecord != false ) ? 1 : 0 ),
-																	locLatitude,
-																	locLongitute,
-																	mMoodIndex
-																	);
+					AlertDialog.Builder builder = new AlertDialog.Builder( EditPage.this );
+					builder.setTitle( android.R.string.dialog_alert_title );
+					builder.setMessage( getString( R.string.stringUpdateStory ) );
 					
-					if( !rst ) Toast.makeText( EditPage.this, getString( R.string.stringUpdateStoryFail ), Toast.LENGTH_LONG ).show();
-					else {
-						Toast.makeText( EditPage.this, getString( R.string.stringUpdateStorySuccess ), Toast.LENGTH_LONG ).show();
-						
-						setResult( Activity.RESULT_OK );
-						
-						finish();
-						overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
-					}
+					builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							boolean rst = ForTour.mDbHelper.ftStoryUpdByID(	ftID,
+																			mFileName,
+																			editTextOPStory.getText().toString(),
+																			editTextOPLocation.getText().toString(),
+																			( ( hasRecord != false ) ? 1 : 0 ),
+																			locLatitude,
+																			locLongitute,
+																			mMoodIndex
+																			);
+
+							if( !rst ) Toast.makeText( EditPage.this, getString( R.string.stringUpdateStoryFail ), Toast.LENGTH_LONG ).show();
+							else {
+								Toast.makeText( EditPage.this, getString( R.string.stringUpdateStorySuccess ), Toast.LENGTH_LONG ).show();
+								
+								setResult( Activity.RESULT_OK );
+								
+								finish();
+								overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
+							}
+						}
+					} );
+					builder.setNegativeButton( android.R.string.no, null );
+					
+					builder.show();
 				}
 			}
 		} );
