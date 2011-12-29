@@ -44,25 +44,22 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class EditPage extends Activity {
 	private ImageView imageViewOPImage;
-	private EditText editTextOPStory, editTextOPLocation;
-	private ImageButton buttonOPOK, buttonOPSticker, buttonOPHelp;
+	private EditText editTextOPStory, editTextOPLocation, editTextOPDate, editTextOPTime;
+	private ImageButton buttonOPOK, buttonOPSticker, buttonOPHelp, buttonOPRecord, buttonOPLocation;
 	private Bitmap bm;
 	private Uri bmUriPath;
 	private ImageUtil imgUtil;
 	private String mFileName, mMediaFileName;
-	private ImageButton buttonOPRecord, buttonOPLocation;
 	private MediaRecorder mMediaRecorder;
 	private ProgressDialog mProgressDlg;
-	private boolean hasRecord;
 	private LocationManager mLocationManager;
-	private EditText editTextOPDate, editTextOPTime;
 	private long ftStorySavetime;
 	private double locLatitude, locLongitute;
 	
+	private boolean hasRecord = false;
 	private String ftID = null;
 	private int mMoodIndex = 0;
-	private boolean pastEdit = false;
-	
+	private boolean pastEdit = false;	
 	private Date mNowTime = new Date();
 
 	private final int DATE_DIALOG = 1;      
@@ -73,8 +70,6 @@ public class EditPage extends Activity {
         setContentView( R.layout.one_photo );
         
         findviews();
-        
-        hasRecord = false;
         
         locLatitude = -1;
         locLongitute = -1;
@@ -321,7 +316,12 @@ public class EditPage extends Activity {
 			        if( extras != null ) {
 			        	String locLati = extras.getString( LocationMap.KEY_LATITUDE );
 			        	String locLong = extras.getString( LocationMap.KEY_LONGITUDE );
+			        	String locName = extras.getString( LocationMap.KEY_LOCNAME );
 
+			        	if( locName != null ) {
+			        		editTextOPLocation.setText( locName );
+			        	}
+			        	
 			        	try {
 				        	if( locLati != null ) locLatitude = Double.parseDouble( locLati ) / 1E6;
 				        	if( locLong != null ) locLongitute = Double.parseDouble( locLong ) / 1E6;
@@ -342,7 +342,6 @@ public class EditPage extends Activity {
 			        if( extras != null ) {
 			            mFileName = extras.getString( "FILE" );
 			        }
-
 				}
 				break;
 			default:

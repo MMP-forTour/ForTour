@@ -14,10 +14,10 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -39,13 +39,13 @@ public class LocationMap extends MapActivity {
 	private MapController mMapController;
 	private GeoPoint mGeoPoint;
 	private MyLocationOverlay mMyLocationOverlay;
-	private String locLongitude, locLatitude;
-	private Geocoder mGeocoder;
+	private String locLongitude, locLatitude, locName;
 	
 	private boolean hasLocation = false;
 	
 	protected static String KEY_LATITUDE  = "KEY_LATITUDE";
 	protected static String KEY_LONGITUDE = "KEY_LONGITUDE";
+	protected static String KEY_LOCNAME   = "KEY_LOCNAME";
 	
 	private final int ADDRESS_LIMIT = 10;
 	
@@ -77,9 +77,6 @@ public class LocationMap extends MapActivity {
         mButtonLMDetermine = (Button) findViewById( R.id.buttonLMDetermine );
         mButtonLMCancel    = (Button) findViewById( R.id.buttonLMCancel );
         mButtonLMBack      = (Button) findViewById( R.id.buttonLMBack );
-        
-        /* Geocoder test */
-        mGeocoder = new Geocoder( LocationMap.this, Locale.getDefault() );
         
         mMapView = (MapView) findViewById( R.id.mapView );
         
@@ -117,7 +114,7 @@ public class LocationMap extends MapActivity {
         
         mMapOverlays.add( mMyLocationOverlay );
         
-        /* should after all definition */
+        /* should after all variable initial */
         setButtonListener();
         
         /* check Internet first */
@@ -134,18 +131,29 @@ public class LocationMap extends MapActivity {
 			
 			mMapController.animateTo( mGeoPoint );
 			
-			/* Geocoder test */
+			// Translate location to location name
 			runOnUiThread( getAddressList );
 			
 			if( mProgressDialog != null ) mProgressDialog.dismiss();
 		}
 	}; 
-    
-	/* Geocoder test */
+
 	Runnable getAddressList = new Runnable() {
 		@Override
 		public void run() {
+	        Geocoder mGeocoder = new Geocoder( LocationMap.this, Locale.getDefault() );
+	        
 			Spinner mSpinner = (Spinner) findViewById( R.id.spinnerLMList );
+			mSpinner.setOnItemSelectedListener( new OnItemSelectedListener() {
+				@Override
+				public void onItemSelected(AdapterView<?> view, View arg1,
+						int arg2, long arg3) {
+					locName = view.getSelectedItem().toString();
+				}
+				@Override
+				public void onNothingSelected(AdapterView<?> arg0) { }
+			});
+			
 			try {
 				List<Address> addressesList = mGeocoder.getFromLocation( mGeoPoint.getLatitudeE6()/1E6, mGeoPoint.getLongitudeE6()/1E6, ADDRESS_LIMIT );
 				if( addressesList != null ) {
@@ -155,6 +163,7 @@ public class LocationMap extends MapActivity {
 					}
 					
 					ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>( LocationMap.this, android.R.layout.simple_spinner_item, mArrayList );
+					mArrayAdapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item );
 					mSpinner.setAdapter( mArrayAdapter );
 					
 					mSpinner.setVisibility( View.VISIBLE );
@@ -184,6 +193,7 @@ public class LocationMap extends MapActivity {
 				if( mGeoPoint != null ) {
 					b.putString( KEY_LATITUDE, Integer.toString( mGeoPoint.getLatitudeE6() ) );
 					b.putString( KEY_LONGITUDE, Integer.toString( mGeoPoint.getLongitudeE6() ) );
+					b.putString( KEY_LOCNAME, locName );
 					
 					i.putExtras( b );
 				}
