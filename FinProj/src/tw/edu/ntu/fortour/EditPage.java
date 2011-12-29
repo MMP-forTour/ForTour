@@ -119,9 +119,9 @@ public class EditPage extends Activity {
         try {
 			bm = MediaStore.Images.Media.getBitmap( this.getContentResolver(), bmUriPath );
 		} catch (FileNotFoundException e) {
-			Toast.makeText( EditPage.this, "File Not Found: " + e.toString(), Toast.LENGTH_LONG ).show();
+			Toast.makeText( EditPage.this, "File Not Found: " + e.getLocalizedMessage(), Toast.LENGTH_LONG ).show();
 		} catch (IOException e) {
-			Toast.makeText( EditPage.this, "IO Exception: " + e.toString(), Toast.LENGTH_LONG ).show();
+			Toast.makeText( EditPage.this, "IO Exception: " + e.getLocalizedMessage(), Toast.LENGTH_LONG ).show();
 		}
 
         imageViewOPImage.setImageBitmap( imgUtil.imageBorderMerge( getResources().getDrawable( R.drawable.photo_frame ), bm ) );

@@ -55,6 +55,11 @@ public class LocationMap extends MapActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.location_map);
 
+        /* check Internet first */
+        if( !Util.isOnline( getSystemService( Context.CONNECTIVITY_SERVICE ) ) ) {
+        	Toast.makeText( LocationMap.this, getString( R.string.stringNoInternetConnection ), Toast.LENGTH_LONG ).show();
+        }
+        
         mProgressDialog = ProgressDialog.show( LocationMap.this, getString( R.string.stringLoading ), getString( R.string.stringPleaseWait ) );
         mProgressDialog.setCancelable( true );
         mProgressDialog.setOnCancelListener( new OnCancelListener() {
@@ -116,11 +121,6 @@ public class LocationMap extends MapActivity {
         
         /* should after all variable initial */
         setButtonListener();
-        
-        /* check Internet first */
-        if( !Util.isOnline( getSystemService( Context.CONNECTIVITY_SERVICE ) ) ) {
-        	Toast.makeText( LocationMap.this, getString( R.string.stringNoInternetConnection ), Toast.LENGTH_LONG ).show();
-        }
 	}
     
     Runnable determinLocation = new Runnable() {

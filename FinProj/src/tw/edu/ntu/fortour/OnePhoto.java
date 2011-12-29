@@ -81,7 +81,10 @@ public class OnePhoto extends Activity{
 			     							 ForTour.DIR_WORK + "/" + mFileName.replace( ForTour.EXT_PHOTO , ForTour.EXT_RECORD ) ) );
 
         textViewOPStory.setText( c.getString( 1 ) );
-        textViewOPLocation.setText( "@" + " " + c.getString( 2 ) );
+        
+        String ftStoryLocation = c.getString( 2 ).trim();
+        if( !"".equals( ftStoryLocation ) ) ftStoryLocation = "@ " + ftStoryLocation;
+        textViewOPLocation.setText( ftStoryLocation );
         
         Date ftStorySaveTime = new Date( c.getLong( 4 ) ); 
         textViewOPTime.setText( Util.sdfDate.format( ftStorySaveTime ) + " " + Util.sdfTime.format( ftStorySaveTime ) );
@@ -165,6 +168,9 @@ public class OnePhoto extends Activity{
 					
 					startActivity( i );
 				}
+				else {
+					Toast.makeText( OnePhoto.this, getString( R.string.stringNoLocationInformation ), Toast.LENGTH_LONG ).show();
+				}
 			}
 		} );
         
@@ -173,9 +179,9 @@ public class OnePhoto extends Activity{
 			   									ForTour.DIR_WORK + "/" + mFileName ) );
 			bm = MediaStore.Images.Media.getBitmap( this.getContentResolver(), bmUriPath );
 		} catch (FileNotFoundException e) {
-			Toast.makeText( OnePhoto.this, "File Not Found: " + e.toString(), Toast.LENGTH_LONG ).show();
+			Toast.makeText( OnePhoto.this, "File Not Found: " + e.getLocalizedMessage(), Toast.LENGTH_LONG ).show();
 		} catch (IOException e) {
-			Toast.makeText( OnePhoto.this, "IO Exception: " + e.toString(), Toast.LENGTH_LONG ).show();
+			Toast.makeText( OnePhoto.this, "IO Exception: " + e.getLocalizedMessage(), Toast.LENGTH_LONG ).show();
 		}
         
 		imageViewOPImage.setImageBitmap( imgUtil.imageBorderMerge( getResources().getDrawable( R.drawable.photo_frame ), bm ) );
