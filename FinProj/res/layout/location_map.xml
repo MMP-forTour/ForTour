@@ -4,12 +4,20 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
+    <Spinner
+        android:id="@+id/spinnerLMList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_weight="1" />
+
     <com.google.android.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_weight="8"
-        android:apiKey="02gXC0ywZl69krUW8aZoDhn10k135ApymOEiL1w" />
+        android:apiKey="0rqcx9putsFRGDSaK44e1acJsyN3zDLHM73RGRw" />
+    <!-- releasekey: android:apiKey="02gXC0ywZl69krUW8aZoDhn10k135ApymOEiL1w" /> -->
     
     <LinearLayout
         android:id="@+id/linearLayoutActions"

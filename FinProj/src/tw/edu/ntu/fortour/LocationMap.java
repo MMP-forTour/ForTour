@@ -2,6 +2,7 @@ package tw.edu.ntu.fortour;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -10,10 +11,16 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
@@ -33,10 +40,14 @@ public class LocationMap extends MapActivity {
 	private GeoPoint mGeoPoint;
 	private MyLocationOverlay mMyLocationOverlay;
 	private String locLongitude, locLatitude;
+	private Geocoder mGeocoder;
+	
 	private boolean hasLocation = false;
 	
 	protected static String KEY_LATITUDE  = "KEY_LATITUDE";
 	protected static String KEY_LONGITUDE = "KEY_LONGITUDE";
+	
+	private final int ADDRESS_LIMIT = 10;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -66,6 +77,9 @@ public class LocationMap extends MapActivity {
         mButtonLMDetermine = (Button) findViewById( R.id.buttonLMDetermine );
         mButtonLMCancel    = (Button) findViewById( R.id.buttonLMCancel );
         mButtonLMBack      = (Button) findViewById( R.id.buttonLMBack );
+        
+        /* Geocoder test */
+        mGeocoder = new Geocoder( LocationMap.this, Locale.getDefault() );
         
         mMapView = (MapView) findViewById( R.id.mapView );
         
@@ -120,10 +134,36 @@ public class LocationMap extends MapActivity {
 			
 			mMapController.animateTo( mGeoPoint );
 			
+			/* Geocoder test */
+			runOnUiThread( getAddressList );
+			
 			if( mProgressDialog != null ) mProgressDialog.dismiss();
 		}
 	}; 
     
+	/* Geocoder test */
+	Runnable getAddressList = new Runnable() {
+		@Override
+		public void run() {
+			Spinner mSpinner = (Spinner) findViewById( R.id.spinnerLMList );
+			try {
+				List<Address> addressesList = mGeocoder.getFromLocation( mGeoPoint.getLatitudeE6()/1E6, mGeoPoint.getLongitudeE6()/1E6, ADDRESS_LIMIT );
+				if( addressesList != null ) {
+					ArrayList<String> mArrayList = new ArrayList<String>();
+					for( Address addr : addressesList ) {
+						mArrayList.add( addr.getAddressLine(0) );
+					}
+					
+					ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>( LocationMap.this, android.R.layout.simple_spinner_item, mArrayList );
+					mSpinner.setAdapter( mArrayAdapter );
+					
+					mSpinner.setVisibility( View.VISIBLE );
+				}
+			}
+			catch( Exception e ) { } 
+		}
+	};
+	
 	private void setButtonListener() {
 		mButtonLMDetermine.setOnClickListener( new OnClickListener() {
 			@Override
@@ -135,7 +175,7 @@ public class LocationMap extends MapActivity {
 		
 		mButtonLMOk.setOnClickListener( new OnClickListener() {
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v) {				
 				mGeoPoint = mMyLocationOverlay.getMyLocation();
 
 				Intent i = new Intent();
