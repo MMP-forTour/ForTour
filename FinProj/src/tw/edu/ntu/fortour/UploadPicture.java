@@ -87,7 +87,7 @@ public class UploadPicture extends AsyncTask<Void, Long, Boolean> {
                 mRequest.abort();
             }
         });
-        mDialog.show();
+        //mDialog.show();
     }
 
     @Override

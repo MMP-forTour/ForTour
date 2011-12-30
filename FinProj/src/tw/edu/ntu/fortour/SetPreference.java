@@ -50,13 +50,11 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
     final static private String ACCESS_SECRET_NAME = "ACCESS_SECRET";
 
     static DropboxAPI<AndroidAuthSession> mApi;
-    private boolean mLoggedIn = false;
+    private boolean mLoggedIn;
     private final static String PHOTO_DIR = "/Photos/"; 
     private ImageButton btn_done;
     private CheckBoxPreference sync_db;
 //    private String fileName = null;
-    
-    static Boolean alreadySet = false;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,21 +62,21 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
         // We create a new AuthSession so that we can use the Dropbox API.
         AndroidAuthSession session = buildSession();
         mApi = new DropboxAPI<AndroidAuthSession>(session);
-        alreadySet = true;
         
         // Basic Android widgets
         addPreferencesFromResource(R.xml.settings);
         setContentView(R.layout.settings_main);
         sync_db = (CheckBoxPreference)findPreference(SYNC_DROPBOX); 
         sync_db.setOnPreferenceChangeListener(this);  
-        sync_db.setOnPreferenceClickListener(this); 
+        //sync_db.setOnPreferenceClickListener(this); 
         btn_done = (ImageButton) findViewById(R.id.btn_done);
         
         checkAppKeySetup();
         
         // Display the proper UI state if logged in or not
         setLoggedIn(mApi.getSession().isLinked());
-        //Log.i("btn_done_before", "login="+mApi.getSession().isLinked());
+        mLoggedIn = mApi.getSession().isLinked();
+        Log.i("btn_done_before", "login="+mApi.getSession().isLinked());
         
         btn_done.setOnClickListener(new View.OnClickListener() {	
 			public void onClick(View v) {
@@ -103,6 +101,10 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
                 // Store it locally in our app for later use
                 TokenPair tokens = session.getAccessTokenPair();
                 storeKeys(tokens.key, tokens.secret);
+                /*if (mLoggedIn)
+                	setLoggedIn(true);
+                else
+                	setLoggedIn(false);*/
             } catch (IllegalStateException e) {
                 showToast("Couldn't authenticate with Dropbox:" + e.getLocalizedMessage());
                 Log.i(TAG, "Error authenticating", e);

@@ -569,7 +569,7 @@ public class EditPage extends Activity {
         // that Dropbox authentication completes properly.
         if (session.authenticationSuccessful()) {
             try {
-                // Mandatory call to complete the auth
+            	// Mandatory call to complete the auth
                 session.finishAuthentication();
                 
                 SetPreference.uploadDB(mFileName, EditPage.this);
