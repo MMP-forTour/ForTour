@@ -49,7 +49,7 @@ public class EditPage extends Activity {
 	private Bitmap bm;
 	private Uri bmUriPath;
 	private ImageUtil imgUtil;
-	private String mFileName, mMediaFileName;
+	private String mFileName, mMediaFileName, locName;
 	private MediaRecorder mMediaRecorder;
 	private ProgressDialog mProgressDlg;
 	private LocationManager mLocationManager;
@@ -94,7 +94,9 @@ public class EditPage extends Activity {
             mFileName = c.getString( 0 );
             
             editTextOPStory.setText( c.getString( 1 ) );
-            editTextOPLocation.setText( c.getString( 2 ) );
+            
+            locName = c.getString( 2 );
+            editTextOPLocation.setText( locName );
             
             hasRecord = ( c.getInt( 3 ) == 0 ) ? false : true; 
             
@@ -312,6 +314,17 @@ public class EditPage extends Activity {
 					mLocationManager.isProviderEnabled( LocationManager.NETWORK_PROVIDER ) ) {
 					
 					Intent intent = new Intent();
+					
+					if( updateMode && locLatitude != -1 && locLongitute != -1 ) {
+						Bundle b = new Bundle();
+						
+						b.putString( LocationMap.KEY_LATITUDE, String.valueOf( (int) ( locLatitude * 1E6 ) ) );
+						b.putString( LocationMap.KEY_LONGITUDE, String.valueOf( (int) ( locLongitute * 1E6 ) ) );
+						b.putString( LocationMap.KEY_LOCNAME, locName );
+						b.putString( LocationMap.KEY_UPDMODE, "" );
+						
+						intent.putExtras( b );
+					}
 					intent.setClass( EditPage.this, LocationMap.class );
 					startActivityForResult( intent, ForTour.LOCATION_MAP_PICK );
 				}
