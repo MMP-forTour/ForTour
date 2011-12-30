@@ -60,7 +60,7 @@ public class EditPage extends Activity {
 	private String ftID = null;
 	private int mMoodIndex = 0;
 	private boolean updateMode = false;
-	private Calendar mNowTime = Calendar.getInstance();
+	private Calendar mCalendar = Calendar.getInstance();
 
 	private final int DATE_DIALOG = 1;      
     private final int TIME_DIALOG = 2;
@@ -101,6 +101,8 @@ public class EditPage extends Activity {
             hasRecord = ( c.getInt( 3 ) == 0 ) ? false : true; 
             
             ftStoryTime = c.getLong( 4 );
+            mCalendar = Util.setCalendarInMSec( ftStoryTime );
+            
             locLatitude   = c.getDouble( 5 );
             locLongitute  = c.getDouble( 6 );
             mMoodIndex = c.getInt( 7 );
@@ -458,14 +460,8 @@ public class EditPage extends Activity {
     	editTextOPDate =(EditText) findViewById(R.id.editTextOPDate);
     	editTextOPTime =(EditText) findViewById(R.id.editTextOPTime);
     	
-    	if( !updateMode ) {
-    		ftStoryTimeDate = Util.sdfDate.format( mNowTime.getTime() );
-    		ftStoryTimeTime = Util.sdfTime.format( mNowTime.getTime() );
-    	}
-    	else {
-    		ftStoryTimeDate = Util.sdfDate.format( Util.setCalendarInMSec( ftStoryTime ).getTime() );
-    		ftStoryTimeTime = Util.sdfTime.format( Util.setCalendarInMSec( ftStoryTime ).getTime() );
-    	}
+		ftStoryTimeDate = Util.sdfDate.format( mCalendar.getTime() );
+		ftStoryTimeTime = Util.sdfTime.format( mCalendar.getTime() );
     	
     	editTextOPDate.setText( ftStoryTimeDate );
     	editTextOPTime.setText( ftStoryTimeTime );
@@ -475,9 +471,8 @@ public class EditPage extends Activity {
     }
     
     protected Dialog onCreateDialog(int id) {  
-        //Get date and time
-        Calendar calendar = Calendar.getInstance();
-        Dialog dialog = null;  
+        Dialog dialog = null;
+        
         switch(id) {  
             case DATE_DIALOG:  
                 DatePickerDialog.OnDateSetListener dateListener =   
@@ -490,9 +485,9 @@ public class EditPage extends Activity {
                     };  
                 dialog = new DatePickerDialog(	this,  
 						                        dateListener,  
-						                        calendar.get(Calendar.YEAR),  
-						                        calendar.get(Calendar.MONTH),  
-						                        calendar.get(Calendar.DAY_OF_MONTH) );  
+						                        mCalendar.get(Calendar.YEAR),  
+						                        mCalendar.get(Calendar.MONTH),  
+						                        mCalendar.get(Calendar.DAY_OF_MONTH) );  
                 break;  
             case TIME_DIALOG:  
                 TimePickerDialog.OnTimeSetListener timeListener =   
@@ -505,8 +500,8 @@ public class EditPage extends Activity {
                     };  
                     dialog = new TimePickerDialog(	this,
                     								timeListener,  
-						                            calendar.get(Calendar.HOUR_OF_DAY),  
-						                            calendar.get(Calendar.MINUTE),  
+                    								mCalendar.get(Calendar.HOUR_OF_DAY),  
+                    								mCalendar.get(Calendar.MINUTE),  
 						                            false );
                 break;  
             default:  
