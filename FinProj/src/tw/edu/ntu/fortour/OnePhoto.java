@@ -206,11 +206,10 @@ public class OnePhoto extends Activity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //參數1:群組id, 參數2:itemId, 參數3:item順序, 參數4:item名稱
-        //menu.add(0, 0, 0, getString( R.string.stringDetail ) ).setIcon( android.R.drawable.ic_menu_info_details );
-        menu.add(0, 1, 1, getString( R.string.stringEdit ) ).setIcon( android.R.drawable.ic_menu_edit );
-        menu.add(0, 2, 2, getString( R.string.stringDelete ) ).setIcon( android.R.drawable.ic_menu_delete );
+        menu.add(0, 0, 0, getString( R.string.stringEdit ) ).setIcon( android.R.drawable.ic_menu_edit );
+        menu.add(0, 1, 1, getString( R.string.stringDelete ) ).setIcon( android.R.drawable.ic_menu_delete );
+        //menu.add(0, 2, 2, getString( R.string.stringDetail ) ).setIcon( android.R.drawable.ic_menu_info_details );
         menu.add(0, 3, 3, getString( R.string.stringShare ) ).setIcon( android.R.drawable.ic_menu_share );
-        menu.add(0, 4, 4, getString( R.string.stringSettings ) ).setIcon( android.R.drawable.ic_menu_preferences );
         return super.onCreateOptionsMenu(menu);
     }
     
@@ -220,7 +219,7 @@ public class OnePhoto extends Activity{
     	
     	//依據itemId來判斷使用者點選哪一個item
         switch(item.getItemId()) {
-            case 1:
+            case 0:
 				Bundle b = new Bundle();
 				
 				b.putString("_ID", ftID);
@@ -232,7 +231,7 @@ public class OnePhoto extends Activity{
 				overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
 				
                 break;
-            case 2:
+            case 1:
             	AlertDialog.Builder builder = new AlertDialog.Builder( OnePhoto.this );
 				builder.setTitle( android.R.string.dialog_alert_title );
 				builder.setMessage( getString( R.string.stringDoYouWantToDeleteIt ) );
