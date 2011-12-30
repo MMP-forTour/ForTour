@@ -2,6 +2,7 @@ package tw.edu.ntu.fortour;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -11,8 +12,19 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 
 public class Util {
-	protected static SimpleDateFormat sdfDate = new SimpleDateFormat( "yyyy/MM/dd" );
-	protected static SimpleDateFormat sdfTime = new SimpleDateFormat( "HH:mm" );
+	protected static SimpleDateFormat sdfDate   = new SimpleDateFormat( "yyyy/MM/dd" );
+	protected static SimpleDateFormat sdfTime   = new SimpleDateFormat( "HH:mm" );
+	protected static SimpleDateFormat sdfString = new SimpleDateFormat( "yyyy/MM/dd HH:mm" );
+	
+	public static long datetimeStringToMSec( final String datePart, final String timePart ) {
+		try {
+			Date date = Util.sdfString.parse( datePart + " " + timePart );
+			return ( date.getTime() );
+		}
+		catch( Exception e ) {
+			return ( ( new Date() ).getTime() );
+		}
+	}
 	
 	public static boolean checkFile( final File file ) {
 		return file.exists();
