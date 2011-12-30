@@ -112,16 +112,10 @@ public class DbAdapter {
 		return ( mDb.delete( DATABASE_TABLE, KEY_ROWID + "=?", new String[] { ftID } ) > 0 );
 	}
 	
-	public Cursor ftStoryFetchAll() {
-		return mDb.query(	DATABASE_TABLE , 
-							new String[] { KEY_ROWID, KEY_IMAGE, KEY_STORY, KEY_STORYTIME },
-							null, null, null, null, KEY_ROWID + " DESC" );
-	}
-	
 	public Cursor ftStoryFetchPartial( final int amount ) {
 		final String queryString =	"SELECT " + KEY_ROWID + ", " + KEY_IMAGE + ", " + KEY_STORY + ", " + KEY_STORYTIME + " " +
 									"FROM " + DATABASE_TABLE + " " +
-									"ORDER BY " + KEY_ROWID + " DESC " +
+									"ORDER BY " + KEY_STORYTIME + " DESC " +
 									"LIMIT 0, " + amount + " "; 
 		
 		return mDb.rawQuery( queryString , null );
