@@ -50,10 +50,11 @@ public class EditPage extends Activity {
 	private Uri bmUriPath;
 	private ImageUtil imgUtil;
 	private String mFileName, mMediaFileName, locName;
+	private String ftStoryTimeDate, ftStoryTimeTime;
 	private MediaRecorder mMediaRecorder;
 	private ProgressDialog mProgressDlg;
 	private LocationManager mLocationManager;
-	private long ftStorySavetime;
+	private long ftStoryTime;
 	private double locLatitude, locLongitute;
 	
 	private boolean hasRecord = false;
@@ -100,7 +101,7 @@ public class EditPage extends Activity {
             
             hasRecord = ( c.getInt( 3 ) == 0 ) ? false : true; 
             
-            ftStorySavetime = c.getLong( 4 );
+            ftStoryTime = c.getLong( 4 );
             locLatitude   = c.getDouble( 5 );
             locLongitute  = c.getDouble( 6 );
             mMoodIndex = c.getInt( 7 );
@@ -457,13 +458,16 @@ public class EditPage extends Activity {
     	editTextOPTime =(EditText) findViewById(R.id.editTextOPTime);
     	
     	if( !updateMode ) {
-	    	editTextOPDate.setText( Util.sdfDate.format( mNowTime ) );
-	    	editTextOPTime.setText( Util.sdfTime.format( mNowTime ) );
+    		ftStoryTimeDate = Util.sdfDate.format( mNowTime );
+    		ftStoryTimeTime = Util.sdfTime.format( mNowTime );
     	}
     	else {
-    		editTextOPDate.setText( Util.sdfDate.format( new Date( ftStorySavetime ) ) );
-	    	editTextOPTime.setText( Util.sdfTime.format( new Date( ftStorySavetime ) ) );
+    		ftStoryTimeDate = Util.sdfDate.format( new Date( ftStoryTime ) );
+    		ftStoryTimeTime = Util.sdfTime.format( new Date( ftStoryTime ) );
     	}
+    	
+    	editTextOPDate.setText( ftStoryTimeDate );
+    	editTextOPTime.setText( ftStoryTimeTime );
     	
     	editTextOPDate.setOnClickListener(dateBtnListener);
     	editTextOPTime.setOnClickListener(timeBtnListener);
@@ -477,35 +481,32 @@ public class EditPage extends Activity {
             case DATE_DIALOG:  
                 DatePickerDialog.OnDateSetListener dateListener =   
                     new DatePickerDialog.OnDateSetListener() {  
-                        public void onDateSet(DatePicker datePicker,   
-                                int year, int month, int dayOfMonth) {  
-                            
-                             //Calendar starts from month 0, so add 1 to month
-                            editTextOPDate.setText( String.format( "%d/%02d/%02d", year, month+1, dayOfMonth) );
-                            /* TODO: should save selected date */
+                        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {  
+                            //Calendar starts from month 0, so add 1 to month
+                        	ftStoryTimeDate = String.format( "%d/%02d/%02d", year, month+1, dayOfMonth);
+                            editTextOPDate.setText( ftStoryTimeDate );
                         }  
                     };  
-                dialog = new DatePickerDialog(this,  
-                        dateListener,  
-                        calendar.get(Calendar.YEAR),  
-                        calendar.get(Calendar.MONTH),  
-                        calendar.get(Calendar.DAY_OF_MONTH));  
+                dialog = new DatePickerDialog(	this,  
+						                        dateListener,  
+						                        calendar.get(Calendar.YEAR),  
+						                        calendar.get(Calendar.MONTH),  
+						                        calendar.get(Calendar.DAY_OF_MONTH) );  
                 break;  
             case TIME_DIALOG:  
                 TimePickerDialog.OnTimeSetListener timeListener =   
                     new TimePickerDialog.OnTimeSetListener() {  
                           
-                        public void onTimeSet(TimePicker timerPicker,  
-                                int hourOfDay, int minute) {  
-                            
-                            editTextOPTime.setText( String.format( "%02d:%02d", hourOfDay, minute) );  
-                            /* TODO: should save selected time and merge as millisecond, then save */
+                        public void onTimeSet(TimePicker timerPicker, int hourOfDay, int minute) {
+                        	ftStoryTimeTime = String.format( "%02d:%02d", hourOfDay, minute);
+                            editTextOPTime.setText( ftStoryTimeTime );
                         }  
                     };  
-                    dialog = new TimePickerDialog(this, timeListener,  
-                            calendar.get(Calendar.HOUR_OF_DAY),  
-                            calendar.get(Calendar.MINUTE),  
-                            false);   //24h or pm/am
+                    dialog = new TimePickerDialog(	this,
+                    								timeListener,  
+						                            calendar.get(Calendar.HOUR_OF_DAY),  
+						                            calendar.get(Calendar.MINUTE),  
+						                            false );
                 break;  
             default:  
                 break;  
