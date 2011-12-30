@@ -54,7 +54,7 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
     private final static String PHOTO_DIR = "/Photos/"; 
     private ImageButton btn_done;
     private CheckBoxPreference sync_db;
-    private String fileName = null;
+//    private String fileName = null;
     
     static Boolean alreadySet = false;
     
@@ -75,20 +75,13 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
         btn_done = (ImageButton) findViewById(R.id.btn_done);
         
         checkAppKeySetup();
-
-        /*Bundle extras = getIntent().getExtras();
-        if(extras != null) {
-        	fileName = extras.getString("FILE");
-            //Toast.makeText(this, "FILENAME is: " + extras.getString("FILE"),
-            //Toast.LENGTH_SHORT).show();
-        }*/
         
         // Display the proper UI state if logged in or not
-        //setLoggedIn(mApi.getSession().isLinked());
+        setLoggedIn(mApi.getSession().isLinked());
+        //Log.i("btn_done_before", "login="+mApi.getSession().isLinked());
+        
         btn_done.setOnClickListener(new View.OnClickListener() {	
 			public void onClick(View v) {
-				//if (fileName != null) 
-					//uploadDB(fileName, SetPreference.this);
 				finish();
 			}
 		});
@@ -110,7 +103,6 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
                 // Store it locally in our app for later use
                 TokenPair tokens = session.getAccessTokenPair();
                 storeKeys(tokens.key, tokens.secret);
-                setLoggedIn(true);
             } catch (IllegalStateException e) {
                 showToast("Couldn't authenticate with Dropbox:" + e.getLocalizedMessage());
                 Log.i(TAG, "Error authenticating", e);
