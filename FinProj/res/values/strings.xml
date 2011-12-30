@@ -39,4 +39,6 @@
     <string name="stringDetail">Detail</string>
     <string name="stringDeleteStorySuccess">Delete Story Success</string>
     <string name="stringDeleteStoryFail">Delete Story Fail</string>
+    <string name="stringView">View</string>
+    <string name="stringActions">Actions</string>
 </resources>
