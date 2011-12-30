@@ -16,9 +16,8 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_weight="8"
-    	
-    	android:apiKey="0rqcx9putsFRGDSaK44e1acJsyN3zDLHM73RGRw" />
-    	<!-- android:apiKey="0fM4d1bStJDZxjRkBnbW960U6sxUatXnI8cRsGw" /> -->
+    	android:apiKey="0rqcx9putsFRGDSaK44e1acJsyN3zDLHM73RGRw" />    
+    <!-- weiru's key: android:apiKey="0fM4d1bStJDZxjRkBnbW960U6sxUatXnI8cRsGw" /> -->
     <!-- releasekey: android:apiKey="02gXC0ywZl69krUW8aZoDhn10k135ApymOEiL1w" /> -->
     <!-- debugkey:   android:apiKey="0rqcx9putsFRGDSaK44e1acJsyN3zDLHM73RGRw" /> -->
     

@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -14,12 +16,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
-import android.view.Menu;
+import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AbsListView;
 import android.widget.ImageView;
@@ -56,6 +59,86 @@ public class ListPage extends ListActivity {
 		mListView.setTextFilterEnabled( true );
 		mListView.setOnScrollListener( ftStoryScroll );
 		mListView.setOnItemClickListener( ftStoryClick );
+		
+		registerForContextMenu( mListView );
+    }
+    
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
+    	super.onCreateContextMenu(menu, view, menuInfo);
+
+    	menu.setHeaderTitle( R.string.stringActions );
+    	
+    	menu.add(0, 0, 0, getString( R.string.stringView ) );
+        menu.add(0, 1, 1, getString( R.string.stringEdit ) );
+        menu.add(0, 2, 2, getString( R.string.stringDelete ) );
+        menu.add(0, 3, 3, getString( R.string.stringShare ) );
+    }
+    
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+    	AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+    	Cursor c = (Cursor) getListAdapter().getItem( info.position );
+    	
+    	final String ftID = c.getString( 0 );
+    	final String mFileName = c.getString( 1 );
+    	final String mMediaFileName = mFileName.replace( ForTour.EXT_PHOTO , ForTour.EXT_RECORD );
+    	
+    	if( c != null ) {
+	    	Intent i = new Intent();
+	    	Bundle b = new Bundle();
+	    	
+			b.putString( "_ID", ftID );
+			i.putExtras( b );
+	    	
+	    	switch( item.getItemId() ) {
+	    		case 0:
+					i.setClass( ListPage.this, OnePhoto.class );
+					startActivity( i );
+	    			break;
+				case 1:
+					i.setClass( ListPage.this, EditPage.class );
+					startActivity( i );
+					break;
+				case 2:
+					AlertDialog.Builder builder = new AlertDialog.Builder( ListPage.this );
+					builder.setTitle( android.R.string.dialog_alert_title );
+					builder.setMessage( getString( R.string.stringDoYouWantToDeleteIt ) );
+					
+					builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							boolean rst = ForTour.mDbHelper.ftStoryDelByID( ftID );
+
+							if( !rst ) Toast.makeText( ListPage.this, getString( R.string.stringDeleteStoryFail ), Toast.LENGTH_LONG ).show();
+							else {
+								Util.deleteFile( new File( Environment.getExternalStorageDirectory(),
+						   			    					ForTour.DIR_WORK + "/" + ForTour.DIR_THUMB + "/" + mFileName ) );
+								Util.deleteFile( new File( Environment.getExternalStorageDirectory(),
+						   			    					ForTour.DIR_WORK + "/" + mFileName ) );
+								Util.deleteFile( new File( Environment.getExternalStorageDirectory(),
+															ForTour.DIR_WORK + "/" + mMediaFileName ) );
+								updateListView();
+								Toast.makeText( ListPage.this, getString( R.string.stringDeleteStorySuccess ), Toast.LENGTH_LONG ).show();
+							}
+						}
+					} );
+					builder.setNegativeButton( android.R.string.no, null );
+					
+					builder.show();
+					break;
+				case 3:
+					Intent intent = new Intent(android.content.Intent.ACTION_SEND); 
+			    	intent.setType("image/png");
+			    	intent.putExtra( Intent.EXTRA_STREAM, bmUriPath ); 
+			    	startActivity( Intent.createChooser( intent, getString( R.string.stringShare ) ) );
+					break;
+				default:
+					break;
+			}
+    	}
+    	
+    	return super.onContextItemSelected(item);
     }
     
     private OnItemClickListener ftStoryClick = new OnItemClickListener() {
@@ -236,33 +319,4 @@ public class ListPage extends ListActivity {
 		 *       But we need an elegant method. */
 		updateListView();
 	}
-	
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //參數1:群組id, 參數2:itemId, 參數3:item順序, 參數4:item名稱
-        /*menu.add(0, 0, 0, getString( R.string.stringEdit ) ).setIcon( android.R.drawable.ic_menu_edit );
-        menu.add(0, 1, 1, getString( R.string.stringShare ) ).setIcon( android.R.drawable.ic_menu_share );
-        menu.add(0, 2, 2, getString( R.string.stringSettings ) ).setIcon( android.R.drawable.ic_menu_preferences );*/
-        return super.onCreateOptionsMenu(menu);
-    }
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        //依據itemId來判斷使用者點選哪一個item
-        switch(item.getItemId()) {
-            case 0://Edit, 選擇多個刪除
-            	
-                break;
-            case 1://Share, 選擇多個share...?
-
-                break;
-            case 2://Setting
-            	Intent i = new Intent();
-            	i.setClass( ListPage.this, SetPreference.class );				
-				startActivity( i );
-                break;
-            default:
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

@@ -205,7 +205,6 @@ public class OnePhoto extends Activity{
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //參數1:群組id, 參數2:itemId, 參數3:item順序, 參數4:item名稱
         menu.add(0, 0, 0, getString( R.string.stringEdit ) ).setIcon( android.R.drawable.ic_menu_edit );
         menu.add(0, 1, 1, getString( R.string.stringDelete ) ).setIcon( android.R.drawable.ic_menu_delete );
         //menu.add(0, 2, 2, getString( R.string.stringDetail ) ).setIcon( android.R.drawable.ic_menu_info_details );
@@ -215,19 +214,16 @@ public class OnePhoto extends Activity{
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-    	Intent i = new Intent();
-    	
-    	//依據itemId來判斷使用者點選哪一個item
         switch(item.getItemId()) {
             case 0:
+            	Intent i0 = new Intent();
 				Bundle b = new Bundle();
 				
 				b.putString("_ID", ftID);
-				b.putString("FILE", mFileName);
 				
-				i.putExtras( b );
-				i.setClass( OnePhoto.this, EditPage.class );
-				startActivityForResult( i, ForTour.EDIT_ONE_PHOTO );
+				i0.putExtras( b );
+				i0.setClass( OnePhoto.this, EditPage.class );
+				startActivityForResult( i0, ForTour.EDIT_ONE_PHOTO );
 				overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
 				
                 break;
@@ -262,10 +258,6 @@ public class OnePhoto extends Activity{
             case 3:
             	share();
                 break;
-            case 4:
-            	i.setClass( OnePhoto.this, SetPreference.class );				
-				startActivity( i );
-                break;
             default:
             	break;
         }
@@ -292,5 +284,4 @@ public class OnePhoto extends Activity{
     	intent.putExtra( Intent.EXTRA_STREAM, bmUriPath ); 
     	startActivity( Intent.createChooser( intent, getString( R.string.stringShare ) ) );
     }
-    
 }
