@@ -24,7 +24,7 @@
     <string name="stringThereIsNoDataNow">There is no data now</string>
     <string name="stringSaveStorySuccess">Save Story Success</string>
     <string name="stringSaveStoryFail">Save Story Fail</string>
-    <string name="stringUpdateAndExit">Update And Exit</string>
+    <string name="stringUpdateAndExit">Update and Exit</string>
     <string name="stringUpdateStorySuccess">Update Story Success</string>
     <string name="stringUpdateStoryFail">Update Story Fail</string>
     <string name="stringLocation">Location</string>
@@ -43,5 +43,5 @@
     <string name="stringDeleteStoryFail">Delete Story Fail</string>
     <string name="stringView">View</string>
     <string name="stringActions">Actions</string>
-    <string name="stringSaveAndExit">Save And Exit</string>
+    <string name="stringSaveAndExit">Save and Exit</string>
 </resources>
