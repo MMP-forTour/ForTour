@@ -155,38 +155,51 @@ public class EditPage extends Activity {
 			@Override
 			public void onClick(View v) {
 				if( !updateMode ) {
-					long rst = ForTour.mDbHelper.ftStoryAdd(	mFileName,
-																editTextOPStory.getText().toString(),
-																editTextOPLocation.getText().toString(),
-																( ( hasRecord != false ) ? 1 : 0 ),
-																locLatitude,
-																locLongitute,
-																mMoodIndex,
-																Util.datetimeStringToMSec( ftStoryTimeDate, ftStoryTimeTime )
-															);
-					
-					if( rst == -1 ) Toast.makeText( EditPage.this, getString( R.string.stringSaveStoryFail ), Toast.LENGTH_LONG ).show();
-					else {
-						try {
-							FileOutputStream thumbFile = new FileOutputStream(
-															new File( Environment.getExternalStorageDirectory(),
-																	   ForTour.DIR_WORK + "/" + ForTour.DIR_THUMB + "/" + mFileName
-															)
-														 );
-							Bitmap.createScaledBitmap( bm, imgUtil.THUMB_SIZE, imgUtil.THUMB_SIZE, true ).compress( Bitmap.CompressFormat.PNG, 90, thumbFile );
-							if ( SetPreference.mApi != null )
-								checkSyncDropbox();
+					AlertDialog.Builder builder = new AlertDialog.Builder( EditPage.this );
+					builder.setTitle( R.string.stringSaveAndExit );
+					builder.setMessage( R.string.stringDoYouWantToSaveIt );
+					builder.setIcon( android.R.drawable.ic_dialog_info );
+
+					builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface arg0, int arg1) {
+							long rst = ForTour.mDbHelper.ftStoryAdd(	mFileName,
+																		editTextOPStory.getText().toString(),
+																		editTextOPLocation.getText().toString(),
+																		( ( hasRecord != false ) ? 1 : 0 ),
+																		locLatitude,
+																		locLongitute,
+																		mMoodIndex,
+																		Util.datetimeStringToMSec( ftStoryTimeDate, ftStoryTimeTime )
+																	);
+							
+							if( rst == -1 ) Toast.makeText( EditPage.this, getString( R.string.stringSaveStoryFail ), Toast.LENGTH_LONG ).show();
+							else {
+								try {
+									FileOutputStream thumbFile = new FileOutputStream(
+																	new File( Environment.getExternalStorageDirectory(),
+																			   ForTour.DIR_WORK + "/" + ForTour.DIR_THUMB + "/" + mFileName
+																	)
+																 );
+									Bitmap.createScaledBitmap( bm, imgUtil.THUMB_SIZE, imgUtil.THUMB_SIZE, true ).compress( Bitmap.CompressFormat.PNG, 90, thumbFile );
+									
+									if ( SetPreference.mApi != null ) checkSyncDropbox();
+								}
+								catch( FileNotFoundException e ) { }
+								
+								Toast.makeText( EditPage.this, getString( R.string.stringSaveStorySuccess ), Toast.LENGTH_LONG ).show();
+								finish();
+							}
 						}
-						catch( FileNotFoundException e ) { }
-						
-						Toast.makeText( EditPage.this, getString( R.string.stringSaveStorySuccess ), Toast.LENGTH_LONG ).show();
-						finish();
-					}
+					} );
+					builder.setNegativeButton( android.R.string.no, null );
+					
+					builder.show();
 				}
 				else {
 					AlertDialog.Builder builder = new AlertDialog.Builder( EditPage.this );
-					builder.setTitle( android.R.string.dialog_alert_title );
-					builder.setMessage( getString( R.string.stringUpdateStory ) );
+					builder.setTitle( R.string.stringUpdateAndExit );
+					builder.setMessage( R.string.stringDoYouWantToSaveIt );
 					
 					builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
 						@Override
@@ -426,9 +439,9 @@ public class EditPage extends Activity {
 	@Override
 	public void onBackPressed() {
 		AlertDialog.Builder builder = new AlertDialog.Builder( EditPage.this );
-		builder.setIcon( android.R.drawable.ic_dialog_alert );
-		builder.setTitle( android.R.string.dialog_alert_title );
-		builder.setMessage( R.string.stringDiscardSavingStory );
+		builder.setIcon( android.R.drawable.ic_dialog_info );
+		builder.setTitle( R.string.stringDiscardAndExit );
+		builder.setMessage( R.string.stringDoYouWantToDiscardIt );
 		builder.setNegativeButton( android.R.string.no, null );
 		builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
 			@Override

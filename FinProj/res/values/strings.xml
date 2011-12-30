@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hello">Hello World, ForTour!</string>
-    <string name="app_name">ForTour</string>
+    <string name="app_name">ForTour Diary</string>
     <string name="stringRecording">Recording</string>
-    <string name="stringHoldDownButtonToRecord">Hold down the button to record.</string>
+    <string name="stringHoldDownButtonToRecord">Hold down the button to record</string>
     <string name="stringReleaseButtonToStop">Release the button to stop recording</string>
     <string name="stringSave">Save</string>
     <string name="stringReplace">Replace</string>
@@ -13,16 +13,18 @@
     <string name="stringStoryMedia">Story Media</string>
     <string name="stringEnableLocationServices">Enable Location Services</string>
     <string name="stringDoYouWantToEnableIt">Do you want to enable it?</string>
+    <string name="stringDoYouWantToSaveIt">Do you want to save it?</string>
+    <string name="stringDoYouWantToDiscardIt">Do you want to discard it?</string>
     <string name="stringDoYouWantToReplaceIt">Do you want to replace it?</string>
     <string name="stringDoYouWantToDeleteIt">Do you want to delete it?</string>
-    <string name="stringServiceCanNotBeUsedNow">Service can not be used now.</string>
+    <string name="stringServiceCanNotBeUsedNow">Service can not be used now</string>
     <string name="stringUnableToRetrieveLocationNow">Unable to retrieve location now</string>
     <string name="stringNoLocationInformation">No location information</string>
     <string name="stringNoInternetConnection">No Internet connection</string>
     <string name="stringThereIsNoDataNow">There is no data now</string>
     <string name="stringSaveStorySuccess">Save Story Success</string>
     <string name="stringSaveStoryFail">Save Story Fail</string>
-    <string name="stringUpdateStory">Update Story?</string>
+    <string name="stringUpdateAndExit">Update And Exit</string>
     <string name="stringUpdateStorySuccess">Update Story Success</string>
     <string name="stringUpdateStoryFail">Update Story Fail</string>
     <string name="stringLocation">Location</string>
@@ -31,7 +33,7 @@
     <string name="stringHowAboutYourMood">How about your mood</string>
     <string name="stringHelp">Help</string>
     <string name="stringThereIsNoMoreData">There is no more data</string>
-    <string name="stringDiscardSavingStory">Discard Saving Story?</string>
+    <string name="stringDiscardAndExit">Discard and Exit</string>
     <string name="stringShare">Share</string>
     <string name="stringEdit">Edit</string>
     <string name="stringDelete">Delete</string>
@@ -41,4 +43,5 @@
     <string name="stringDeleteStoryFail">Delete Story Fail</string>
     <string name="stringView">View</string>
     <string name="stringActions">Actions</string>
+    <string name="stringSaveAndExit">Save And Exit</string>
 </resources>
