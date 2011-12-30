@@ -280,6 +280,7 @@ public class OnePhoto extends Activity{
 			if( resultCode == Activity.RESULT_OK ) {
 				// NOTE: Any good idea to refresh?
 				Intent i = getIntent();
+				i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 				finish();
 				startActivity( i );
 			}
