@@ -72,7 +72,6 @@ public class ListPage extends ListActivity {
 			bundle.putString( "_ID", selectedItem.getString( 0 ) );
 			intent.putExtras( bundle );
 			startActivity( intent );
-			/* TODO: may need refresh list when edit page finished */
 		}
 	};
 	

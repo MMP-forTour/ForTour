@@ -36,6 +36,7 @@
     <string name="stringEdit">Edit</string>
     <string name="stringDelete">Delete</string>
     <string name="stringSettings">Settings</string>
+    <string name="stringDetail">Detail</string>
     <string name="stringDeleteStorySuccess">Delete Story Success</string>
     <string name="stringDeleteStoryFail">Delete Story Fail</string>
 </resources>
