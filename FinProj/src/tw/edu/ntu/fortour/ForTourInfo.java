@@ -3,13 +3,15 @@ package tw.edu.ntu.fortour;
 import android.app.Activity;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.TextView;
 
 
 
-public class ForTourInfo extends Activity {
+public class ForTourInfo extends Activity implements OnTouchListener{
     
 	/** Called when the activity is first created. */
     @Override
@@ -36,5 +38,12 @@ public class ForTourInfo extends Activity {
     	
     	finish();
 		overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
+    }
+
+	@Override
+    public boolean onTouch(View arg0, MotionEvent arg1) {
+	    // TODO Auto-generated method stub
+		finish();
+	    return false;
     }
 }
