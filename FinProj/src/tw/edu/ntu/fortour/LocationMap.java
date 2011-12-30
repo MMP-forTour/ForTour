@@ -42,10 +42,12 @@ public class LocationMap extends MapActivity {
 	private String locLongitude, locLatitude, locName;
 	
 	private boolean hasLocation = false;
+	private boolean updateMode  = false;
 	
 	protected static String KEY_LATITUDE  = "KEY_LATITUDE";
 	protected static String KEY_LONGITUDE = "KEY_LONGITUDE";
 	protected static String KEY_LOCNAME   = "KEY_LOCNAME";
+	protected static String KEY_UPDMODE   = "KEY_UPDMODE";
 	
 	private final int ADDRESS_LIMIT = 10;
 	
@@ -74,6 +76,8 @@ public class LocationMap extends MapActivity {
         if( b != null ) {
         	locLatitude  = b.getString( KEY_LATITUDE );
 	        locLongitude = b.getString( KEY_LONGITUDE );
+	        locName      = b.getString( KEY_LOCNAME );
+	        updateMode   = b.getString( KEY_UPDMODE ) != null ? true : false;
 
 	        if( locLatitude != null && locLongitude != null ) hasLocation = true;
         }
@@ -103,16 +107,19 @@ public class LocationMap extends MapActivity {
 	        mMyLocationOverlay.runOnFirstFix( determinLocation );
         }
         else {
-        	mButtonLMOk.setVisibility( View.GONE );
-        	mButtonLMDetermine.setVisibility( View.GONE );
-        	mButtonLMCancel.setVisibility( View.GONE );
-        	mButtonLMBack.setVisibility( View.VISIBLE );
+        	if( !( hasLocation && updateMode ) ) {
+	        	mButtonLMOk.setVisibility( View.GONE );
+	        	mButtonLMDetermine.setVisibility( View.GONE );
+	        	mButtonLMCancel.setVisibility( View.GONE );
+	        	mButtonLMBack.setVisibility( View.VISIBLE );
+        	}
         	determinLocation.run();
         	
         	// Add a marker
+        	/* TODO: set click as false when we can draw location text in a bubble */
         	markerOverlay mLMOverlay = new markerOverlay( getResources().getDrawable( R.drawable.locate ) );
         	
-        	OverlayItem mOverlayItem = new OverlayItem( mGeoPoint, "", "" );
+        	OverlayItem mOverlayItem = new OverlayItem( mGeoPoint, getString( R.string.stringLocation ), locName );
         	mLMOverlay.addLandmark( mOverlayItem );
         	mMapOverlays.add( mLMOverlay );
         }
@@ -132,7 +139,7 @@ public class LocationMap extends MapActivity {
 			mMapController.animateTo( mGeoPoint );
 			
 			// Translate location to location name
-			runOnUiThread( getAddressList );
+			if( !hasLocation || ( hasLocation && updateMode ) ) runOnUiThread( getAddressList );
 			
 			if( mProgressDialog != null ) mProgressDialog.dismiss();
 		}
@@ -256,6 +263,5 @@ public class LocationMap extends MapActivity {
 		public int size() {
 			return mOverlayList.size();
 		}
-		
 	}
 }

@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.Date;
 
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.session.TokenPair;
@@ -54,18 +53,19 @@ public class EditPage extends Activity {
 	private Bitmap bm;
 	private Uri bmUriPath;
 	private ImageUtil imgUtil;
-	private String mFileName, mMediaFileName;
+	private String mFileName, mMediaFileName, locName;
+	private String ftStoryTimeDate, ftStoryTimeTime;
 	private MediaRecorder mMediaRecorder;
 	private ProgressDialog mProgressDlg;
 	private LocationManager mLocationManager;
-	private long ftStorySavetime;
+	private long ftStoryTime;
 	private double locLatitude, locLongitute;
 	
 	private boolean hasRecord = false;
 	private String ftID = null;
 	private int mMoodIndex = 0;
-	private boolean updateMode = false;	
-	private Date mNowTime = new Date();
+	private boolean updateMode = false;
+	private Calendar mCalendar = Calendar.getInstance();
 
 	private final int DATE_DIALOG = 1;      
     private final int TIME_DIALOG = 2;
@@ -99,11 +99,15 @@ public class EditPage extends Activity {
             mFileName = c.getString( 0 );
             
             editTextOPStory.setText( c.getString( 1 ) );
-            editTextOPLocation.setText( c.getString( 2 ) );
+            
+            locName = c.getString( 2 );
+            editTextOPLocation.setText( locName );
             
             hasRecord = ( c.getInt( 3 ) == 0 ) ? false : true; 
             
-            ftStorySavetime = c.getLong( 4 );
+            ftStoryTime = c.getLong( 4 );
+            mCalendar = Util.setCalendarInMSec( ftStoryTime );
+            
             locLatitude   = c.getDouble( 5 );
             locLongitute  = c.getDouble( 6 );
             mMoodIndex = c.getInt( 7 );
@@ -156,7 +160,8 @@ public class EditPage extends Activity {
 																( ( hasRecord != false ) ? 1 : 0 ),
 																locLatitude,
 																locLongitute,
-																mMoodIndex
+																mMoodIndex,
+																Util.datetimeStringToMSec( ftStoryTimeDate, ftStoryTimeTime )
 															);
 					
 					if( rst == -1 ) Toast.makeText( EditPage.this, getString( R.string.stringSaveStoryFail ), Toast.LENGTH_LONG ).show();
@@ -198,7 +203,8 @@ public class EditPage extends Activity {
 																			( ( hasRecord != false ) ? 1 : 0 ),
 																			locLatitude,
 																			locLongitute,
-																			mMoodIndex
+																			mMoodIndex,
+																			Util.datetimeStringToMSec( ftStoryTimeDate, ftStoryTimeTime )
 																			);
 
 							if( !rst ) Toast.makeText( EditPage.this, getString( R.string.stringUpdateStoryFail ), Toast.LENGTH_LONG ).show();
@@ -318,6 +324,17 @@ public class EditPage extends Activity {
 					mLocationManager.isProviderEnabled( LocationManager.NETWORK_PROVIDER ) ) {
 					
 					Intent intent = new Intent();
+					
+					if( updateMode && locLatitude != -1 && locLongitute != -1 ) {
+						Bundle b = new Bundle();
+						
+						b.putString( LocationMap.KEY_LATITUDE, String.valueOf( (int) ( locLatitude * 1E6 ) ) );
+						b.putString( LocationMap.KEY_LONGITUDE, String.valueOf( (int) ( locLongitute * 1E6 ) ) );
+						b.putString( LocationMap.KEY_LOCNAME, locName );
+						b.putString( LocationMap.KEY_UPDMODE, "" );
+						
+						intent.putExtras( b );
+					}
 					intent.setClass( EditPage.this, LocationMap.class );
 					startActivityForResult( intent, ForTour.LOCATION_MAP_PICK );
 				}
@@ -449,56 +466,49 @@ public class EditPage extends Activity {
     	editTextOPDate =(EditText) findViewById(R.id.editTextOPDate);
     	editTextOPTime =(EditText) findViewById(R.id.editTextOPTime);
     	
-    	if( !updateMode ) {
-	    	editTextOPDate.setText( Util.sdfDate.format( mNowTime ) );
-	    	editTextOPTime.setText( Util.sdfTime.format( mNowTime ) );
-    	}
-    	else {
-    		editTextOPDate.setText( Util.sdfDate.format( new Date( ftStorySavetime ) ) );
-	    	editTextOPTime.setText( Util.sdfTime.format( new Date( ftStorySavetime ) ) );
-    	}
+		ftStoryTimeDate = Util.sdfDate.format( mCalendar.getTime() );
+		ftStoryTimeTime = Util.sdfTime.format( mCalendar.getTime() );
+    	
+    	editTextOPDate.setText( ftStoryTimeDate );
+    	editTextOPTime.setText( ftStoryTimeTime );
     	
     	editTextOPDate.setOnClickListener(dateBtnListener);
     	editTextOPTime.setOnClickListener(timeBtnListener);
     }
     
     protected Dialog onCreateDialog(int id) {  
-        //Get date and time
-        Calendar calendar = Calendar.getInstance();
-        Dialog dialog = null;  
+        Dialog dialog = null;
+        
         switch(id) {  
             case DATE_DIALOG:  
                 DatePickerDialog.OnDateSetListener dateListener =   
                     new DatePickerDialog.OnDateSetListener() {  
-                        public void onDateSet(DatePicker datePicker,   
-                                int year, int month, int dayOfMonth) {  
-                            
-                             //Calendar starts from month 0, so add 1 to month
-                            editTextOPDate.setText( String.format( "%d/%02d/%02d", year, month+1, dayOfMonth) );
-                            /* TODO: should save selected date */
+                        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {  
+                            //Calendar starts from month 0, so add 1 to month
+                        	ftStoryTimeDate = String.format( "%d/%02d/%02d", year, month+1, dayOfMonth);
+                            editTextOPDate.setText( ftStoryTimeDate );
                         }  
                     };  
-                dialog = new DatePickerDialog(this,  
-                        dateListener,  
-                        calendar.get(Calendar.YEAR),  
-                        calendar.get(Calendar.MONTH),  
-                        calendar.get(Calendar.DAY_OF_MONTH));  
+                dialog = new DatePickerDialog(	this,  
+						                        dateListener,  
+						                        mCalendar.get(Calendar.YEAR),  
+						                        mCalendar.get(Calendar.MONTH),  
+						                        mCalendar.get(Calendar.DAY_OF_MONTH) );  
                 break;  
             case TIME_DIALOG:  
                 TimePickerDialog.OnTimeSetListener timeListener =   
                     new TimePickerDialog.OnTimeSetListener() {  
                           
-                        public void onTimeSet(TimePicker timerPicker,  
-                                int hourOfDay, int minute) {  
-                            
-                            editTextOPTime.setText( String.format( "%02d:%02d", hourOfDay, minute) );  
-                            /* TODO: should save selected time and merge as millisecond, then save */
+                        public void onTimeSet(TimePicker timerPicker, int hourOfDay, int minute) {
+                        	ftStoryTimeTime = String.format( "%02d:%02d", hourOfDay, minute);
+                            editTextOPTime.setText( ftStoryTimeTime );
                         }  
                     };  
-                    dialog = new TimePickerDialog(this, timeListener,  
-                            calendar.get(Calendar.HOUR_OF_DAY),  
-                            calendar.get(Calendar.MINUTE),  
-                            false);   //24h or pm/am
+                    dialog = new TimePickerDialog(	this,
+                    								timeListener,  
+                    								mCalendar.get(Calendar.HOUR_OF_DAY),  
+                    								mCalendar.get(Calendar.MINUTE),  
+						                            false );
                 break;  
             default:  
                 break;  

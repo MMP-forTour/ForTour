@@ -3,7 +3,7 @@ package tw.edu.ntu.fortour;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Date;
+import java.util.Calendar;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -38,8 +38,7 @@ public class OnePhoto extends Activity{
 	private MediaPlayer mMediaPlayer;
 	private ProgressDialog mProgressDlg;
 	private double locLatitude, locLongitute;
-	private String mMediaFileName;
-	private Integer forResult;
+	private String mMediaFileName, ftStoryLocation;
 	
 	private TextView textViewOPStory, textViewOPTime, textViewOPLocation;
     private EditText editTextOPStory, editTextOPLocation, editTextOPDate, editTextOPTime;
@@ -52,7 +51,6 @@ public class OnePhoto extends Activity{
         setContentView(R.layout.one_photo);
         
         ftID = this.getIntent().getExtras().getString( "_ID" );
-        forResult = this.getIntent().getExtras().getInt( "forResult" );
         
         imgUtil = new ImageUtil();
         
@@ -85,12 +83,14 @@ public class OnePhoto extends Activity{
 
         textViewOPStory.setText( c.getString( 1 ) );
         
-        String ftStoryLocation = c.getString( 2 ).trim();
-        if( !"".equals( ftStoryLocation ) ) ftStoryLocation = "@ " + ftStoryLocation;
-        textViewOPLocation.setText( ftStoryLocation );
+        ftStoryLocation = c.getString( 2 ).trim();
         
-        Date ftStorySaveTime = new Date( c.getLong( 4 ) ); 
-        textViewOPTime.setText( Util.sdfDate.format( ftStorySaveTime ) + " " + Util.sdfTime.format( ftStorySaveTime ) );
+        if( !"".equals( ftStoryLocation ) ) textViewOPLocation.setText( "@ " + ftStoryLocation );
+        else textViewOPLocation.setText( ftStoryLocation );
+        
+        Calendar ftStorySaveTime = Calendar.getInstance();
+        ftStorySaveTime.setTimeInMillis( c.getLong( 4 ) );
+        textViewOPTime.setText( Util.sdfDate.format( ftStorySaveTime.getTime() ) + " " + Util.sdfTime.format( ftStorySaveTime.getTime() ) );
 
         locLatitude   = c.getDouble( 5 );
         locLongitute  = c.getDouble( 6 );
@@ -163,6 +163,7 @@ public class OnePhoto extends Activity{
 					
 					b.putString( LocationMap.KEY_LATITUDE, String.valueOf( (int) ( locLatitude * 1E6 ) ) );
 					b.putString( LocationMap.KEY_LONGITUDE, String.valueOf( (int) ( locLongitute * 1E6 ) ) );
+					b.putString( LocationMap.KEY_LOCNAME, ftStoryLocation );
 					
 					i.putExtras( b );
 					i.setClass( OnePhoto.this, LocationMap.class );
@@ -205,10 +206,11 @@ public class OnePhoto extends Activity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //參數1:群組id, 參數2:itemId, 參數3:item順序, 參數4:item名稱
-        menu.add(0, 0, 0, getString( R.string.stringEdit ) ).setIcon( android.R.drawable.ic_menu_edit );
-        menu.add(0, 1, 1, getString( R.string.stringDelete ) ).setIcon( android.R.drawable.ic_menu_delete );
-        menu.add(0, 2, 2, getString( R.string.stringShare ) ).setIcon( android.R.drawable.ic_menu_share );
-        menu.add(0, 3, 3, getString( R.string.stringSettings ) ).setIcon( android.R.drawable.ic_menu_preferences );
+        //menu.add(0, 0, 0, getString( R.string.stringDetail ) ).setIcon( android.R.drawable.ic_menu_info_details );
+        menu.add(0, 1, 1, getString( R.string.stringEdit ) ).setIcon( android.R.drawable.ic_menu_edit );
+        menu.add(0, 2, 2, getString( R.string.stringDelete ) ).setIcon( android.R.drawable.ic_menu_delete );
+        menu.add(0, 3, 3, getString( R.string.stringShare ) ).setIcon( android.R.drawable.ic_menu_share );
+        menu.add(0, 4, 4, getString( R.string.stringSettings ) ).setIcon( android.R.drawable.ic_menu_preferences );
         return super.onCreateOptionsMenu(menu);
     }
     
@@ -218,7 +220,7 @@ public class OnePhoto extends Activity{
     	
     	//依據itemId來判斷使用者點選哪一個item
         switch(item.getItemId()) {
-            case 0:
+            case 1:
 				Bundle b = new Bundle();
 				
 				b.putString("_ID", ftID);
@@ -230,7 +232,7 @@ public class OnePhoto extends Activity{
 				overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
 				
                 break;
-            case 1:
+            case 2:
             	AlertDialog.Builder builder = new AlertDialog.Builder( OnePhoto.this );
 				builder.setTitle( android.R.string.dialog_alert_title );
 				builder.setMessage( getString( R.string.stringDoYouWantToDeleteIt ) );
@@ -251,7 +253,6 @@ public class OnePhoto extends Activity{
 							Toast.makeText( OnePhoto.this, getString( R.string.stringDeleteStorySuccess ), Toast.LENGTH_LONG ).show();
 							finish();
 							overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
-							/* TODO: may need refocus on list page */
 						}
 					}
 				} );
@@ -259,10 +260,10 @@ public class OnePhoto extends Activity{
 				
 				builder.show();
                 break;
-            case 2:
+            case 3:
             	share();
                 break;
-            case 3:
+            case 4:
             	i.setClass( OnePhoto.this, SetPreference.class );				
 				startActivity( i );
                 break;
@@ -277,6 +278,7 @@ public class OnePhoto extends Activity{
     	switch( requestCode ) {
 		case ForTour.EDIT_ONE_PHOTO:
 			if( resultCode == Activity.RESULT_OK ) {
+				// NOTE: Any good idea to refresh?
 				Intent i = getIntent();
 				finish();
 				startActivity( i );

@@ -3,8 +3,6 @@ package tw.edu.ntu.fortour;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -35,19 +33,15 @@ public class ListPage extends ListActivity {
 	private static final int LENGTH_TITLE = 5;
 	private static final int LOAD_LIMIT   = 8;
 	
-	private SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd" );
-	
 	private Bitmap bm;
 	private Uri bmUriPath;
 	private ListView mListView;
 	private Cursor mCursor;
 	private SimpleCursorAdapter mSimpleCursorAdapter;
 	
-	private int loadAmount   = LOAD_LIMIT;
-	private int lastInScreen = 0;
-	
-	private boolean noMoreData = false;
-	private boolean inLoading  = false;
+	private int loadAmount			= LOAD_LIMIT;
+	private boolean noMoreData		= false;
+	private boolean inLoading		= false;
 
 	/** Called when the activity is first created. */
     @Override
@@ -75,7 +69,7 @@ public class ListPage extends ListActivity {
 			bundle.putInt( "forResult", position );
 			intent.putExtras( bundle );
 			startActivity( intent );
-			/* TODO: may need refresh list when edit page finished */
+			/* need update if there is edit */
 		}
 	};
 	
@@ -84,9 +78,7 @@ public class ListPage extends ListActivity {
 		public void onScrollStateChanged(AbsListView view, int scrollState) { }
 		
 		@Override
-		public void onScroll(	AbsListView view, int firstVisibleItem,
-								int visibleItemCount, int totalItemCount) {
-			lastInScreen = firstVisibleItem + visibleItemCount - ( LOAD_LIMIT - visibleItemCount );
+		public void onScroll(	AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 			if( firstVisibleItem + visibleItemCount == totalItemCount ) {
 				if( !noMoreData ) {
 					if( !inLoading ) {
@@ -105,7 +97,7 @@ public class ListPage extends ListActivity {
 	        String[] from = new String[] {
 	        		DbAdapter.KEY_IMAGE,
 	        		DbAdapter.KEY_STORY,
-	        		DbAdapter.KEY_SAVETIME
+	        		DbAdapter.KEY_STORYTIME
 	        };
 			int[] to = new int[] {
 					R.id.imageViewLMRImage,
@@ -113,10 +105,15 @@ public class ListPage extends ListActivity {
 					R.id.textViewLMRTime
 			};
 			
-			mSimpleCursorAdapter = new SimpleCursorAdapter( this, R.layout.list_mode_row, mCursor, from, to );
-			mSimpleCursorAdapter.setViewBinder( mViewBinder );
-			mSimpleCursorAdapter.notifyDataSetChanged();
-			setListAdapter( mSimpleCursorAdapter );
+			if( loadAmount == LOAD_LIMIT ) {
+				mSimpleCursorAdapter = new SimpleCursorAdapter( this, R.layout.list_mode_row, mCursor, from, to );
+				mSimpleCursorAdapter.setViewBinder( mViewBinder );
+				setListAdapter( mSimpleCursorAdapter );
+			}
+			else {
+				mSimpleCursorAdapter.changeCursor( mCursor );
+				mSimpleCursorAdapter.notifyDataSetChanged();
+			}
 			
 			if( loadAmount > mCursor.getCount() ) noMoreData = true;
 		}
@@ -155,8 +152,6 @@ public class ListPage extends ListActivity {
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
-			
-			mListView.setSelection( lastInScreen );
 			
 			if( mProgressDialog != null ) mProgressDialog.dismiss();
 			
@@ -214,7 +209,7 @@ public class ListPage extends ListActivity {
 					else ftStory.setText( cursor.getString( 2 ) );
 					break;
 				case R.id.textViewLMRTime:
-					ftTime.setText( sdf.format( new Date( Long.parseLong( cursor.getString( 3 ) ) ) ) );
+					ftTime.setText( Util.sdfDate.format( Util.setCalendarInMSec( cursor.getLong( 3 ) ).getTime() ) );
 					break;
 
 				default:
