@@ -23,7 +23,7 @@ public class DbAdapter {
 	public static final String KEY_STORY		= "ftStory";
 	public static final String KEY_LOCATION	= "ftLocation";
 	public static final String KEY_HAS_RECORD	= "ftHasRecord";
-	public static final String KEY_STORYTIME	= "ftStoryTime";
+	public static final String KEY_STORYTIME	= "ftSaveTime";
 	public static final String KEY_LATITUDE	= "ftLatitude";
 	public static final String KEY_LONGITUDE	= "ftLongitude";
 	public static final String KEY_MOODIMAGE	= "ftMoodImage";
