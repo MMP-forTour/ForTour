@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -60,8 +59,8 @@ public class EditPage extends Activity {
 	private boolean hasRecord = false;
 	private String ftID = null;
 	private int mMoodIndex = 0;
-	private boolean updateMode = false;	
-	private Date mNowTime = new Date();
+	private boolean updateMode = false;
+	private Calendar mNowTime = Calendar.getInstance();
 
 	private final int DATE_DIALOG = 1;      
     private final int TIME_DIALOG = 2;
@@ -460,12 +459,12 @@ public class EditPage extends Activity {
     	editTextOPTime =(EditText) findViewById(R.id.editTextOPTime);
     	
     	if( !updateMode ) {
-    		ftStoryTimeDate = Util.sdfDate.format( mNowTime );
-    		ftStoryTimeTime = Util.sdfTime.format( mNowTime );
+    		ftStoryTimeDate = Util.sdfDate.format( mNowTime.getTime() );
+    		ftStoryTimeTime = Util.sdfTime.format( mNowTime.getTime() );
     	}
     	else {
-    		ftStoryTimeDate = Util.sdfDate.format( new Date( ftStoryTime ) );
-    		ftStoryTimeTime = Util.sdfTime.format( new Date( ftStoryTime ) );
+    		ftStoryTimeDate = Util.sdfDate.format( Util.setCalendarInMSec( ftStoryTime ).getTime() );
+    		ftStoryTimeTime = Util.sdfTime.format( Util.setCalendarInMSec( ftStoryTime ).getTime() );
     	}
     	
     	editTextOPDate.setText( ftStoryTimeDate );

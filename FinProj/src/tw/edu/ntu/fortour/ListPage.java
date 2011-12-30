@@ -3,8 +3,6 @@ package tw.edu.ntu.fortour;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -34,8 +32,6 @@ import android.widget.Toast;
 public class ListPage extends ListActivity {
 	private static final int LENGTH_TITLE = 5;
 	private static final int LOAD_LIMIT   = 8;
-	
-	private SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd" );
 	
 	private Bitmap bm;
 	private Uri bmUriPath;
@@ -72,6 +68,7 @@ public class ListPage extends ListActivity {
 			bundle.putString( "_ID", selectedItem.getString( 0 ) );
 			intent.putExtras( bundle );
 			startActivity( intent );
+			/* need update if there is edit */
 		}
 	};
 	
@@ -211,7 +208,7 @@ public class ListPage extends ListActivity {
 					else ftStory.setText( cursor.getString( 2 ) );
 					break;
 				case R.id.textViewLMRTime:
-					ftTime.setText( sdf.format( new Date( Long.parseLong( cursor.getString( 3 ) ) ) ) );
+					ftTime.setText( Util.sdfDate.format( Util.setCalendarInMSec( cursor.getLong( 3 ) ).getTime() ) );
 					break;
 
 				default:

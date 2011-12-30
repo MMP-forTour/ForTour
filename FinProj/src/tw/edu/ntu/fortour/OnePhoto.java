@@ -3,7 +3,7 @@ package tw.edu.ntu.fortour;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Date;
+import java.util.Calendar;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -88,8 +88,9 @@ public class OnePhoto extends Activity{
         if( !"".equals( ftStoryLocation ) ) textViewOPLocation.setText( "@ " + ftStoryLocation );
         else textViewOPLocation.setText( ftStoryLocation );
         
-        Date ftStorySaveTime = new Date( c.getLong( 4 ) ); 
-        textViewOPTime.setText( Util.sdfDate.format( ftStorySaveTime ) + " " + Util.sdfTime.format( ftStorySaveTime ) );
+        Calendar ftStorySaveTime = Calendar.getInstance();
+        ftStorySaveTime.setTimeInMillis( c.getLong( 4 ) );
+        textViewOPTime.setText( Util.sdfDate.format( ftStorySaveTime.getTime() ) + " " + Util.sdfTime.format( ftStorySaveTime.getTime() ) );
 
         locLatitude   = c.getDouble( 5 );
         locLongitute  = c.getDouble( 6 );

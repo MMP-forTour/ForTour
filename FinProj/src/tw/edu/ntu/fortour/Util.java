@@ -2,7 +2,7 @@ package tw.edu.ntu.fortour;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -18,12 +18,19 @@ public class Util {
 	
 	public static long datetimeStringToMSec( final String datePart, final String timePart ) {
 		try {
-			Date date = Util.sdfString.parse( datePart + " " + timePart );
-			return ( date.getTime() );
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime( Util.sdfString.parse( datePart + " " + timePart ) );
+			return ( calendar.getTimeInMillis() );
 		}
 		catch( Exception e ) {
-			return ( ( new Date() ).getTime() );
+			return ( Calendar.getInstance().getTimeInMillis() );
 		}
+	}
+	
+	public static Calendar setCalendarInMSec( final long timeInMSec ) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis( timeInMSec );
+		return cal;
 	}
 	
 	public static boolean checkFile( final File file ) {
