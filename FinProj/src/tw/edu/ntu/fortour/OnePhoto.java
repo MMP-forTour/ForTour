@@ -39,6 +39,7 @@ public class OnePhoto extends Activity{
 	private ProgressDialog mProgressDlg;
 	private double locLatitude, locLongitute;
 	private String mMediaFileName;
+	private Integer forResult;
 	
 	private TextView textViewOPStory, textViewOPTime, textViewOPLocation;
     private EditText editTextOPStory, editTextOPLocation, editTextOPDate, editTextOPTime;
@@ -51,6 +52,7 @@ public class OnePhoto extends Activity{
         setContentView(R.layout.one_photo);
         
         ftID = this.getIntent().getExtras().getString( "_ID" );
+        forResult = this.getIntent().getExtras().getInt( "forResult" );
         
         imgUtil = new ImageUtil();
         

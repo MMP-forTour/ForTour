@@ -72,6 +72,7 @@ public class ListPage extends ListActivity {
 			Bundle bundle = new Bundle();
 			intent.setClass( ListPage.this, OnePhoto.class );
 			bundle.putString( "_ID", selectedItem.getString( 0 ) );
+			bundle.putInt( "forResult", position );
 			intent.putExtras( bundle );
 			startActivity( intent );
 			/* TODO: may need refresh list when edit page finished */
