@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,11 +65,13 @@ public class ListPage extends ListActivity {
 			
 			Intent intent = new Intent();
 			Bundle bundle = new Bundle();
-			intent.setClass( ListPage.this, OnePhoto.class );
+			
 			bundle.putString( "_ID", selectedItem.getString( 0 ) );
+			
 			intent.putExtras( bundle );
+			intent.setClass( ListPage.this, OnePhoto.class );
+			
 			startActivity( intent );
-			/* need update if there is edit */
 		}
 	};
 	
@@ -78,7 +81,7 @@ public class ListPage extends ListActivity {
 		
 		@Override
 		public void onScroll(	AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-			if( firstVisibleItem + visibleItemCount == totalItemCount ) {
+			if( ( totalItemCount != 0 ) && ( firstVisibleItem + visibleItemCount == totalItemCount ) ) {
 				if( !noMoreData ) {
 					if( !inLoading ) {
 						( new asycLoading() ).execute();
@@ -225,6 +228,15 @@ public class ListPage extends ListActivity {
 		ImageUtil.freeBitmap( bm );
 	}
 	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		/* NOTE: This will update the list when resume(return from another activity).
+		 *       But we need an elegant method. */
+		updateListView();
+	}
+	
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //參數1:群組id, 參數2:itemId, 參數3:item順序, 參數4:item名稱
@@ -253,6 +265,4 @@ public class ListPage extends ListActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }
