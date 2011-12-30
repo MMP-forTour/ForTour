@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="@drawable/one_photo_i" >
+    android:background="@drawable/one_photo_i" android:id="@+id/one_photo_info">
 
         <FrameLayout
             android:id="@+id/frameLayout1"
@@ -14,7 +14,7 @@
                 android:id="@+id/btn_close"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/close" android:layout_gravity="bottom|right"/>
+                android:background="@drawable/close" android:layout_gravity="bottom|right" android:visibility="gone"/>
 
         </FrameLayout>
 
