@@ -23,7 +23,7 @@ public class DbAdapter {
 	public static final String KEY_STORY		= "ftStory";
 	public static final String KEY_LOCATION	= "ftLocation";
 	public static final String KEY_HAS_RECORD	= "ftHasRecord";
-	public static final String KEY_SAVETIME	= "ftSaveTime";
+	public static final String KEY_STORYTIME	= "ftStoryTime";
 	public static final String KEY_LATITUDE	= "ftLatitude";
 	public static final String KEY_LONGITUDE	= "ftLongitude";
 	public static final String KEY_MOODIMAGE	= "ftMoodImage";
@@ -35,7 +35,7 @@ public class DbAdapter {
 					KEY_STORY + " TEXT NULL," +
 					KEY_LOCATION + " TEXT NULL," +
 					KEY_HAS_RECORD + " INTEGER NOT NULL," +
-					KEY_SAVETIME + " LONG," +
+					KEY_STORYTIME + " LONG," +
 					KEY_LATITUDE + " DOUBLE NULL," +
 					KEY_LONGITUDE + " DOUBLE NULL," +
 					KEY_MOODIMAGE + " INTEGER DEFAULT 0" +
@@ -86,7 +86,7 @@ public class DbAdapter {
 		initValues.put( KEY_LONGITUDE, ftLongitude );
 		initValues.put( KEY_MOODIMAGE, ftMoodImage );
 		
-		initValues.put( KEY_SAVETIME, ( new Date() ).getTime() );
+		initValues.put( KEY_STORYTIME, ( new Date() ).getTime() );
 		
 		return mDb.insert( DATABASE_TABLE, null, initValues );
 	}
@@ -114,12 +114,12 @@ public class DbAdapter {
 	
 	public Cursor ftStoryFetchAll() {
 		return mDb.query(	DATABASE_TABLE , 
-							new String[] { KEY_ROWID, KEY_IMAGE, KEY_STORY, KEY_SAVETIME },
+							new String[] { KEY_ROWID, KEY_IMAGE, KEY_STORY, KEY_STORYTIME },
 							null, null, null, null, KEY_ROWID + " DESC" );
 	}
 	
 	public Cursor ftStoryFetchPartial( final int amount ) {
-		final String queryString =	"SELECT " + KEY_ROWID + ", " + KEY_IMAGE + ", " + KEY_STORY + ", " + KEY_SAVETIME + " " +
+		final String queryString =	"SELECT " + KEY_ROWID + ", " + KEY_IMAGE + ", " + KEY_STORY + ", " + KEY_STORYTIME + " " +
 									"FROM " + DATABASE_TABLE + " " +
 									"ORDER BY " + KEY_ROWID + " DESC " +
 									"LIMIT 0, " + amount + " "; 
@@ -130,7 +130,7 @@ public class DbAdapter {
 	public Cursor ftStoryFetchByID( final String ftID ) {
 		Cursor cursor =  mDb.query(	DATABASE_TABLE , 
 									new String[] { KEY_IMAGE, KEY_STORY,
-												   KEY_LOCATION, KEY_HAS_RECORD, KEY_SAVETIME, 
+												   KEY_LOCATION, KEY_HAS_RECORD, KEY_STORYTIME, 
 												   KEY_LATITUDE, KEY_LONGITUDE, KEY_MOODIMAGE },
 									KEY_ROWID + "=?",
 									new String[] { ftID },

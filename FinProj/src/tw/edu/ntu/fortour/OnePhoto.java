@@ -277,6 +277,7 @@ public class OnePhoto extends Activity{
     	switch( requestCode ) {
 		case ForTour.EDIT_ONE_PHOTO:
 			if( resultCode == Activity.RESULT_OK ) {
+				// NOTE: Any good idea to refresh?
 				Intent i = getIntent();
 				finish();
 				startActivity( i );

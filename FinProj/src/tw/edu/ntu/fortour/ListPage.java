@@ -99,7 +99,7 @@ public class ListPage extends ListActivity {
 	        String[] from = new String[] {
 	        		DbAdapter.KEY_IMAGE,
 	        		DbAdapter.KEY_STORY,
-	        		DbAdapter.KEY_SAVETIME
+	        		DbAdapter.KEY_STORYTIME
 	        };
 			int[] to = new int[] {
 					R.id.imageViewLMRImage,
