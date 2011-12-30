@@ -9,13 +9,6 @@
             android:id="@+id/frameLayout1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" >
-
-            <Button
-                android:id="@+id/btn_close"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/close" android:layout_gravity="bottom|right" android:visibility="gone"/>
-
         </FrameLayout>
 
 </LinearLayout>
