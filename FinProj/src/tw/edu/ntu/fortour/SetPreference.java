@@ -34,8 +34,8 @@ import com.dropbox.client2.session.TokenPair;
 
 public class SetPreference extends PreferenceActivity 
 implements OnPreferenceChangeListener, OnPreferenceClickListener {
-	private static final String TAG = "Settings";
-	private static final String SYNC_DROPBOX = "sync_db";
+	static final String TAG = "Settings";
+	static final String SYNC_DROPBOX = "sync_db";
 	
 	final static private String APP_KEY = "t80g3k4j17kbyjb";
 	final static private String APP_SECRET = "g2f6spmfn1kazv5";
@@ -48,13 +48,14 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
     final static private String ACCOUNT_PREFS_NAME = "prefs";
     final static private String ACCESS_KEY_NAME = "ACCESS_KEY";
     final static private String ACCESS_SECRET_NAME = "ACCESS_SECRET";
+    //final static private String LOGIN_STATUS = "LogInStatus";
+    //final static private String LOGIN_PREFS_NAME = "mLoggedIn";
 
     static DropboxAPI<AndroidAuthSession> mApi;
-    private boolean mLoggedIn;
+    //private boolean mLoggedIn;
     private final static String PHOTO_DIR = "/Photos/"; 
     private ImageButton btn_done;
-    private CheckBoxPreference sync_db;
-//    private String fileName = null;
+    CheckBoxPreference sync_db;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,15 +69,14 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
         setContentView(R.layout.settings_main);
         sync_db = (CheckBoxPreference)findPreference(SYNC_DROPBOX); 
         sync_db.setOnPreferenceChangeListener(this);  
-        //sync_db.setOnPreferenceClickListener(this); 
+        sync_db.setOnPreferenceClickListener(this); 
         btn_done = (ImageButton) findViewById(R.id.btn_done);
         
         checkAppKeySetup();
         
         // Display the proper UI state if logged in or not
-        setLoggedIn(mApi.getSession().isLinked());
-        mLoggedIn = mApi.getSession().isLinked();
-        Log.i("btn_done_before", "login="+mApi.getSession().isLinked());
+        //setLoggedIn(mApi.getSession().isLinked());
+        //Log.i("btn_done_before", "login="+mApi.getSession().isLinked());
         
         btn_done.setOnClickListener(new View.OnClickListener() {	
 			public void onClick(View v) {
@@ -101,10 +101,6 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
                 // Store it locally in our app for later use
                 TokenPair tokens = session.getAccessTokenPair();
                 storeKeys(tokens.key, tokens.secret);
-                /*if (mLoggedIn)
-                	setLoggedIn(true);
-                else
-                	setLoggedIn(false);*/
             } catch (IllegalStateException e) {
                 showToast("Couldn't authenticate with Dropbox:" + e.getLocalizedMessage());
                 Log.i(TAG, "Error authenticating", e);
@@ -116,7 +112,6 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
      * Convenience function to change UI state based on being logged in
      */
     private void setLoggedIn(boolean loggedIn) {
-    	mLoggedIn = loggedIn;
     	if (loggedIn) {
     		sync_db.setChecked(true);
     	} else {
@@ -232,13 +227,13 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
 	    // TODO Auto-generated method stub
     	String key = preference.getKey();
         if (SYNC_DROPBOX.equals(key)) {
-        	mLoggedIn = (Boolean) newValue;
-            if (mLoggedIn) {
-            	// Start the remote authentication
-                mApi.getSession().startAuthentication(SetPreference.this);
+        	//mLoggedIn = (Boolean) newValue;
+            if (mApi.getSession().isLinked()) {
+            	logOut();
             }
             else
-            	logOut();
+            	// Start the remote authentication
+                mApi.getSession().startAuthentication(SetPreference.this);
         }
 	    return true;
     }
@@ -246,7 +241,7 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
 	//This is what get called when save a picture
     public static void uploadDB(String fileName, Context ctx) {
     	if (mApi.getSession().authenticationSuccessful()) {
-    		Log.i(TAG, "upload!!!!!!!!");
+    		Log.i(TAG, "upload!");
     		Uri uri = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
     				  ForTour.DIR_WORK + "/" + fileName ) );
     		File file;
@@ -270,7 +265,7 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //參數1:群組id, 參數2:itemId, 參數3:item順序, 參數4:item名稱
-        menu.add(0, 0, 0, "Info");
+        //menu.add(0, 0, 0, "Info");
         return super.onCreateOptionsMenu(menu);
     }
     
@@ -285,4 +280,5 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

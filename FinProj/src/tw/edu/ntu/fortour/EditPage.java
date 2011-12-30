@@ -17,6 +17,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.location.LocationManager;
@@ -24,6 +25,7 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
@@ -172,8 +174,8 @@ public class EditPage extends Activity {
 															)
 														 );
 							Bitmap.createScaledBitmap( bm, imgUtil.THUMB_SIZE, imgUtil.THUMB_SIZE, true ).compress( Bitmap.CompressFormat.PNG, 90, thumbFile );
-							
-							checkSyncDropbox();
+							if ( SetPreference.mApi != null )
+								checkSyncDropbox();
 						}
 						catch( FileNotFoundException e ) { }
 						
@@ -555,22 +557,27 @@ public class EditPage extends Activity {
 	}
 	
 	private void checkSyncDropbox(){
-		AndroidAuthSession session = SetPreference.mApi.getSession();
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		// then you use
+		Boolean linked = prefs.getBoolean(SetPreference.SYNC_DROPBOX, false);
+		if (linked) {
+			AndroidAuthSession session = SetPreference.mApi.getSession();
 
-        // The next part must be inserted in the onResume() method of the
-        // activity from which session.startAuthentication() was called, so
-        // that Dropbox authentication completes properly.
-        if (session.authenticationSuccessful()) {
-            try {
-            	// Mandatory call to complete the auth
-                session.finishAuthentication();
+			// The next part must be inserted in the onResume() method of the
+			// activity from which session.startAuthentication() was called, so
+			// that Dropbox authentication completes properly.
+			if (session.authenticationSuccessful()) {
+				try {
+					// Mandatory call to complete the auth
+					session.finishAuthentication();
                 
-                SetPreference.uploadDB(mFileName, EditPage.this);
-            } catch (IllegalStateException e) {
-                showToast("Couldn't authenticate with Dropbox:" + e.getLocalizedMessage());
-                Log.i(TAG, "Error authenticating", e);
-            }
-        }
+					SetPreference.uploadDB(mFileName, EditPage.this);
+				} catch (IllegalStateException e) {
+					showToast("Couldn't authenticate with Dropbox:" + e.getLocalizedMessage());
+					Log.i(TAG, "Error authenticating", e);
+				}
+			}
+		}
 	}
 	
 	private void showToast(String msg) {
