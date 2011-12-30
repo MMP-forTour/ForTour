@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -80,7 +81,7 @@ public class ListPage extends ListActivity {
 		
 		@Override
 		public void onScroll(	AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-			if( firstVisibleItem + visibleItemCount == totalItemCount ) {
+			if( ( totalItemCount != 0 ) && ( firstVisibleItem + visibleItemCount == totalItemCount ) ) {
 				if( !noMoreData ) {
 					if( !inLoading ) {
 						( new asycLoading() ).execute();
