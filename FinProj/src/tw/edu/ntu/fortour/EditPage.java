@@ -86,6 +86,7 @@ public class EditPage extends Activity {
         
 		Bundle extras = getIntent().getExtras();
         if( extras != null ) {
+            mFileName = extras.getString( "FILE" );
             ftID = extras.getString("_ID");
         }
         
