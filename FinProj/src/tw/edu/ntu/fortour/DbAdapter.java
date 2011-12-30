@@ -1,7 +1,5 @@
 package tw.edu.ntu.fortour;
 
-import java.util.Date;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -75,7 +73,8 @@ public class DbAdapter {
 	public long ftStoryAdd( final String ftImage,
 							 final String ftStory, final String ftLocation,
 							 final int ftHasRecord, final double ftLatitude,
-							 final double ftLongitude, final int ftMoodImage ) {
+							 final double ftLongitude, final int ftMoodImage,
+							 final long ftStoryTime ) {
 		
 		ContentValues initValues = new ContentValues();
 		initValues.put( KEY_IMAGE, ftImage );
@@ -85,8 +84,7 @@ public class DbAdapter {
 		initValues.put( KEY_LATITUDE, ftLatitude );
 		initValues.put( KEY_LONGITUDE, ftLongitude );
 		initValues.put( KEY_MOODIMAGE, ftMoodImage );
-		
-		initValues.put( KEY_STORYTIME, ( new Date() ).getTime() );
+		initValues.put( KEY_STORYTIME, ftStoryTime );
 		
 		return mDb.insert( DATABASE_TABLE, null, initValues );
 	}
@@ -94,7 +92,8 @@ public class DbAdapter {
 	public boolean ftStoryUpdByID( final String ftID, final String ftImage,
 								 final String ftStory, final String ftLocation,
 								 final int ftHasRecord, final double ftLatitude,
-								 final double ftLongitude, final int ftMoodImage ) {
+								 final double ftLongitude, final int ftMoodImage,
+								 final long ftStoryTime ) {
 		
 		ContentValues initValues = new ContentValues();
 		initValues.put( KEY_IMAGE, ftImage );
@@ -104,6 +103,7 @@ public class DbAdapter {
 		initValues.put( KEY_LATITUDE, ftLatitude );
 		initValues.put( KEY_LONGITUDE, ftLongitude );
 		initValues.put( KEY_MOODIMAGE, ftMoodImage );
+		initValues.put( KEY_STORYTIME, ftStoryTime );
 		
 		return ( mDb.update( DATABASE_TABLE, initValues, KEY_ROWID + "=?", new String[] { ftID } ) > 0  );
 	}

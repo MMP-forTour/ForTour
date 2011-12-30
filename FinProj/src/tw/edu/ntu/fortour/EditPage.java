@@ -154,7 +154,8 @@ public class EditPage extends Activity {
 																( ( hasRecord != false ) ? 1 : 0 ),
 																locLatitude,
 																locLongitute,
-																mMoodIndex
+																mMoodIndex,
+																Util.datetimeStringToMSec( ftStoryTimeDate, ftStoryTimeTime )
 															);
 					
 					if( rst == -1 ) Toast.makeText( EditPage.this, getString( R.string.stringSaveStoryFail ), Toast.LENGTH_LONG ).show();
@@ -195,7 +196,8 @@ public class EditPage extends Activity {
 																			( ( hasRecord != false ) ? 1 : 0 ),
 																			locLatitude,
 																			locLongitute,
-																			mMoodIndex
+																			mMoodIndex,
+																			Util.datetimeStringToMSec( ftStoryTimeDate, ftStoryTimeTime )
 																			);
 
 							if( !rst ) Toast.makeText( EditPage.this, getString( R.string.stringUpdateStoryFail ), Toast.LENGTH_LONG ).show();
