@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.Calendar;
 
 import com.dropbox.client2.android.AndroidAuthSession;
-import com.dropbox.client2.session.TokenPair;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -175,12 +174,6 @@ public class EditPage extends Activity {
 							Bitmap.createScaledBitmap( bm, imgUtil.THUMB_SIZE, imgUtil.THUMB_SIZE, true ).compress( Bitmap.CompressFormat.PNG, 90, thumbFile );
 							
 							checkSyncDropbox();
-//							Intent i = new Intent();
-//							i.setClass(EditPage.this, SetPreference.class);
-//							Bundle bundle = new Bundle();
-//							bundle.putString( "FILE", mFileName );
-//							i.putExtras(bundle);
-//							startActivity(i);
 						}
 						catch( FileNotFoundException e ) { }
 						
