@@ -40,8 +40,8 @@
         <activity android:name="tw.edu.ntu.fortour.OnePhoto" android:screenOrientation="portrait"></activity>
         <activity android:name="tw.edu.ntu.fortour.SetPreference" android:screenOrientation="portrait"></activity>
         <activity android:name="tw.edu.ntu.fortour.LocationMap" android:screenOrientation="portrait"></activity>
-        <activity android:name="tw.edu.ntu.fortour.ForTourInfo" android:screenOrientation="portrait"></activity>
-        <activity android:name="tw.edu.ntu.fortour.EditPageInfo" android:screenOrientation="portrait"></activity>
+        <activity android:name="tw.edu.ntu.fortour.ForTourInfo" android:screenOrientation="portrait" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"></activity>
+        <activity android:name="tw.edu.ntu.fortour.EditPageInfo" android:screenOrientation="portrait" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"></activity>
 
     </application>
 </manifest>
