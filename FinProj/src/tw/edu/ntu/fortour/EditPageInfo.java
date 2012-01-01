@@ -19,14 +19,6 @@ public class EditPageInfo extends Activity implements OnTouchListener{
         LinearLayout bg = (LinearLayout) findViewById(R.id.one_photo_info);
         bg.setOnTouchListener(this);
     }
- 
-    @Override
-    public void onBackPressed() {
-    	super.onBackPressed();
-    	
-    	finish();
-		overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
-    }
 
 	@Override
     public boolean onTouch(View v, MotionEvent event) {

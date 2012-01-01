@@ -209,70 +209,24 @@ public class ForTour extends Activity {
 	}
     
     private void doCrop() {
-		final ArrayList<CropOption> cropOptions = new ArrayList<CropOption>();   	
-    	
-		Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setType("image/*");
-        
-        List<ResolveInfo> list = getPackageManager().queryIntentActivities( intent, 0 );        
-        int size = list.size();        
-        
-        if (size == 0) {	        
-        	Toast.makeText(this, "Can not find image crop app", Toast.LENGTH_SHORT).show();       	
-            return;
-        } else {
-        	mImageDirayUri = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
-        											  DIR_WORK + "/" + mFileName ) );
-        	
-        	intent.setData(mImageCaptureUri);        
-            intent.putExtra("outputX", ImageUtil.imageInnerWidth );
-            intent.putExtra("outputY", ImageUtil.imageInnerHeight );
-            intent.putExtra("aspectX", 1);
-            intent.putExtra("aspectY", 1);
-            intent.putExtra("scale", true);
-            intent.putExtra("return-data", false);
-            intent.putExtra( MediaStore.EXTRA_OUTPUT, mImageDirayUri );
-            intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
-      
-        	if (size == 1) {
-        		Intent i = new Intent(intent);
-	        	ResolveInfo res	= list.get(0);        	
-	        	i.setComponent( new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-	        	startActivityForResult(i, CROP_FROM_CAMERA);
-        	} 
-        	else {
-		        for (ResolveInfo res : list) {
-		        	final CropOption co = new CropOption();		        	
-		        	co.title 	= getPackageManager().getApplicationLabel(res.activityInfo.applicationInfo);
-		        	co.icon		= getPackageManager().getApplicationIcon(res.activityInfo.applicationInfo);
-		        	co.appIntent= new Intent(intent);		        	
-		        	co.appIntent.setComponent( new ComponentName(res.activityInfo.packageName, res.activityInfo.name));		        	
-		            cropOptions.add(co);
-		        }
-	        
-		        CropOptionAdapter adapter = new CropOptionAdapter(getApplicationContext(), cropOptions);
-		        
-		        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		        builder.setTitle("Choose Crop App");
-		        builder.setAdapter( adapter, new DialogInterface.OnClickListener() {
-		            public void onClick( DialogInterface dialog, int item ) {
-		                startActivityForResult( cropOptions.get(item).appIntent, CROP_FROM_CAMERA);
-		            }
-		        });
-	        
-		        builder.setOnCancelListener( new DialogInterface.OnCancelListener() {
-		            public void onCancel( DialogInterface dialog ) {		               
-		                if (mImageCaptureUri != null ) {
-		                    getContentResolver().delete(mImageCaptureUri, null, null );
-		                    mImageCaptureUri = null;
-		                }
-		            }
-		        } );
-		        
-		        AlertDialog alert = builder.create();		        
-		        alert.show();
-        	}
-        }
+		Intent intent = new Intent(this, tw.edu.ntu.fortour.crop.CropImage.class);
+		intent.setType("image/*");
+
+       	mImageDirayUri = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
+       											  DIR_WORK + "/" + mFileName ) );
+        	      
+        intent.putExtra("outputX", ImageUtil.imageInnerWidth );
+        intent.putExtra("outputY", ImageUtil.imageInnerHeight );
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("scale", true);
+        intent.putExtra("return-data", false);
+        intent.putExtra("srcimage-path", mImageCaptureUri.getPath());
+        intent.putExtra("image-path", mImageDirayUri.getPath());
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
+            
+        Intent i = new Intent(intent);
+        startActivityForResult(i, CROP_FROM_CAMERA);
 	}
     
     @Override
