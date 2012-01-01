@@ -1,16 +1,15 @@
 package tw.edu.ntu.fortour;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+
+import com.droid4you.util.cropimage.CropImage;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,7 +25,7 @@ import android.widget.Toast;
 
 public class ForTour extends Activity {
     private ImageButton add, view, set;
-    private Uri mImageCaptureUri, mImageDirayUri;
+    private Uri mImageCaptureUri, mImageDiaryUri;
     private String mFileName;
     
     protected static DbAdapter mDbHelper;
@@ -124,6 +123,7 @@ public class ForTour extends Activity {
 		
 		builder.setTitle("Select Image");
 		builder.setAdapter( adapter, new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick( DialogInterface dialog, int item ) {
 				// The real filename
 				mFileName = Util.getFileName( EXT_PHOTO );
@@ -153,6 +153,7 @@ public class ForTour extends Activity {
 		
 		final AlertDialog dialog = builder.create();
 		add.setOnClickListener(new View.OnClickListener() {	
+			@Override
 			public void onClick(View v) {
 				dialog.show();
 			}
@@ -161,14 +162,16 @@ public class ForTour extends Activity {
     
     private void setButtonListener(){
         view.setOnClickListener(new Button.OnClickListener(){
-        	public void onClick(View arg0){
+        	@Override
+			public void onClick(View arg0){
         		Intent intent = new Intent();
         		intent.setClass( ForTour.this, ListPage.class );        		
         		startActivity( intent );
         	}
         });
         set.setOnClickListener(new Button.OnClickListener(){
-        	public void onClick(View arg0){
+        	@Override
+			public void onClick(View arg0){
         		Intent intent = new Intent();
         		intent.setClass( ForTour.this, SetPreference.class );
         		startActivity( intent );
@@ -186,8 +189,17 @@ public class ForTour extends Activity {
 		    	break;
 		    	
 		    case PICK_FROM_FILE: 
-		    	mImageCaptureUri = data.getData();
-		    	doCrop();
+		    	try {
+		            Cursor cursor = managedQuery( data.getData(), new String[] { MediaStore.Images.Media.DATA }, null, null, null );	     
+		            int column_index = cursor.getColumnIndexOrThrow( MediaStore.Images.Media.DATA );
+		            cursor.moveToFirst();
+		            mImageCaptureUri = Uri.parse( cursor.getString( column_index ) );
+	
+			    	doCrop();
+		    	}
+		    	catch( Exception e ) {
+		    		Toast.makeText( ForTour.this, "Exception: " + e.getLocalizedMessage(), Toast.LENGTH_LONG ).show();
+		    	}
 		    	break;
 	    
 		    case CROP_FROM_CAMERA:
@@ -209,20 +221,20 @@ public class ForTour extends Activity {
 	}
     
     private void doCrop() {
-		Intent intent = new Intent(this, tw.edu.ntu.fortour.crop.CropImage.class);
+		Intent intent = new Intent(this, CropImage.class);
 		intent.setType("image/*");
 
-       	mImageDirayUri = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
+       	mImageDiaryUri = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
        											  DIR_WORK + "/" + mFileName ) );
-        	      
+
+       	intent.putExtra("image-path", mImageCaptureUri.getPath());
         intent.putExtra("outputX", ImageUtil.imageInnerWidth );
         intent.putExtra("outputY", ImageUtil.imageInnerHeight );
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
         intent.putExtra("scale", true);
         intent.putExtra("return-data", false);
-        intent.putExtra("srcimage-path", mImageCaptureUri.getPath());
-        intent.putExtra("image-path", mImageDirayUri.getPath());
+        intent.putExtra( MediaStore.EXTRA_OUTPUT, mImageDiaryUri.getPath() );
         intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
             
         Intent i = new Intent(intent);
