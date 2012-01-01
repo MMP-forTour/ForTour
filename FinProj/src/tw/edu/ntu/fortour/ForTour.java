@@ -27,7 +27,7 @@ import android.widget.Toast;
 public class ForTour extends Activity {
     private ImageButton add, view, set;
     private Uri mImageCaptureUri, mImageDirayUri;
-    private String mFilename;
+    private String mFileName;
     
     protected static DbAdapter mDbHelper;
 
@@ -55,6 +55,9 @@ public class ForTour extends Activity {
         
         mDbHelper = new DbAdapter( this );
         mDbHelper.open();
+        
+        // Initial default filename
+        mFileName = Util.getFileName( EXT_PHOTO );
         
         checkWorkDirs();
         findviews();
@@ -122,13 +125,14 @@ public class ForTour extends Activity {
 		builder.setTitle("Select Image");
 		builder.setAdapter( adapter, new DialogInterface.OnClickListener() {
 			public void onClick( DialogInterface dialog, int item ) {
-				mFilename = String.valueOf(System.currentTimeMillis()) + EXT_PHOTO;
+				// The real filename
+				mFileName = Util.getFileName( EXT_PHOTO );
 				
 				if (item == 0) {
 					//pick from camera
 					Intent intent 	 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);					
 					mImageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
-									   DIR_WORK + "/" + DIR_TEMP + "/" + mFilename ));
+									   DIR_WORK + "/" + DIR_TEMP + "/" + mFileName ));
 					intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
 					
 					try {
@@ -193,7 +197,7 @@ public class ForTour extends Activity {
 					Intent intent1 = new Intent();
 					intent1.setClass(ForTour.this, EditPage.class);
 					Bundle bundle = new Bundle();
-					bundle.putString( "FILE", mFilename );
+					bundle.putString( "FILE", mFileName );
 					intent1.putExtras(bundle);
 					startActivityForResult(intent1, PASS_ONE_PHOTO);  
 		        }
@@ -218,7 +222,7 @@ public class ForTour extends Activity {
             return;
         } else {
         	mImageDirayUri = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
-        											  DIR_WORK + "/" + mFilename ) );
+        											  DIR_WORK + "/" + mFileName ) );
         	
         	intent.setData(mImageCaptureUri);        
             intent.putExtra("outputX", ImageUtil.imageInnerWidth );

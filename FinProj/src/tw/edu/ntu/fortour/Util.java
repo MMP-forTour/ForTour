@@ -33,6 +33,10 @@ public class Util {
 		return cal;
 	}
 	
+	public static String getFileName( final String fileExt ) {
+		return String.valueOf(System.currentTimeMillis()) + fileExt;
+	}
+	
 	public static boolean checkFile( final File file ) {
 		return file.exists();
 	}

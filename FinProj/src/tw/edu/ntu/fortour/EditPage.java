@@ -88,6 +88,10 @@ public class EditPage extends Activity {
         if( extras != null ) {
             mFileName = extras.getString( "FILE" );
             ftID = extras.getString("_ID");
+            
+            // TODO: Partially experimental solution? Why some user will encounter
+            //        mFileName is null?
+            if( mFileName == null ) mFileName = Util.getFileName( ForTour.EXT_PHOTO );
         }
         
         if( ftID != null ) {
