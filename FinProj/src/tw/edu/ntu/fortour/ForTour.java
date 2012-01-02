@@ -7,6 +7,7 @@ import com.droid4you.util.cropimage.CropImage;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -188,18 +189,28 @@ public class ForTour extends Activity {
 		    	doCrop();    	
 		    	break;
 		    	
-		    case PICK_FROM_FILE: 
-		    	try {
-		            Cursor cursor = managedQuery( data.getData(), new String[] { MediaStore.Images.Media.DATA }, null, null, null );	     
-		            int column_index = cursor.getColumnIndexOrThrow( MediaStore.Images.Media.DATA );
-		            cursor.moveToFirst();
-		            mImageCaptureUri = Uri.parse( cursor.getString( column_index ) );
-	
-			    	doCrop();
-		    	}
-		    	catch( Exception e ) {
-		    		Toast.makeText( ForTour.this, "Exception: " + e.getLocalizedMessage(), Toast.LENGTH_LONG ).show();
-		    	}
+		    case PICK_FROM_FILE:
+		    	mImageCaptureUri = data.getData();
+
+				if( mImageCaptureUri.getScheme().equals( ContentResolver.SCHEME_CONTENT ) ) {
+			    	try {
+			            Cursor cursor = managedQuery( data.getData(), new String[] { MediaStore.Images.Media.DATA }, null, null, null );	     
+			            int column_index = cursor.getColumnIndexOrThrow( MediaStore.Images.Media.DATA );
+			            cursor.moveToFirst();
+			            mImageCaptureUri = Uri.parse( cursor.getString( column_index ) );
+		
+				    	doCrop();
+			    	}
+			    	catch( Exception e ) {
+			    		Toast.makeText( ForTour.this, "Exception: " + e.getLocalizedMessage(), Toast.LENGTH_LONG ).show();
+			    	}
+				}
+				else if ( mImageCaptureUri.getScheme().equals( ContentResolver.SCHEME_FILE ) ) {
+					doCrop();
+				}
+				else {
+					Toast.makeText( ForTour.this, "Error when retrieve data.", Toast.LENGTH_LONG ).show();
+				}
 		    	break;
 	    
 		    case CROP_FROM_CAMERA:
