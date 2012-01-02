@@ -10,17 +10,30 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:layout_weight="1" />
-
-    <com.google.android.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="8"
-    	android:apiKey="0rqcx9putsFRGDSaK44e1acJsyN3zDLHM73RGRw" />  
-    	  
-    <!-- weiru's key: android:apiKey="0fM4d1bStJDZxjRkBnbW960U6sxUatXnI8cRsGw" /> -->
-    <!-- releasekey: android:apiKey="02gXC0ywZl69krUW8aZoDhn10k135ApymOEiL1w" /> -->
-    <!-- debugkey:   android:apiKey="0rqcx9putsFRGDSaK44e1acJsyN3zDLHM73RGRw" /> -->
+    
+	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  		android:layout_width="fill_parent"
+  		android:layout_height="fill_parent"
+  		android:layout_weight="8" >
+  
+	    <com.google.android.maps.MapView
+	        android:id="@+id/mapView"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	    	android:apiKey="0rqcx9putsFRGDSaK44e1acJsyN3zDLHM73RGRw" />  
+	    	  
+	    <!-- weiru's key: android:apiKey="0fM4d1bStJDZxjRkBnbW960U6sxUatXnI8cRsGw" /> -->
+	    <!-- releasekey: android:apiKey="02gXC0ywZl69krUW8aZoDhn10k135ApymOEiL1w" /> -->
+	    <!-- debugkey:   android:apiKey="0rqcx9putsFRGDSaK44e1acJsyN3zDLHM73RGRw" /> -->
+	    
+	    <ImageView
+	        android:id="@+id/imageViewLMDrag"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:src="@drawable/locate"
+		    android:visibility="gone" /> 
+    
+    </RelativeLayout>
     
     <LinearLayout
         android:id="@+id/linearLayoutActions"
