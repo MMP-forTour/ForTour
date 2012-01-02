@@ -19,6 +19,7 @@
     <string name="stringDoYouWantToDeleteIt">Do you want to delete it?</string>
     <string name="stringServiceCanNotBeUsedNow">Service can not be used now</string>
     <string name="stringUnableToRetrieveLocationNow">Unable to retrieve location now</string>
+    <string name="stringUnableToProcessDataNow">Unable to process data Now</string>
     <string name="stringNoLocationInformation">No location information</string>
     <string name="stringNoInternetConnection">No Internet connection</string>
     <string name="stringThereIsNoDataNow">There is no data now</string>
