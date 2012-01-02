@@ -60,6 +60,7 @@ public class ForTour extends Activity {
         mFileName = Util.getFileName( EXT_PHOTO );
         
         checkWorkDirs();
+        
         findviews();
         setCamera();
         setButtonListener();
@@ -92,6 +93,13 @@ public class ForTour extends Activity {
     	return true;
     }
     
+    private boolean checkExternalAvaliable() {
+    	String state = Environment.getExternalStorageState();
+    	
+    	if( state.equals( Environment.MEDIA_MOUNTED ) ) return true;
+    	else return false;
+    }
+    
     private boolean checkDirExistOrCreate( boolean isExternal, final String dirPath ) {
     	File dir;
     	
@@ -108,11 +116,16 @@ public class ForTour extends Activity {
     }
     
     private void checkWorkDirs() {
-    	if( !checkDirExistOrCreate( true, DIR_WORK + "/" ) ||
-    		!checkDirExistOrCreate( true, DIR_WORK + "/" + DIR_TEMP + "/" ) ||
-    		!checkDirExistOrCreate( true, DIR_WORK + "/" + DIR_THUMB + "/" ) ) {
-    		
-    		Toast.makeText( this, "Working Directory Creation Fail.", Toast.LENGTH_SHORT ).show();
+    	if( checkExternalAvaliable() ) {
+	    	if( !checkDirExistOrCreate( true, DIR_WORK + "/" ) ||
+	    		!checkDirExistOrCreate( true, DIR_WORK + "/" + DIR_TEMP + "/" ) ||
+	    		!checkDirExistOrCreate( true, DIR_WORK + "/" + DIR_THUMB + "/" ) ) {
+	    		
+	    		Toast.makeText( this, "Working Directory Creation Fail", Toast.LENGTH_LONG ).show();
+	    	}
+    	}
+    	else {
+    		Toast.makeText( this, "External Storage not Avaliable Now", Toast.LENGTH_LONG ).show();
     	}
     }
     
