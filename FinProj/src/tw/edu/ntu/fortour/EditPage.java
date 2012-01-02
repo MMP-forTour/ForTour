@@ -88,11 +88,6 @@ public class EditPage extends Activity {
         if( extras != null ) {
             mFileName = extras.getString( "FILE" );
             ftID = extras.getString("_ID");
-
-            if( mFileName == null ) {
-            	Toast.makeText( EditPage.this, getString( R.string.stringUnableToProcessDataNow ), Toast.LENGTH_LONG ).show();
-            	finish();
-            }
         }
         
         if( ftID != null ) {
@@ -121,6 +116,12 @@ public class EditPage extends Activity {
             c.close();
             
             buttonOPSticker.setImageResource( ImageUtil.imageMoodFiles[ mMoodIndex ] );
+        }
+        
+        /* It mFileName is NULL, leave */
+        if( mFileName == null ) {
+        	Toast.makeText( EditPage.this, getString( R.string.stringUnableToProcessDataNow ), Toast.LENGTH_LONG ).show();
+        	finish();
         }
         
         mMediaFileName = mFileName.replace( ForTour.EXT_PHOTO, ForTour.EXT_RECORD );
