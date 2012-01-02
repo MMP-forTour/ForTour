@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
@@ -39,6 +40,7 @@ import com.google.android.maps.OverlayItem;
 public class LocationMap extends MapActivity {
 	private ProgressDialog mProgressDialog;
 	private Button mButtonLMOk, mButtonLMLocation, mButtonLMCancel, mButtonLMBack;
+	private TextView mTextViewLMLocation;
 	private MapView mMapView;
 	private MapController mMapController;
 	private GeoPoint mGeoPoint, mManualGeoPoint;
@@ -56,7 +58,7 @@ public class LocationMap extends MapActivity {
 	protected static String KEY_LOCNAME   = "KEY_LOCNAME";
 	protected static String KEY_UPDMODE   = "KEY_UPDMODE";
 	
-	private final int ADDRESS_LIMIT = 10;
+	private final int ADDRESS_LIMIT = 5;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -84,6 +86,7 @@ public class LocationMap extends MapActivity {
         mButtonLMLocation  = (Button) findViewById( R.id.buttonLMDetermine );
         mButtonLMCancel    = (Button) findViewById( R.id.buttonLMCancel );
         mButtonLMBack      = (Button) findViewById( R.id.buttonLMBack );
+        mTextViewLMLocation= (TextView) findViewById( R.id.textViewLMLocation );
         mMapView		   = (MapView) findViewById( R.id.mapView );
         
         mProgressDialog = new ProgressDialog( LocationMap.this );
@@ -123,6 +126,11 @@ public class LocationMap extends MapActivity {
 	        	mButtonLMLocation.setVisibility( View.GONE );
 	        	mButtonLMCancel.setVisibility( View.GONE );
 	        	mButtonLMBack.setVisibility( View.VISIBLE );
+	        	
+	        	if( !"".equals( locName ) ) {
+	        		mTextViewLMLocation.setText( locName );
+	        		mTextViewLMLocation.setVisibility( View.VISIBLE );
+	        	}
         	}
         	determinLocation.run();
         }
@@ -195,7 +203,7 @@ public class LocationMap extends MapActivity {
 				}
 			}
 			catch( Exception e ) { 
-				Toast.makeText( LocationMap.this, getString( R.string.stringUnableToRetrieveLocationListNow ), Toast.LENGTH_SHORT ).show();
+				Toast.makeText( LocationMap.this, getString( R.string.stringLocationList ) + ": " + e.getLocalizedMessage(), Toast.LENGTH_SHORT ).show();
 			} 
 		}
 	};
@@ -208,11 +216,12 @@ public class LocationMap extends MapActivity {
 				
 				mProgressDialog.show();
 
+				mMapOverlays.clear();
 				
-				// TODO: Need an elegant way to remove added overlay
-				if( mMapOverlays.size() > 2 ) mMapOverlays.remove( 1 );
+				if( !hasLocation ) mMyLocationOverlay.runOnFirstFix( determinLocation );
+				else determinLocation.run();
 				
-				mMyLocationOverlay.runOnFirstFix( determinLocation );
+				mMapOverlays.add( mMyLocationOverlay );
 			}
 		} );
 		

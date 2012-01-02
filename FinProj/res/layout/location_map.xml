@@ -4,17 +4,35 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <Spinner
-        android:id="@+id/spinnerLMList"
+    <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_weight="1" />
+        android:orientation="vertical" >
+        
+        <Spinner
+        android:id="@+id/spinnerLMList"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/textViewLMLocation"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="Location"
+            android:layout_marginBottom="4dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:visibility="gone" />
+        
+    </LinearLayout>
     
 	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   		android:layout_width="fill_parent"
-  		android:layout_height="fill_parent"
-  		android:layout_weight="8" >
+  		android:layout_height="wrap_content"
+  		android:layout_weight="1" >
   
 	    <com.google.android.maps.MapView
 	        android:id="@+id/mapView"
@@ -40,7 +58,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:layout_weight="1" >
+        android:layout_gravity="center" >
 
         <Button
             android:id="@+id/buttonLMOk"
