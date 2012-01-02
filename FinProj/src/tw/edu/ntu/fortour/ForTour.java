@@ -92,7 +92,7 @@ public class ForTour extends Activity {
     	return true;
     }
     
-    private void checkDir( boolean isExternal, final String dirPath ) {
+    private boolean checkDirExistOrCreate( boolean isExternal, final String dirPath ) {
     	File dir;
     	
     	if( isExternal ) dir = new File( Environment.getExternalStorageDirectory(), dirPath );
@@ -100,15 +100,20 @@ public class ForTour extends Activity {
     	
     	if( !dir.exists() ) {
     		if( !dir.mkdir() ) {
-    			Toast.makeText( this, "Working Directories Creation Fail.", Toast.LENGTH_LONG ).show();
+    			return false;
     		}
     	}
+    	
+    	return true;
     }
     
     private void checkWorkDirs() {
-    	checkDir( true, DIR_WORK + "/" );
-    	checkDir( true, DIR_WORK + "/" + DIR_TEMP + "/" );
-    	checkDir( true, DIR_WORK + "/" + DIR_THUMB + "/" );
+    	if( !checkDirExistOrCreate( true, DIR_WORK + "/" ) ||
+    		!checkDirExistOrCreate( true, DIR_WORK + "/" + DIR_TEMP + "/" ) ||
+    		!checkDirExistOrCreate( true, DIR_WORK + "/" + DIR_THUMB + "/" ) ) {
+    		
+    		Toast.makeText( this, "Working Directory Creation Fail.", Toast.LENGTH_SHORT ).show();
+    	}
     }
     
     private void findviews(){
