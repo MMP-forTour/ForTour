@@ -181,7 +181,7 @@ public class LocationMap extends MapActivity {
 			mSpinner.setOnItemSelectedListener( new OnItemSelectedListener() {
 				@Override
 				public void onItemSelected(AdapterView<?> view, View arg1, int arg2, long arg3) {
-					locName = view.getSelectedItem().toString();
+					locName = view.getSelectedItem().toString().trim();
 				}
 				
 				@Override
@@ -194,16 +194,21 @@ public class LocationMap extends MapActivity {
 				else addressesList = mGeocoder.getFromLocation( mManualGeoPoint.getLatitudeE6()/1E6, mManualGeoPoint.getLongitudeE6()/1E6, ADDRESS_LIMIT );
 				
 				if( addressesList != null ) {
+					int selectPos = 0;
+					
 					ArrayList<String> mArrayList = new ArrayList<String>();
-					for( Address addr : addressesList ) {
-						mArrayList.add( addr.getAddressLine(0) );
+					for( int i = 0; i < addressesList.size(); i++ ) {
+						String addr = addressesList.get(i).getAddressLine(0).trim();
+						mArrayList.add( addr );
+						if( locName != null && addr.equals( locName ) ) selectPos = i;
 					}
 					
 					mArrayAdapter = new ArrayAdapter<String>( LocationMap.this, android.R.layout.simple_spinner_item, mArrayList );
 					mArrayAdapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item );
 					mSpinner.setAdapter( mArrayAdapter );
+					mSpinner.setSelection( selectPos );
 					
-					if( ! mSpinner.isEnabled() ) mSpinner.setEnabled( true );
+					if( !mSpinner.isEnabled() ) mSpinner.setEnabled( true );
 				}
 			}
 			catch( Exception e ) {
@@ -235,21 +240,23 @@ public class LocationMap extends MapActivity {
 		
 		mButtonLMOk.setOnClickListener( new OnClickListener() {
 			@Override
-			public void onClick(View v) {				
-				mGeoPoint = mMyLocationOverlay.getMyLocation();
-
+			public void onClick(View v) {
 				Intent i = new Intent();
 				Bundle b = new Bundle();
+				
+				if( !hasLocation ) mGeoPoint = mMyLocationOverlay.getMyLocation();
+				else mGeoPoint = new GeoPoint( Integer.valueOf( locLatitude ) , Integer.valueOf( locLongitude ) );
 				
 				if( manualMode && mManualGeoPoint != null ) mGeoPoint = mManualGeoPoint;
 				
 				if( mGeoPoint != null ) {
 					b.putString( KEY_LATITUDE, Integer.toString( mGeoPoint.getLatitudeE6() ) );
 					b.putString( KEY_LONGITUDE, Integer.toString( mGeoPoint.getLongitudeE6() ) );
-					b.putString( KEY_LOCNAME, locName );
-					
-					i.putExtras( b );
 				}
+				
+				if( !"".equals( locName ) ) b.putString( KEY_LOCNAME, locName.trim() );
+				
+				i.putExtras( b );
 				setResult( Activity.RESULT_OK, i );
 				
 				LocationMap.this.finish();
@@ -269,6 +276,12 @@ public class LocationMap extends MapActivity {
 				LocationMap.this.finish();
 			}
 		} );
+	}
+	
+	@Override
+	public void onBackPressed() {
+		/* NOTE: We don't allow user use back button in map view */
+		if( !( hasLocation && updateMode ) ) super.onBackPressed();
 	}
 	
     @Override

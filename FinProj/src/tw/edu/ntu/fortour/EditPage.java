@@ -54,7 +54,7 @@ public class EditPage extends Activity {
 	private Bitmap bm;
 	private Uri bmUriPath;
 	private ImageUtil imgUtil;
-	private String mFileName, mMediaFileName, locName;
+	private String mFileName, mMediaFileName, mLocName;
 	private String ftStoryTimeDate, ftStoryTimeTime;
 	private MediaRecorder mMediaRecorder;
 	private ProgressDialog mProgressDlg;
@@ -101,8 +101,8 @@ public class EditPage extends Activity {
             
             editTextOPStory.setText( c.getString( 1 ) );
             
-            locName = c.getString( 2 );
-            editTextOPLocation.setText( locName );
+            mLocName = c.getString( 2 );
+            editTextOPLocation.setText( mLocName );
             
             hasRecord = ( c.getInt( 3 ) == 0 ) ? false : true; 
             
@@ -344,7 +344,7 @@ public class EditPage extends Activity {
 						
 						b.putString( LocationMap.KEY_LATITUDE, String.valueOf( (int) ( locLatitude * 1E6 ) ) );
 						b.putString( LocationMap.KEY_LONGITUDE, String.valueOf( (int) ( locLongitute * 1E6 ) ) );
-						b.putString( LocationMap.KEY_LOCNAME, locName );
+						b.putString( LocationMap.KEY_LOCNAME, mLocName );
 						b.putString( LocationMap.KEY_UPDMODE, "" );
 						
 						intent.putExtras( b );
@@ -403,7 +403,8 @@ public class EditPage extends Activity {
 			        	String locName = extras.getString( LocationMap.KEY_LOCNAME );
 
 			        	if( locName != null ) {
-			        		editTextOPLocation.setText( locName );
+			        		mLocName = locName;
+			        		editTextOPLocation.setText( mLocName );
 			        	}
 			        	
 			        	try {
