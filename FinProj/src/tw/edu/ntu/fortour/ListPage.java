@@ -53,7 +53,7 @@ public class ListPage extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_mode);
         
-        updateListView();
+        updateListView( false );
         
 		mListView = getListView();
 		mListView.setTextFilterEnabled( true );
@@ -118,7 +118,7 @@ public class ListPage extends ListActivity {
 						   			    					ForTour.DIR_WORK + "/" + mFileName ) );
 								Util.deleteFile( new File( Environment.getExternalStorageDirectory(),
 															ForTour.DIR_WORK + "/" + mMediaFileName ) );
-								updateListView();
+								updateListView( true );
 								Toast.makeText( ListPage.this, getString( R.string.stringDeleteStorySuccess ), Toast.LENGTH_LONG ).show();
 							}
 						}
@@ -174,7 +174,7 @@ public class ListPage extends ListActivity {
 		}
 	};
 	
-	private void updateListView() {
+	private void updateListView( boolean needUpdate ) {
 		mCursor = ForTour.mDbHelper.ftStoryFetchPartial( loadAmount );
 		startManagingCursor( mCursor );
 		
@@ -190,7 +190,7 @@ public class ListPage extends ListActivity {
 					R.id.textViewLMRTime
 			};
 			
-			if( loadAmount == LOAD_LIMIT ) {
+			if( !needUpdate ) {
 				mSimpleCursorAdapter = new SimpleCursorAdapter( this, R.layout.list_mode_row, mCursor, from, to );
 				mSimpleCursorAdapter.setViewBinder( mViewBinder );
 				setListAdapter( mSimpleCursorAdapter );
@@ -214,7 +214,7 @@ public class ListPage extends ListActivity {
 		protected Void doInBackground(Void... params) {
 			runOnUiThread( new Runnable() {
 				public void run() {
-					updateListView();
+					updateListView( true );
 				}
 			} );
 			return null;
@@ -317,6 +317,6 @@ public class ListPage extends ListActivity {
 		
 		/* NOTE: This will update the list when resume(return from another activity).
 		 *       But we need an elegant method. */
-		updateListView();
+		updateListView( true );
 	}
 }
