@@ -36,9 +36,10 @@ public class ForTour extends Activity {
 	private static final int PICK_FROM_CAMERA    = 0x100001;
 	private static final int CROP_FROM_CAMERA    = 0x100002;
 	private static final int PICK_FROM_FILE      = 0x100003;
-	protected static final int LOCATION_MAP_PICK = 0x100004;
-	protected static final int EDIT_ONE_PHOTO    = 0x100005;
-	protected static final int PASS_ONE_PHOTO    = 0x100005;
+	private static final int CROP_FROM_FILE      = 0x100004;
+	protected static final int LOCATION_MAP_PICK = 0x100005;
+	protected static final int EDIT_ONE_PHOTO    = 0x100006;
+	protected static final int PASS_ONE_PHOTO    = 0x100007;
 	
 	protected static final String EXT_PHOTO  = ".png";
 	protected static final String EXT_RECORD = ".3gp";
@@ -204,7 +205,7 @@ public class ForTour extends Activity {
 	   
 	    switch (requestCode) {
 		    case PICK_FROM_CAMERA:
-		    	doCrop();    	
+		    	doCrop( CROP_FROM_CAMERA );    	
 		    	break;
 		    	
 		    case PICK_FROM_FILE:
@@ -217,14 +218,14 @@ public class ForTour extends Activity {
 			            cursor.moveToFirst();
 			            mImageCaptureUri = Uri.parse( cursor.getString( column_index ) );
 		
-				    	doCrop();
+				    	doCrop( CROP_FROM_FILE );
 			    	}
 			    	catch( Exception e ) {
 			    		Toast.makeText( ForTour.this, "Exception: " + e.getLocalizedMessage(), Toast.LENGTH_LONG ).show();
 			    	}
 				}
 				else if ( mImageCaptureUri.getScheme().equals( ContentResolver.SCHEME_FILE ) ) {
-					doCrop();
+					doCrop( CROP_FROM_CAMERA );
 				}
 				else {
 					Toast.makeText( ForTour.this, "Error when retrieve data.", Toast.LENGTH_LONG ).show();
@@ -232,6 +233,7 @@ public class ForTour extends Activity {
 		    	break;
 	    
 		    case CROP_FROM_CAMERA:
+		    case CROP_FROM_FILE:
 		        Bundle extras = data.getExtras();
 		        if (extras != null) {	 					
 					//open the editPage
@@ -244,12 +246,12 @@ public class ForTour extends Activity {
 		        }
 
 		        // Delete the template photo
-		        Util.deleteFile( new File( mImageCaptureUri.getPath() ) );
+		        if( requestCode == CROP_FROM_CAMERA ) Util.deleteFile( new File( mImageCaptureUri.getPath() ) );
 		        break;
 	    }
 	}
     
-    private void doCrop() {
+    private void doCrop( final int cropFrom ) {
 		Intent intent = new Intent(this, CropImage.class);
 		intent.setType("image/*");
 
@@ -267,7 +269,7 @@ public class ForTour extends Activity {
         intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
             
         Intent i = new Intent(intent);
-        startActivityForResult(i, CROP_FROM_CAMERA);
+        startActivityForResult(i, cropFrom);
 	}
     
     @Override
