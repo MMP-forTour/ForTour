@@ -161,46 +161,33 @@ public class EditPage extends Activity {
 			@Override
 			public void onClick(View v) {
 				if( !updateMode ) {
-					AlertDialog.Builder builder = new AlertDialog.Builder( EditPage.this );
-					builder.setTitle( R.string.stringSaveAndExit );
-					builder.setMessage( R.string.stringDoYouWantToSaveIt );
-					builder.setIcon( android.R.drawable.ic_dialog_info );
-
-					builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface arg0, int arg1) {
-							long rst = ForTour.mDbHelper.ftStoryAdd(	mFileName,
-																		editTextOPStory.getText().toString(),
-																		editTextOPLocation.getText().toString(),
-																		( ( hasRecord != false ) ? 1 : 0 ),
-																		locLatitude,
-																		locLongitute,
-																		mMoodIndex,
-																		Util.datetimeStringToMSec( ftStoryTimeDate, ftStoryTimeTime )
-																	);
-							
-							if( rst == -1 ) Toast.makeText( EditPage.this, getString( R.string.stringSaveStoryFail ), Toast.LENGTH_LONG ).show();
-							else {
-								try {
-									FileOutputStream thumbFile = new FileOutputStream(
-																	new File( Environment.getExternalStorageDirectory(),
-																			   ForTour.DIR_WORK + "/" + ForTour.DIR_THUMB + "/" + mFileName
-																	)
-																 );
-									Bitmap.createScaledBitmap( bm, imgUtil.THUMB_SIZE, imgUtil.THUMB_SIZE, true ).compress( Bitmap.CompressFormat.PNG, 90, thumbFile );
-									
-									if ( SetPreference.mApi != null ) checkSyncDropbox();
-								}
-								catch( FileNotFoundException e ) { }
-								
-								Toast.makeText( EditPage.this, getString( R.string.stringSaveStorySuccess ), Toast.LENGTH_LONG ).show();
-								finish();
-							}
-						}
-					} );
-					builder.setNegativeButton( android.R.string.no, null );
+					long rst = ForTour.mDbHelper.ftStoryAdd(	mFileName,
+																editTextOPStory.getText().toString(),
+																editTextOPLocation.getText().toString(),
+																( ( hasRecord != false ) ? 1 : 0 ),
+																locLatitude,
+																locLongitute,
+																mMoodIndex,
+																Util.datetimeStringToMSec( ftStoryTimeDate, ftStoryTimeTime )
+															);
 					
-					builder.show();
+					if( rst == -1 ) Toast.makeText( EditPage.this, getString( R.string.stringSaveStoryFail ), Toast.LENGTH_LONG ).show();
+					else {
+						try {
+							FileOutputStream thumbFile = new FileOutputStream(
+															new File( Environment.getExternalStorageDirectory(),
+																	   ForTour.DIR_WORK + "/" + ForTour.DIR_THUMB + "/" + mFileName
+															)
+														 );
+							Bitmap.createScaledBitmap( bm, imgUtil.THUMB_SIZE, imgUtil.THUMB_SIZE, true ).compress( Bitmap.CompressFormat.PNG, 90, thumbFile );
+							
+							if ( SetPreference.mApi != null ) checkSyncDropbox();
+						}
+						catch( FileNotFoundException e ) { }
+						
+						Toast.makeText( EditPage.this, getString( R.string.stringSaveStorySuccess ), Toast.LENGTH_LONG ).show();
+						finish();
+					}
 				}
 				else {
 					AlertDialog.Builder builder = new AlertDialog.Builder( EditPage.this );
