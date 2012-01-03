@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -254,6 +255,23 @@ public class LocMap extends MapActivity {
 		mButtonLMOk.setOnClickListener( new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if( updateMode ) {
+					AlertDialog.Builder builder = new AlertDialog.Builder( LocMap.this );
+					builder.setTitle( R.string.stringSaveChanges );
+					builder.setMessage( R.string.stringDoYouWantToReplaceIt );
+					builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface arg0, int arg1) {
+							update();
+						}
+					} );
+					builder.setNegativeButton( android.R.string.no, null );
+					builder.show();
+				}
+				else update();
+			}
+			
+			private void update() {
 				Intent i = new Intent();
 				Bundle b = new Bundle();
 				
@@ -279,7 +297,17 @@ public class LocMap extends MapActivity {
 		mButtonLMCancel.setOnClickListener( new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				LocMap.this.finish();
+				AlertDialog.Builder builder = new AlertDialog.Builder( LocMap.this );
+				builder.setTitle( R.string.stringDiscardChanges );
+				builder.setMessage( R.string.stringDoYouWantToDiscardIt );
+				builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						LocMap.this.finish();
+					}
+				} );
+				builder.setNegativeButton( android.R.string.no, null );
+				builder.show();
 			}
 		} );
 		

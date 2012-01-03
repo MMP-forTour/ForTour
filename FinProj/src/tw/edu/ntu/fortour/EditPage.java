@@ -191,8 +191,8 @@ public class EditPage extends Activity {
 				}
 				else {
 					AlertDialog.Builder builder = new AlertDialog.Builder( EditPage.this );
-					builder.setTitle( R.string.stringUpdateAndExit );
-					builder.setMessage( R.string.stringDoYouWantToSaveIt );
+					builder.setTitle( R.string.stringSaveChanges );
+					builder.setMessage( R.string.stringDoYouWantToReplaceIt );
 					
 					builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
 						@Override
@@ -262,6 +262,7 @@ public class EditPage extends Activity {
 							mMediaRecorder.release();
 							
 							AlertDialog.Builder builder = new AlertDialog.Builder( EditPage.this );
+							builder.setIcon( android.R.drawable.ic_dialog_info );
 							
 							android.content.DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
 								@Override
@@ -433,8 +434,7 @@ public class EditPage extends Activity {
 	@Override
 	public void onBackPressed() {
 		AlertDialog.Builder builder = new AlertDialog.Builder( EditPage.this );
-		builder.setIcon( android.R.drawable.ic_dialog_info );
-		builder.setTitle( R.string.stringDiscardAndExit );
+		builder.setTitle( R.string.stringDiscardChanges );
 		builder.setMessage( R.string.stringDoYouWantToDiscardIt );
 		builder.setNegativeButton( android.R.string.no, null );
 		builder.setPositiveButton( android.R.string.yes, new DialogInterface.OnClickListener() {
