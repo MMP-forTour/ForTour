@@ -200,7 +200,8 @@ public class LocationMap extends MapActivity {
 					for( int i = 0; i < addressesList.size(); i++ ) {
 						String addr = addressesList.get(i).getAddressLine(0).trim();
 						mArrayList.add( addr );
-						if( locName != null && addr.equals( locName ) ) selectPos = i;
+						
+						if( !manualMode && locName != null && addr.equals( locName ) ) selectPos = i;
 					}
 					
 					mArrayAdapter = new ArrayAdapter<String>( LocationMap.this, android.R.layout.simple_spinner_item, mArrayList );
@@ -217,7 +218,7 @@ public class LocationMap extends MapActivity {
 				mSpinner.setEnabled( false );
 				
 				Toast.makeText( LocationMap.this, getString( R.string.stringLocationList ) + ": " + e.getLocalizedMessage(), Toast.LENGTH_SHORT ).show();
-			} 
+			}
 		}
 	};
 	
