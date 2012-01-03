@@ -42,6 +42,7 @@ public class LocationMap extends MapActivity {
 	private Button mButtonLMOk, mButtonLMLocation, mButtonLMCancel, mButtonLMBack;
 	private TextView mTextViewLMLocation;
 	private MapView mMapView;
+	private Spinner mSpinner;
 	private MapController mMapController;
 	private GeoPoint mGeoPoint, mManualGeoPoint;
 	private MyLocationOverlay mMyLocationOverlay;
@@ -88,6 +89,7 @@ public class LocationMap extends MapActivity {
         mButtonLMBack      = (Button) findViewById( R.id.buttonLMBack );
         mTextViewLMLocation= (TextView) findViewById( R.id.textViewLMLocation );
         mMapView		   = (MapView) findViewById( R.id.mapView );
+        mSpinner		   = (Spinner) findViewById( R.id.spinnerLMList );
         
         mProgressDialog = new ProgressDialog( LocationMap.this );
         
@@ -128,6 +130,8 @@ public class LocationMap extends MapActivity {
 	        	mButtonLMBack.setVisibility( View.VISIBLE );
 	        	
 	        	if( !"".equals( locName ) ) {
+	        		mSpinner.setVisibility( View.GONE );
+	        		
 	        		mTextViewLMLocation.setText( locName );
 	        		mTextViewLMLocation.setVisibility( View.VISIBLE );
 	        	}
@@ -168,11 +172,12 @@ public class LocationMap extends MapActivity {
 	}; 
 
 	Runnable getAddressList = new Runnable() {
+		private ArrayAdapter<String> mArrayAdapter;
+		
 		@Override
 		public void run() {
 	        Geocoder mGeocoder = new Geocoder( LocationMap.this, Locale.getDefault() );
 	        
-			Spinner mSpinner = (Spinner) findViewById( R.id.spinnerLMList );
 			mSpinner.setOnItemSelectedListener( new OnItemSelectedListener() {
 				@Override
 				public void onItemSelected(AdapterView<?> view, View arg1, int arg2, long arg3) {
@@ -185,7 +190,6 @@ public class LocationMap extends MapActivity {
 			
 			try {
 				List<Address> addressesList = null;
-				
 				if( !manualMode ) addressesList = mGeocoder.getFromLocation( mGeoPoint.getLatitudeE6()/1E6, mGeoPoint.getLongitudeE6()/1E6, ADDRESS_LIMIT );
 				else addressesList = mGeocoder.getFromLocation( mManualGeoPoint.getLatitudeE6()/1E6, mManualGeoPoint.getLongitudeE6()/1E6, ADDRESS_LIMIT );
 				
@@ -195,14 +199,18 @@ public class LocationMap extends MapActivity {
 						mArrayList.add( addr.getAddressLine(0) );
 					}
 					
-					ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>( LocationMap.this, android.R.layout.simple_spinner_item, mArrayList );
+					mArrayAdapter = new ArrayAdapter<String>( LocationMap.this, android.R.layout.simple_spinner_item, mArrayList );
 					mArrayAdapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item );
 					mSpinner.setAdapter( mArrayAdapter );
 					
-					mSpinner.setVisibility( View.VISIBLE );
+					if( ! mSpinner.isEnabled() ) mSpinner.setEnabled( true );
 				}
 			}
-			catch( Exception e ) { 
+			catch( Exception e ) {
+				if( mArrayAdapter != null ) mArrayAdapter.clear();
+				
+				mSpinner.setEnabled( false );
+				
 				Toast.makeText( LocationMap.this, getString( R.string.stringLocationList ) + ": " + e.getLocalizedMessage(), Toast.LENGTH_SHORT ).show();
 			} 
 		}

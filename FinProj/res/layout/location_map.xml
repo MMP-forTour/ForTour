@@ -13,8 +13,7 @@
         <Spinner
         android:id="@+id/spinnerLMList"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:visibility="gone" />
+        android:layout_height="fill_parent" />
 
         <TextView
             android:id="@+id/textViewLMLocation"
