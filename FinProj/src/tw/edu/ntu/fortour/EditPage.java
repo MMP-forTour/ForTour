@@ -342,14 +342,14 @@ public class EditPage extends Activity {
 					if( updateMode && locLatitude != -1 && locLongitute != -1 ) {
 						Bundle b = new Bundle();
 						
-						b.putString( LocationMap.KEY_LATITUDE, String.valueOf( (int) ( locLatitude * 1E6 ) ) );
-						b.putString( LocationMap.KEY_LONGITUDE, String.valueOf( (int) ( locLongitute * 1E6 ) ) );
-						b.putString( LocationMap.KEY_LOCNAME, mLocName );
-						b.putString( LocationMap.KEY_UPDMODE, "" );
+						b.putString( LocMap.KEY_LATITUDE, String.valueOf( (int) ( locLatitude * 1E6 ) ) );
+						b.putString( LocMap.KEY_LONGITUDE, String.valueOf( (int) ( locLongitute * 1E6 ) ) );
+						b.putString( LocMap.KEY_LOCNAME, mLocName );
+						b.putString( LocMap.KEY_UPDMODE, "" );
 						
 						intent.putExtras( b );
 					}
-					intent.setClass( EditPage.this, LocationMap.class );
+					intent.setClass( EditPage.this, LocMap.class );
 					startActivityForResult( intent, ForTour.LOCATION_MAP_PICK );
 				}
 				else {
@@ -398,9 +398,9 @@ public class EditPage extends Activity {
 				if( resultCode == Activity.RESULT_OK ) {
 					Bundle extras = data.getExtras();
 			        if( extras != null ) {
-			        	String locLati = extras.getString( LocationMap.KEY_LATITUDE );
-			        	String locLong = extras.getString( LocationMap.KEY_LONGITUDE );
-			        	String locName = extras.getString( LocationMap.KEY_LOCNAME );
+			        	String locLati = extras.getString( LocMap.KEY_LATITUDE );
+			        	String locLong = extras.getString( LocMap.KEY_LONGITUDE );
+			        	String locName = extras.getString( LocMap.KEY_LOCNAME );
 
 			        	if( locName != null ) {
 			        		mLocName = locName;

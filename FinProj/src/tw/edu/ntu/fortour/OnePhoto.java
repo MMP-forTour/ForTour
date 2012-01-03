@@ -161,12 +161,12 @@ public class OnePhoto extends Activity{
 					Intent i = new Intent();
 					Bundle b = new Bundle();
 					
-					b.putString( LocationMap.KEY_LATITUDE, String.valueOf( (int) ( locLatitude * 1E6 ) ) );
-					b.putString( LocationMap.KEY_LONGITUDE, String.valueOf( (int) ( locLongitute * 1E6 ) ) );
-					b.putString( LocationMap.KEY_LOCNAME, ftStoryLocation );
+					b.putString( LocMap.KEY_LATITUDE, String.valueOf( (int) ( locLatitude * 1E6 ) ) );
+					b.putString( LocMap.KEY_LONGITUDE, String.valueOf( (int) ( locLongitute * 1E6 ) ) );
+					b.putString( LocMap.KEY_LOCNAME, ftStoryLocation );
 					
 					i.putExtras( b );
-					i.setClass( OnePhoto.this, LocationMap.class );
+					i.setClass( OnePhoto.this, LocMap.class );
 					
 					startActivity( i );
 				}

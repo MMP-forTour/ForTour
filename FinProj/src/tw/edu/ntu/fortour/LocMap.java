@@ -37,9 +37,9 @@ import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
-public class LocationMap extends MapActivity {
+public class LocMap extends MapActivity {
 	private ProgressDialog mProgressDialog;
-	private Button mButtonLMOk, mButtonLMLocation, mButtonLMCancel, mButtonLMBack;
+	private Button mButtonLMOk, mButtonLMLocation, mButtonLMCancel, mButtonLMBack, mButtonLMHelp;
 	private TextView mTextViewLMLocation;
 	private MapView mMapView;
 	private Spinner mSpinner;
@@ -69,7 +69,7 @@ public class LocationMap extends MapActivity {
 
         /* check Internet first */
         if( !Util.isOnline( getSystemService( Context.CONNECTIVITY_SERVICE ) ) ) {
-        	Toast.makeText( LocationMap.this, getString( R.string.stringNoInternetConnection ), Toast.LENGTH_LONG ).show();
+        	Toast.makeText( LocMap.this, getString( R.string.stringNoInternetConnection ), Toast.LENGTH_LONG ).show();
         }
         
         Bundle b = this.getIntent().getExtras();
@@ -83,6 +83,7 @@ public class LocationMap extends MapActivity {
 	        if( locLatitude != null && locLongitude != null ) hasLocation = true;
         }
         
+        mButtonLMHelp      = (Button) findViewById( R.id.buttonLMHelp );
         mButtonLMOk        = (Button) findViewById( R.id.buttonLMOk );
         mButtonLMLocation  = (Button) findViewById( R.id.buttonLMDetermine );
         mButtonLMCancel    = (Button) findViewById( R.id.buttonLMCancel );
@@ -91,7 +92,7 @@ public class LocationMap extends MapActivity {
         mMapView		   = (MapView) findViewById( R.id.mapView );
         mSpinner		   = (Spinner) findViewById( R.id.spinnerLMList );
         
-        mProgressDialog = new ProgressDialog( LocationMap.this );
+        mProgressDialog = new ProgressDialog( LocMap.this );
         
         mProgressDialog.setTitle( getString( R.string.stringLoading ) );
         mProgressDialog.setMessage( getString( R.string.stringPleaseWait ) );
@@ -99,7 +100,7 @@ public class LocationMap extends MapActivity {
         mProgressDialog.setOnCancelListener( new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface arg0) {
-				Toast.makeText( LocationMap.this, getString( R.string.stringUnableToRetrieveLocationNow ), Toast.LENGTH_LONG ).show();
+				Toast.makeText( LocMap.this, getString( R.string.stringUnableToRetrieveLocationNow ), Toast.LENGTH_LONG ).show();
 			}
 		} );
         
@@ -116,7 +117,7 @@ public class LocationMap extends MapActivity {
         mMapController = mMapView.getController();
         mMapController.setZoom( 17 );
         
-        mMyLocationOverlay = new MyLocationOverlay( LocationMap.this, mMapView );
+        mMyLocationOverlay = new MyLocationOverlay( LocMap.this, mMapView );
         if( !hasLocation ) {
 	        mMyLocationOverlay.enableCompass();
 	        mMyLocationOverlay.enableMyLocation();
@@ -124,6 +125,7 @@ public class LocationMap extends MapActivity {
         }
         else {
         	if( !( hasLocation && updateMode ) ) {
+        		mButtonLMHelp.setVisibility( View.GONE );
 	        	mButtonLMOk.setVisibility( View.GONE );
 	        	mButtonLMLocation.setVisibility( View.GONE );
 	        	mButtonLMCancel.setVisibility( View.GONE );
@@ -176,7 +178,7 @@ public class LocationMap extends MapActivity {
 		
 		@Override
 		public void run() {
-	        Geocoder mGeocoder = new Geocoder( LocationMap.this, Locale.getDefault() );
+	        Geocoder mGeocoder = new Geocoder( LocMap.this, Locale.getDefault() );
 	        
 			mSpinner.setOnItemSelectedListener( new OnItemSelectedListener() {
 				@Override
@@ -204,7 +206,7 @@ public class LocationMap extends MapActivity {
 						if( !manualMode && locName != null && addr.equals( locName ) ) selectPos = i;
 					}
 					
-					mArrayAdapter = new ArrayAdapter<String>( LocationMap.this, android.R.layout.simple_spinner_item, mArrayList );
+					mArrayAdapter = new ArrayAdapter<String>( LocMap.this, android.R.layout.simple_spinner_item, mArrayList );
 					mArrayAdapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item );
 					mSpinner.setAdapter( mArrayAdapter );
 					mSpinner.setSelection( selectPos );
@@ -217,12 +219,22 @@ public class LocationMap extends MapActivity {
 				
 				mSpinner.setEnabled( false );
 				
-				Toast.makeText( LocationMap.this, getString( R.string.stringLocationList ) + ": " + e.getLocalizedMessage(), Toast.LENGTH_SHORT ).show();
+				Toast.makeText( LocMap.this, getString( R.string.stringLocationList ) + ": " + e.getLocalizedMessage(), Toast.LENGTH_SHORT ).show();
 			}
 		}
 	};
 	
 	private void setButtonListener() {
+		mButtonLMHelp.setOnClickListener( new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent();
+	        	intent.setClass( LocMap.this, LocMapInfo.class );
+	        	startActivity( intent );
+	        	overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
+			}
+		} );
+		
 		mButtonLMLocation.setOnClickListener( new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -260,21 +272,21 @@ public class LocationMap extends MapActivity {
 				i.putExtras( b );
 				setResult( Activity.RESULT_OK, i );
 				
-				LocationMap.this.finish();
+				LocMap.this.finish();
 			}
 		} );
 		
 		mButtonLMCancel.setOnClickListener( new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				LocationMap.this.finish();
+				LocMap.this.finish();
 			}
 		} );
 		
 		mButtonLMBack.setOnClickListener( new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				LocationMap.this.finish();
+				LocMap.this.finish();
 			}
 		} );
 	}

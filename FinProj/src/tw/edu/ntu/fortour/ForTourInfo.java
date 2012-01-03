@@ -31,7 +31,6 @@ public class ForTourInfo extends Activity implements OnTouchListener{
 
 	@Override
     public boolean onTouch(View arg0, MotionEvent arg1) {
-	    // TODO Auto-generated method stub
 		finish();
 		overridePendingTransition( android.R.anim.fade_in, android.R.anim.fade_out );
 	    return false;

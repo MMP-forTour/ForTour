@@ -7,24 +7,38 @@
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content" >
         
-        <Spinner
-        android:id="@+id/spinnerLMList"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
-
-        <TextView
-            android:id="@+id/textViewLMLocation"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:ellipsize="end"
-            android:lines="1"
-            android:text="Location"
-            android:layout_marginBottom="4dp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:visibility="gone" />
+        <LinearLayout
+	        android:id="@+id/linearLayout1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="fill_parent"
+	        android:orientation="vertical" 
+	        android:layout_weight="1">
+	        
+	        <Spinner
+	        android:id="@+id/spinnerLMList"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content" />
+	
+	        <TextView
+	            android:id="@+id/textViewLMLocation"
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"
+	            android:ellipsize="end"
+	            android:lines="1"
+	            android:text="Location"
+	            android:layout_marginBottom="4dp"
+	            android:textAppearance="?android:attr/textAppearanceMedium"
+	            android:visibility="gone" />
+	        
+	    </LinearLayout>
+	    
+        <Button
+	         android:id="@+id/buttonLMHelp"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:text="@string/stringHelp" />
         
     </LinearLayout>
     
