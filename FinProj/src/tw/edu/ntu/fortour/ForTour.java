@@ -211,7 +211,7 @@ public class ForTour extends Activity {
 		    case PICK_FROM_FILE:
 		    	mImageCaptureUri = data.getData();
 
-				if( mImageCaptureUri.getScheme().equals( ContentResolver.SCHEME_CONTENT ) ) {
+				if( mImageCaptureUri != null && mImageCaptureUri.getScheme().equals( ContentResolver.SCHEME_CONTENT ) ) {
 			    	try {
 			            Cursor cursor = managedQuery( data.getData(), new String[] { MediaStore.Images.Media.DATA }, null, null, null );	     
 			            int column_index = cursor.getColumnIndexOrThrow( MediaStore.Images.Media.DATA );
@@ -224,7 +224,7 @@ public class ForTour extends Activity {
 			    		Toast.makeText( ForTour.this, "Exception: " + e.getLocalizedMessage(), Toast.LENGTH_LONG ).show();
 			    	}
 				}
-				else if ( mImageCaptureUri.getScheme().equals( ContentResolver.SCHEME_FILE ) ) {
+				else if ( mImageCaptureUri != null && mImageCaptureUri.getScheme().equals( ContentResolver.SCHEME_FILE ) ) {
 					doCrop( CROP_FROM_CAMERA );
 				}
 				else {
@@ -255,21 +255,31 @@ public class ForTour extends Activity {
 		Intent intent = new Intent(this, CropImage.class);
 		intent.setType("image/*");
 
-       	mImageDiaryUri = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
-       											  DIR_WORK + "/" + mFileName ) );
-
-       	intent.putExtra("image-path", mImageCaptureUri.getPath());
-        intent.putExtra("outputX", ImageUtil.imageInnerWidth );
-        intent.putExtra("outputY", ImageUtil.imageInnerHeight );
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("scale", true);
-        intent.putExtra("return-data", false);
-        intent.putExtra( MediaStore.EXTRA_OUTPUT, mImageDiaryUri.getPath() );
-        intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
-            
-        Intent i = new Intent(intent);
-        startActivityForResult(i, cropFrom);
+		if( mImageCaptureUri != null ) {
+			if( Util.checkFile( new File( mImageCaptureUri.getPath() ) ) ) {
+		       	mImageDiaryUri = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
+		       											  DIR_WORK + "/" + mFileName ) );
+		
+		       	intent.putExtra("image-path", mImageCaptureUri.getPath());
+		        intent.putExtra("outputX", ImageUtil.imageInnerWidth );
+		        intent.putExtra("outputY", ImageUtil.imageInnerHeight );
+		        intent.putExtra("aspectX", 1);
+		        intent.putExtra("aspectY", 1);
+		        intent.putExtra("scale", true);
+		        intent.putExtra("return-data", false);
+		        intent.putExtra( MediaStore.EXTRA_OUTPUT, mImageDiaryUri.getPath() );
+		        intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
+		            
+		        Intent i = new Intent(intent);
+		        startActivityForResult(i, cropFrom);
+			}
+			else {
+				Toast.makeText( ForTour.this, "File not found: " + mImageCaptureUri.getPath(), Toast.LENGTH_LONG ).show();
+			}
+		}
+		else {
+			Toast.makeText( ForTour.this, "Error when retrieve data.", Toast.LENGTH_LONG ).show();
+		}
 	}
     
     @Override
