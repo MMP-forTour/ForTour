@@ -252,14 +252,12 @@ public class ForTour extends Activity {
 	}
     
     private void doCrop( final int cropFrom ) {
-		Intent intent = new Intent(this, CropImage.class);
-		intent.setType("image/*");
-
 		if( mImageCaptureUri != null ) {
 			if( Util.checkFile( new File( mImageCaptureUri.getPath() ) ) ) {
 		       	mImageDiaryUri = Uri.fromFile( new File( Environment.getExternalStorageDirectory(),
 		       											  DIR_WORK + "/" + mFileName ) );
 		
+		       	Intent intent = new Intent(this, CropImage.class);
 		       	intent.putExtra("image-path", mImageCaptureUri.getPath());
 		        intent.putExtra("outputX", ImageUtil.imageInnerWidth );
 		        intent.putExtra("outputY", ImageUtil.imageInnerHeight );
@@ -269,9 +267,8 @@ public class ForTour extends Activity {
 		        intent.putExtra("return-data", false);
 		        intent.putExtra( MediaStore.EXTRA_OUTPUT, mImageDiaryUri.getPath() );
 		        intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
-		            
-		        Intent i = new Intent(intent);
-		        startActivityForResult(i, cropFrom);
+
+		        startActivityForResult(intent, cropFrom);
 			}
 			else {
 				Toast.makeText( ForTour.this, "File not found: " + mImageCaptureUri.getPath(), Toast.LENGTH_LONG ).show();
