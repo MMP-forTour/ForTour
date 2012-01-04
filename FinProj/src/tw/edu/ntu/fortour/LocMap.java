@@ -125,7 +125,7 @@ public class LocMap extends MapActivity {
 	        mMyLocationOverlay.runOnFirstFix( determinLocation );
         }
         else {
-        	if( !( hasLocation && updateMode ) ) {
+        	if( !updateMode ) {
         		mButtonLMHelp.setVisibility( View.GONE );
 	        	mButtonLMOk.setVisibility( View.GONE );
 	        	mButtonLMLocation.setVisibility( View.GONE );
@@ -322,7 +322,7 @@ public class LocMap extends MapActivity {
 	@Override
 	public void onBackPressed() {
 		/* NOTE: We don't allow user use back button in map view */
-		if( !( hasLocation && updateMode ) ) super.onBackPressed();
+		if( hasLocation && !updateMode ) super.onBackPressed();
 	}
 	
     @Override
