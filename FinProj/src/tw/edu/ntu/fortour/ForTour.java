@@ -31,8 +31,6 @@ public class ForTour extends Activity {
     
     protected static DbAdapter mDbHelper;
 
-    private static final int MENU_HELP = Menu.FIRST;
-
 	private static final int PICK_FROM_CAMERA    = 0x100001;
 	private static final int CROP_FROM_CAMERA    = 0x100002;
 	private static final int PICK_FROM_FILE      = 0x100003;
@@ -71,7 +69,7 @@ public class ForTour extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
     	super.onCreateOptionsMenu(menu);
     	
-    	menu.add( 0, MENU_HELP, 0, getString( R.string.stringHelp ) ).setIcon( android.R.drawable.ic_menu_help );
+    	menu.add( 0, 0, 0, getString( R.string.stringHelp ) ).setIcon( android.R.drawable.ic_menu_help );
     	
     	return true;
     }
@@ -81,7 +79,7 @@ public class ForTour extends Activity {
     	super.onOptionsItemSelected(item);
     	
     	switch( item.getItemId() ) {
-		case MENU_HELP:
+		case 0:
 			Intent intent = new Intent();
         	intent.setClass( ForTour.this, ForTourInfo.class );
         	startActivity( intent );
