@@ -285,7 +285,7 @@ public class LocMap extends MapActivity {
 					b.putString( KEY_LONGITUDE, Integer.toString( mGeoPoint.getLongitudeE6() ) );
 				}
 				
-				if( !"".equals( locName ) ) b.putString( KEY_LOCNAME, locName.trim() );
+				if( locName!=null && !"".equals( locName ) ) b.putString( KEY_LOCNAME, locName.trim() );
 				
 				i.putExtras( b );
 				setResult( Activity.RESULT_OK, i );
