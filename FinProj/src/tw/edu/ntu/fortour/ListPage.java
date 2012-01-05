@@ -174,6 +174,7 @@ public class ListPage extends ListActivity {
 		}
 	};
 	
+	/* TODO: In HoneyComb, we MUSt use loadmanager */
 	private void updateListView( boolean needUpdate ) {
 		mCursor = ForTour.mDbHelper.ftStoryFetchPartial( loadAmount );
 		startManagingCursor( mCursor );
